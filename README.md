@@ -16,8 +16,8 @@ Ten images of text-bearing objects that went through the wash: two supplied phot
 | 06 | [Meathook Massacre II](images/06-meathook-massacre.jpg) | Title and rules remain readable, with ragged edges and damaged border text. | [u/cartmicah3](https://www.reddit.com/r/mtg/comments/1fw9vqq/this_is_what_meathook_massacre_2_looks_like_going/) |
 | 07 | [Trading-card pack left in a pocket](images/07-shredded-card-pack.jpg) | Several cards retain title and rule fragments despite torn edges, folds and missing sections. | [u/Lipzilla](https://www.reddit.com/r/mtg/comments/129syxr/so_i_just_ruin_a_most_wanted_card_on_accident/) |
 | 08 | [Jeans with a washed-out patch](images/08-silvertab-jeans.jpg) | Inner baggy pleated and silverTab labels remain readable beside the almost blank back patch. | [u/carschap](https://www.reddit.com/r/VintageClothing/comments/xyrs37/rmildlyinfuriating_washed_these_one_time_and_the/) |
-| 09 | [McLaren shirt with peeling lettering](images/09-mclaren-shirt.jpg) | Several sponsor names survive; smaller lettering below DELL has partly disappeared. | [u/Secret674](https://www.reddit.com/r/McLarenFormula1/comments/n01x5c/as_much_as_i_love_mclaren_i_waited_two_month_is/) |
-| 10 | [Passport cover after a wash](images/10-passport-cover.jpg) | PASSPORT and country lettering remain legible on the cover. | [u/LemonResident9209](https://www.reddit.com/r/Passports/comments/1w4lepc/accidentally_washed_my_passport/) |
+| 09 | [Banknotes shredded in the wash](images/09-shredded-banknotes.jpg) | Denominations, lettering and serial-number fragments survive on scattered, torn banknote pieces. | [u/BocceBurger](https://www.reddit.com/r/mildlyinfuriating/comments/tyoljy/i_accidentally_washed_10/) |
+| 10 | [Game cartridge with its label washed away](images/10-washed-ds-cartridge.jpg) | The cartridge has a ruined printed label with handwritten markings; a readable game booklet sits beside it. | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
 
 ## Files and provenance
 
@@ -25,7 +25,9 @@ Ten images of text-bearing objects that went through the wash: two supplied phot
 - `manifest.json`: attribution, source URLs, washing accounts, visual notes, dimensions and SHA-256 hashes.
 - `previews/contact-sheet.jpg`: a resized overview for browsing.
 
-The online washing accounts come from the people posting the images; they have not been independently verified. Image 09 is the source author's two-panel composite. Image 10 is an easy baseline with little visible damage. Images 01 and 02 show the same washed book, so the collection contains nine distinct washing events. Keep those two views together when splitting data.
+The online washing accounts come from the people posting the images; they have not been independently verified. Images 01 and 02 show the same washed book, so the collection contains nine distinct washing events. Keep those two views together when splitting data.
+
+Image 09 shows shredded banknotes; its washing account is disputed in the source comments and recorded as unverified. In image 10, the booklet beside the damaged cartridge is readable context, not washed material. Handwritten markings are visible on the cartridge, but their timing is unknown.
 
 This is a curated seed collection. No OCR runs, reference transcripts, or performance scores are included. Ground truth should distinguish readable text, partial text, and unrecoverable regions. Object names and source stories are context, not evidence that missing words can be read from an image. Keep source titles and descriptions out of image-only model inputs.
 
