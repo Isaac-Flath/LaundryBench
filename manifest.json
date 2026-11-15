@@ -1,11 +1,11 @@
 {
   "name": "LaundryParseBench",
-  "version": "0.3.0",
-  "description": "Ten photos of text-bearing objects reportedly put through laundry, with minimal content checks and a separate image-grounded pairwise judge.",
+  "version": "0.4.0",
+  "description": "Ten washed-document learning examples: inspect each photograph, its visible-text checks, and any saved OCR outputs.",
   "images": [
     {
       "id": "01",
-      "file": "images/01-fox-in-socks-wide.jpeg",
+      "file": "examples/01-nephews-book/image.jpeg",
       "title": "Fox in Socks — wide view",
       "category": "book",
       "event_group": "fox-in-socks",
@@ -29,7 +29,7 @@
     },
     {
       "id": "02",
-      "file": "images/02-godel-escher-bach.jpg",
+      "file": "examples/02-godel-escher-bach/image.jpg",
       "title": "Gödel, Escher, Bach",
       "category": "book",
       "event_group": "godel-escher-bach",
@@ -53,7 +53,7 @@
     },
     {
       "id": "03",
-      "file": "images/03-anatomy-textbook.jpg",
+      "file": "examples/03-anatomy-textbook/image.jpg",
       "title": "Anatomy textbook",
       "category": "book",
       "event_group": "anatomy-textbook",
@@ -77,7 +77,7 @@
     },
     {
       "id": "04",
-      "file": "images/04-stoic-book.jpeg",
+      "file": "examples/04-stoic-book/image.jpeg",
       "title": "Letters from a Stoic",
       "category": "book",
       "event_group": "stoic-book",
@@ -101,7 +101,7 @@
     },
     {
       "id": "05",
-      "file": "images/05-pokemon-card.jpeg",
+      "file": "examples/05-pokemon-card/image.jpeg",
       "title": "Pokémon card pinned flat",
       "category": "trading-card",
       "event_group": "pokemon-card",
@@ -125,7 +125,7 @@
     },
     {
       "id": "06",
-      "file": "images/06-meathook-massacre.jpg",
+      "file": "examples/06-meathook-massacre/image.jpg",
       "title": "Meathook Massacre II",
       "category": "trading-card",
       "event_group": "meathook-card",
@@ -149,7 +149,7 @@
     },
     {
       "id": "07",
-      "file": "images/07-shredded-card-pack.jpg",
+      "file": "examples/07-shredded-cards/image.jpg",
       "title": "Trading-card pack left in a pocket",
       "category": "trading-card",
       "event_group": "shredded-card-pack",
@@ -173,7 +173,7 @@
     },
     {
       "id": "08",
-      "file": "images/08-silvertab-jeans.jpg",
+      "file": "examples/08-jeans-label/image.jpg",
       "title": "Jeans with a washed-out patch",
       "category": "clothing-label",
       "event_group": "silvertab-jeans",
@@ -197,7 +197,7 @@
     },
     {
       "id": "09",
-      "file": "images/09-shredded-banknotes.jpg",
+      "file": "examples/09-banknotes/image.jpg",
       "title": "Banknotes shredded in the wash",
       "category": "currency",
       "event_group": "shredded-banknotes",
@@ -221,7 +221,7 @@
     },
     {
       "id": "10",
-      "file": "images/10-washed-ds-cartridge.jpg",
+      "file": "examples/10-game-cartridge/image.jpg",
       "title": "Game cartridge with its label washed away",
       "category": "game-cartridge",
       "event_group": "washed-ds-cartridge",

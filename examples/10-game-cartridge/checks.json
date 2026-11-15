@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "annotation_status": "Visually reviewed by the authoring assistant; not independently human-adjudicated.",
+  "image_id": "10",
+  "image_sha256": "cd16d59a5c5249730bb3f1bdbc1221dcf9451bf5529839ad8b4162d2c0496fe1",
+  "event_group": "washed-ds-cartridge",
+  "checks": [
+    {
+      "id": "game",
+      "question": "Which game title is readable on the booklet?",
+      "evidence": "Intact booklet on the left, not the washed cartridge.",
+      "all_of": [
+        [
+          "Pokemon"
+        ],
+        [
+          "Black Version 2",
+          "Black 2 Version",
+          "Black 2"
+        ]
+      ]
+    },
+    {
+      "id": "document-type",
+      "question": "What kind of booklet is it?",
+      "evidence": "White diagonal lettering on the booklet, not the cartridge.",
+      "all_of": [
+        [
+          "Instruction Booklet"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "annotation_status": "Visually reviewed by the authoring assistant; not independently human-adjudicated.",
+  "image_id": "04",
+  "image_sha256": "f19f210b6f5f381090906d8942a83d868b16b2ea733a56a066986853f5166400",
+  "event_group": "stoic-book",
+  "checks": [
+    {
+      "id": "author",
+      "question": "Which author is named?",
+      "evidence": "SENECA on the main exposed page.",
+      "all_of": [
+        [
+          "Seneca"
+        ]
+      ]
+    },
+    {
+      "id": "publisher",
+      "question": "Which publisher imprint is named?",
+      "evidence": "Logo at the bottom of the exposed page.",
+      "all_of": [
+        [
+          "Capstone"
+        ]
+      ]
+    },
+    {
+      "id": "title-fragment",
+      "question": "What readable title phrase survives?",
+      "evidence": "Only FROM A STOIC is required; missing initial letters are not.",
+      "all_of": [
+        [
+          "From a Stoic"
+        ]
+      ]
+    }
+  ]
+}

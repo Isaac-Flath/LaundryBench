@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "annotation_status": "Visually reviewed by the authoring assistant; not independently human-adjudicated.",
+  "image_id": "06",
+  "image_sha256": "97e25250b3117ba55bfc616923b0143db31b11b19f364a16bc28ed93fd975600",
+  "event_group": "meathook-card",
+  "checks": [
+    {
+      "id": "title",
+      "question": "What is the card title?",
+      "evidence": "Top title bar.",
+      "all_of": [
+        [
+          "Meathook Massacre II",
+          "Meathook Massacre 2"
+        ]
+      ]
+    },
+    {
+      "id": "type",
+      "question": "What card type is printed?",
+      "evidence": "Type line immediately below the artwork.",
+      "all_of": [
+        [
+          "Legendary Enchantment"
+        ]
+      ]
+    },
+    {
+      "id": "payment",
+      "question": "How much life can be paid?",
+      "evidence": "Both rules paragraphs state pay 3 life.",
+      "all_of": [
+        [
+          "pay 3 life",
+          "pay three life",
+          "3 life",
+          "three life"
+        ]
+      ]
+    }
+  ]
+}

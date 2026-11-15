@@ -1,0 +1,15 @@
+{
+  "score": 1.0,
+  "complete": true,
+  "valid_judgments": 2,
+  "total_judgments": 2,
+  "per_image": {
+    "01": 1.0
+  },
+  "mean_by_candidate_position": {
+    "A": 1.0,
+    "B": 1.0
+  },
+  "order_disagreements": 0,
+  "complete_order_pairs": 1
+}

@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "annotation_status": "Visually reviewed by the authoring assistant; not independently human-adjudicated.",
+  "image_id": "03",
+  "image_sha256": "c20915faf972be5e17ddf9c1d6f340d73eccc71ea38cff7ac0bbf811263e777c",
+  "event_group": "anatomy-textbook",
+  "checks": [
+    {
+      "id": "bone",
+      "question": "Which bone is named in the heading?",
+      "evidence": "Heading under the skull figures, left exposed page.",
+      "all_of": [
+        [
+          "Sphenoid"
+        ]
+      ]
+    },
+    {
+      "id": "section",
+      "question": "Which section heading follows it?",
+      "evidence": "The next heading on the same exposed page.",
+      "all_of": [
+        [
+          "Anatomy"
+        ]
+      ]
+    }
+  ]
+}
