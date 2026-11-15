@@ -30,17 +30,14 @@ def load_dataset(image_id=None):
     return images, {'version': '1.0.0', 'cases': cases}
 
 
-def read_outputs(parser, images):
-    import re
-    if not re.fullmatch(r'[a-z0-9-]+', parser):
-        raise ValueError('Parser name must contain only lowercase letters, numbers and hyphens')
+def read_outputs(directory, images):
+    directory = Path(directory)
     outputs = {}
-    for image_id, item in images.items():
-        directory = (ROOT / item['file']).parent / 'outputs'
-        matches = [directory / f'{parser}{suffix}' for suffix in ('.md', '.txt', '.html')
-                   if (directory / f'{parser}{suffix}').is_file()]
+    for image_id in images:
+        matches = [directory / f'{image_id}{suffix}' for suffix in ('.md', '.txt', '.html')
+                   if (directory / f'{image_id}{suffix}').is_file()]
         if len(matches) != 1:
-            raise ValueError(f'{image_id}: need exactly one {parser}.md, .txt or .html in {directory}')
+            raise ValueError(f'{image_id}: need exactly one .md, .txt or .html file in {directory}')
         outputs[image_id] = matches[0].read_text(encoding='utf-8')
     return outputs
 

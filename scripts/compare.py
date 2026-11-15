@@ -129,8 +129,8 @@ def run(jobs, images, candidate, baseline, model, out, key):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--candidate', required=True, help='Saved output name, e.g. gemini')
-    parser.add_argument('--baseline', required=True, help='Saved output name, e.g. datalab')
+    parser.add_argument('--candidate', required=True, help='Candidate predictions directory')
+    parser.add_argument('--baseline', required=True, help='Baseline predictions directory')
     parser.add_argument('--image', help='One image ID; omit to compare all ten')
     parser.add_argument('--model', required=True, help='Explicit Gemini Flash model ID; actual returned version is recorded')
     parser.add_argument('--out', type=Path, required=True, help='New output directory; existing directories are refused')

@@ -127,6 +127,9 @@ def score(outputs, images, checks):
         rows.append({'image_id': image_id, 'score': sum(c['pass'] for c in results)/len(results),
                      'output_sha256': digest(outputs[image_id].encode()), 'checks': results})
     return {'metric': 'content_recovery', 'checks_version': checks['version'],
+            'dataset_sha256': digest((ROOT / 'manifest.json').read_bytes()),
+            'scorer_sha256': digest((ROOT / 'scripts/check.py').read_bytes() + (ROOT / 'scripts/common.py').read_bytes()),
+            'images_evaluated': len(rows),
             'checks_sha256': digest(json.dumps(checks, sort_keys=True).encode()),
             'score': event_mean({r['image_id']: r['score'] for r in rows}, images),
             'passed': sum(c['pass'] for r in rows for c in r['checks']),
@@ -135,12 +138,12 @@ def score(outputs, images, checks):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--parser', required=True, help='Saved output name, e.g. gemini')
+    parser.add_argument('outputs', help='Directory containing 01.md through 10.md (txt/html also accepted)')
     parser.add_argument('--image', help='One image ID, e.g. 01; omit to check all ten')
     parser.add_argument('--out', help='Optional JSON report path')
     args = parser.parse_args()
     images, checks = load_dataset(args.image)
-    result = score(read_outputs(args.parser, images), images, checks)
+    result = score(read_outputs(args.outputs, images), images, checks)
     if args.out:
         save_json(args.out, result)
     for row in result['images']:

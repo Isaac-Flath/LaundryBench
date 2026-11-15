@@ -1,7 +1,7 @@
 {
   "name": "LaundryParseBench",
-  "version": "0.4.0",
-  "description": "Ten washed-document learning examples: inspect each photograph, its visible-text checks, and any saved OCR outputs.",
+  "version": "0.5.0",
+  "description": "Ten washed-document images with visible-content checks and separate scoring tools.",
   "images": [
     {
       "id": "01",
