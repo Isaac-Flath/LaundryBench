@@ -1,0 +1,57 @@
+{
+  "image_id": "swapped-size",
+  "round": 0,
+  "candidate_label": "A",
+  "image_sha256": "30a39f591da35c2f4802f6f49ffc0e2c6e74222cb0c31fd313538771fec2dfde",
+  "parses": {
+    "A": "silverTab\nbaggy pleated\nWaist: 36\nLength: 34\nOuter patch: unreadable.",
+    "B": "silverTab\nbaggy pleated\nWaist: 34\nLength: 36\nOuter patch: unreadable."
+  },
+  "model_requested": "gemini-3.5-flash",
+  "points": 1.0,
+  "raw_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "{\n  \"verdict\": \"A\",\n  \"evidence\": [\n    \"Parse A correctly identifies Waist as 36 and Length as 34 from 'W36 L34'.\",\n    \"Parse B incorrectly swaps the Waist and Length values (Waist: 34, Length: 36).\"\n  ],\n  \"rationale\": \"Parse A accurately transcribes the size tag ('W36 L34'), while Parse B transposes the waist and length values.\"\n}",
+              "thoughtSignature": "ErsHCrgHAWkUfRMshIH92tku4Keo+0DYhjXkXNVi41/vwRzVlbw6f0Hm4wtGszZRVYdtH0ujZ/4YkZNObreJW3kfZHm37gCESo1I7SPKh0RJKTBZdZ0e+8rPkUv+WuZHfJ9wWa5/SSRp0twMPem7f5YiK70WV1Ue2APvH3/2sZxP+0Yo5kXy8j/IZS1pHiNXvthRLQ9d6sGgL5+7IjnN5SXub1PAwKdD9gsEGTShJPEx3uSTlpwArqc+u5xDouOpHp+xIeKaXNcckgdMaK5R22wNZb3mlUTTXHTUJ8fYExtmUsnGC5pu/Pvysyfj4ZT4YK5D+y/U4J6jmrF3gnGhcbrvBSrm4h5X66D1C0oqWDnJU2rHRbMBJaY1oA/0XFZV99hLDVyTfqtx9jF4KDkPtNO61Orr2Ty8GDL9AK+xkarJuy+PNFXMIRBoRyPeclH1+bisT95wTMUEVQC+1m1dC3ezbJ1KT5hbnuYVtiVA/Je4ie9rZc5CdsJh7tovKIWw5ekT9PZlZG7UVQ9W7EsExPRT3gVZrkm3jgkQ27AC8cA5hFcI/FlLNbNLKioo5wnO7cHNP5lIZolgZESVc8el8vG/CdJ2H9gcM2uQb8AVu8ntd3h7blk+gR6/UYNoBVWzXWYwQ3nptZ4TzIC3npvKygCHVb7sh77zIrkCe09A9on4HoYqGzueI2e253UxPgT6wFahdZxNQPaq2O3rZCdgMzuqFy0+RaMISvnoi6djt7oPcwrvD6RiA7mOGu5W0Ay1/C7ymSUJQDuqkc4fEAlG6uhmGvlD5q8wAYO8oX3egHsQHdThgwT6ZOBlQHjte8BId6JT20vAre/zFHzzjLUvjnS8T2lnhGTfRoXKmYG7fC2Dj4Miyu2rx/FdCBRGIA/Kl8FQo9mtmSOJu53GGwWzr2IYIcZQbj80GEctPYhPQ1AGTO/8bL+eVcYX6yagFIOeFKvlUD0KKIuonupwpDBZUlhj4etF9LJSJqf33JRjnB1IqhU2Xz57BpdghcqTS1nu/x+Lk7x7MafqPjoj8FpEVLzqs2LwhQSawsYfwcGvc3X3+oCJdALXw3sdt2wo08OgIJBupY0Furnrcq/s+PLSDbZFTCyffwQxpKPz1w/rM3GGfUxoNCu4ozON3d4FYML4J0pyVAv8Ui1Ma8+CkzYVERXWc7LB3enYdNxu3iCth8hzDsueR6a6XSMIRXia7nWxyC1W5/vOiD+jFZRd9w7JBVro+BXdTvIzFQT8Ud+LQ1fWwb/qI5pZgsoyJV9ymg=="
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 1484,
+      "candidatesTokenCount": 109,
+      "totalTokenCount": 1878,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 420
+        },
+        {
+          "modality": "IMAGE",
+          "tokenCount": 1064
+        }
+      ],
+      "thoughtsTokenCount": 285,
+      "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.6-flash",
+    "responseId": "Dff5aqjXB5eu5NoPn9iGoQ0"
+  },
+  "model_reported": "gemini-3.6-flash",
+  "judgment": {
+    "verdict": "A",
+    "evidence": [
+      "Parse A correctly identifies Waist as 36 and Length as 34 from 'W36 L34'.",
+      "Parse B incorrectly swaps the Waist and Length values (Waist: 34, Length: 36)."
+    ],
+    "rationale": "Parse A accurately transcribes the size tag ('W36 L34'), while Parse B transposes the waist and length values."
+  }
+}

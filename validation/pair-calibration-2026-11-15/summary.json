@@ -1,0 +1,49 @@
+{
+  "kind": "synthetic calibration, not parser scores",
+  "passed": 6,
+  "total": 6,
+  "results": [
+    {
+      "control": "format-tie",
+      "candidate_label": "A",
+      "expected_points": 0.5,
+      "actual_points": 0.5,
+      "pass": true
+    },
+    {
+      "control": "invented-patch",
+      "candidate_label": "A",
+      "expected_points": 1.0,
+      "actual_points": 1.0,
+      "pass": true
+    },
+    {
+      "control": "format-tie",
+      "candidate_label": "B",
+      "expected_points": 0.5,
+      "actual_points": 0.5,
+      "pass": true
+    },
+    {
+      "control": "swapped-size",
+      "candidate_label": "B",
+      "expected_points": 1.0,
+      "actual_points": 1.0,
+      "pass": true
+    },
+    {
+      "control": "invented-patch",
+      "candidate_label": "B",
+      "expected_points": 1.0,
+      "actual_points": 1.0,
+      "pass": true
+    },
+    {
+      "control": "swapped-size",
+      "candidate_label": "A",
+      "expected_points": 1.0,
+      "actual_points": 1.0,
+      "pass": true
+    }
+  ]
+}

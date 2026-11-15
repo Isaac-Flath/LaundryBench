@@ -1,0 +1,57 @@
+{
+  "image_id": "format-tie",
+  "round": 0,
+  "candidate_label": "A",
+  "image_sha256": "30a39f591da35c2f4802f6f49ffc0e2c6e74222cb0c31fd313538771fec2dfde",
+  "parses": {
+    "A": "<p>silverTab</p><p>baggy pleated</p><table><tr><th>Waist</th><td>36</td></tr><tr><th>Length</th><td>34</td></tr></table><p>Outer patch: unreadable.</p>",
+    "B": "silverTab\nbaggy pleated\nWaist: 36\nLength: 34\nOuter patch: unreadable."
+  },
+  "model_requested": "gemini-3.5-flash",
+  "points": 0.5,
+  "raw_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "{\n  \"verdict\": \"tie\",\n  \"evidence\": [\n    \"Both parses correctly transcribe 'silverTab', 'baggy pleated', and the size 'W36 L34' (as Waist 36, Length 34).\",\n    \"Both parses note the blank/worn outer patch as unreadable.\"\n  ],\n  \"rationale\": \"Both OCR parses capture the exact same text content accurately. Formatting differences (HTML vs plain text/Markdown) are disregarded according to the evaluation criteria, resulting in a tie.\"\n}",
+              "thoughtSignature": "EqAJCp0JAWkUfRPpjMF1WPwiKUFlJ6Um1QQ7JVWFeJAd6OzL3GGgDP+W5jP/bZnJUCJm2cP5wira1u2O2CUy9JKpPZAOqmBrATqi3dLyAbd3v2IfO28Dwn5YSLPePkoxVWFj4yTDCFK40zxqdPrNHFjJuXIHJOKLFI2nHaXx6onZwPl0w6fRIGlAKe1gY7VnPGLTYQnbTN5bgbS6p1h5YO3BgwyUwmVgU5cNbTAkcDp19M5bOX3quz2hbC9lLdPNlOBew8xgeWY6ItdwlRTnT4xWRk0RCLdTBTfnrKYr7sjqNtxl+29oxvOS3Qp3ThOe3KQrl5UUNIb559SELO6dOKLAiBtNV6AwyEaGTOloHZFplX+rfxijdR9nDdCcghiRjm4zbgy8UPU3u1ErmVIor8XrjQgenakjMbNe5XKy8BbPhqDhc4TkyX26TEQRPIfkbdJTWxxTHFMil/86u5lU3Xb19MVL3LWvpUQD/X/w6yZuwSOICh+he4aLNL+C2QR/ivmeTKf7jBvvzDoRxqzvW7OSUVkaOlTE7zu5O5P0D500XpxeSYOR1Ms33aw3iyYGyS8xHbAHsDacjPpvcj3IO06dzVjuJ27TZmCBMeZabYR0hf7MHeXIvL6wyIMVAQ5BJEbovNvK2UIMcZW15XCC/QwfmiBNl9cvVEMJxBEz4J6ZuqDV9AWd9CoZL9mOqQ14mwdfuZNabrneA9rve0tIHLWihJN4lyKiFJco9AxCrpv+4L20T5z/y/kmSC9SVBrAGL+P5pPDLdV9DgTtTvAyaq58+8UKwYXkJwl98MojdvP5o8R4QTiI7CSMzGnxIOr2McrgmEGwwxIWQWDGEcJdS2HZ5E2BMgeBzr+FheiJo62thcPE0dC3sWQSCaTNQx0MYzmtixCjsuQfvFDz7qE0dEpruvWIb97FBP6XLwFNofqSebcqP56oJUGwT3ghHtwU/KIs1lPaaokeXiBaP/lpjrFoEQ42lj4YcA8Fy7mmp6EOuADTa6YkvKejFwKPw1w4KmSqW3uvDpXrDy8Hs81efTHnhxVzpL77gfTdVT5WQgmNaBVH+0OKWLlEC9OH9a1fLTm7Jv/tYPumbfnHDxOPXpTEj4cu+NQ9sNydPkW4bOhsz9Mf8WEXtKgSKG44YYWjIZjXtREgv1UGttRJQ4sjiggBaeCYBp98k+nnZDy5VIus9CjjdYY9qe2O8eZAol6/JshbyKpmcq/YFayiz0cXkOgF5gMFk4S6V0huJWGzBdqCZzxE2AHqGOEZEzr1DNRdpdG8oszOrRTH/lzoM0sgVryBsHUeVc82RZW65g/EX2hGyU59wb1+DK/iPadw9Ag/6x96GcjVsdy/ssNrc+N4VZjHWDY6ONbS7UMNPfZd8kWBftfwv6FvQ05Wh8rJ4U2rSxn5KUrE3cDH1uiwb9f4WI1iKRJuSE7ZOSZQ4280U01mMOANoL/HtvdirGYaNLtvLHELkYAqsb0NrrbFVEajBAqWrRpMMnzkPnFiVnJHdAZL7+l6wAlt1/VO1lDSSfn7CmpgImUh+UydDKqmq4SiJfqgyoUaO/yLnlX8yxGtkJW+eac="
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 1502,
+      "candidatesTokenCount": 118,
+      "totalTokenCount": 1926,
+      "promptTokensDetails": [
+        {
+          "modality": "IMAGE",
+          "tokenCount": 1064
+        },
+        {
+          "modality": "TEXT",
+          "tokenCount": 438
+        }
+      ],
+      "thoughtsTokenCount": 306,
+      "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.6-flash",
+    "responseId": "9Pb5aqevD9-pxdIP8u2I4AU"
+  },
+  "model_reported": "gemini-3.6-flash",
+  "judgment": {
+    "verdict": "tie",
+    "evidence": [
+      "Both parses correctly transcribe 'silverTab', 'baggy pleated', and the size 'W36 L34' (as Waist 36, Length 34).",
+      "Both parses note the blank/worn outer patch as unreadable."
+    ],
+    "rationale": "Both OCR parses capture the exact same text content accurately. Formatting differences (HTML vs plain text/Markdown) are disregarded according to the evaluation criteria, resulting in a tie."
+  }
+}

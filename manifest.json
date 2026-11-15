@@ -1,7 +1,7 @@
 {
   "name": "LaundryParseBench",
-  "version": "0.2.0",
-  "description": "Ten source image files of text-bearing objects reportedly put through laundry. A curated seed collection, not a scored benchmark.",
+  "version": "0.3.0",
+  "description": "Ten photos of text-bearing objects reportedly put through laundry, with minimal content checks and a separate image-grounded pairwise judge.",
   "images": [
     {
       "id": "01",
@@ -25,31 +25,31 @@
       ],
       "bytes": 1635098,
       "sha256": "f2a24f8c78189b7916f70ada74a98e2998402e950d9fbc8c220142414b263b4a",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "02",
-      "file": "images/02-fox-in-socks-close.jpeg",
-      "title": "Fox in Socks — close view",
+      "file": "images/02-godel-escher-bach.jpg",
+      "title": "Gödel, Escher, Bach",
       "category": "book",
-      "event_group": "fox-in-socks",
-      "source_page": null,
-      "source_image": null,
-      "attribution": "Isaac Flath (user-provided)",
-      "wash_evidence": "Same washing event as image 01.",
-      "evidence_level": "user-reported",
-      "visual_notes": "Closer view of surviving printed cover; wrinkles, missing material and pulp.",
+      "event_group": "godel-escher-bach",
+      "source_page": "https://community.alteryx.com/en/discussion/426908/finding-a-book-in-my-laundry-an-inspire-nashville-photo-journal",
+      "source_image": "https://us.v-cdn.net/6038679/uploads/images/b8/b868fc28159db8f2caadf32d0b6cb436.jpg",
+      "attribution": "AlexKo / Alteryx Community",
+      "wash_evidence": "Author reports accidentally washing the paperback after leaving it in a laundry hamper; the post shows the washer, scattered paper and surviving cover.",
+      "evidence_level": "source-author-reported",
+      "visual_notes": "Title, subtitle and author lettering survive on a torn cover with missing patches.",
       "damage_severity": "Heavy",
-      "notes": "Second angle of the same item as 01; keep both in the same evaluation split.",
-      "rights_status": "User supplied; no public license specified.",
+      "notes": "Separate washing incident from image 01. Original source photograph; no generated restoration.",
+      "rights_status": "Third-party image; no redistribution license verified.",
       "retrieved_date": "2026-11-15",
       "pixel_dimensions": [
-        4032,
-        3024
+        446,
+        512
       ],
-      "bytes": 1875422,
-      "sha256": "d55c9d0ac89c6d425207fd5fde02e29dc7d707e62ffb882a26c90163cb681811",
-      "ground_truth_status": "not annotated"
+      "bytes": 48952,
+      "sha256": "4900acd8986cf76ce8dcdf0f4d780fa05cf7eed059df362cf68389d2b2cf75f9",
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "03",
@@ -73,7 +73,7 @@
       ],
       "bytes": 1006927,
       "sha256": "c20915faf972be5e17ddf9c1d6f340d73eccc71ea38cff7ac0bbf811263e777c",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "04",
@@ -97,7 +97,7 @@
       ],
       "bytes": 384150,
       "sha256": "f19f210b6f5f381090906d8942a83d868b16b2ea733a56a066986853f5166400",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "05",
@@ -121,7 +121,7 @@
       ],
       "bytes": 2001893,
       "sha256": "7d9ff303b6aad058900a8ead6ef9fe018e9209437da3d21101980d9df6c79308",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "06",
@@ -145,7 +145,7 @@
       ],
       "bytes": 5256258,
       "sha256": "97e25250b3117ba55bfc616923b0143db31b11b19f364a16bc28ed93fd975600",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "07",
@@ -169,7 +169,7 @@
       ],
       "bytes": 1253091,
       "sha256": "3193bd4c70336722be1ac9587841e91cd80796dccc478d698ced4900d18dbec9",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "08",
@@ -193,7 +193,7 @@
       ],
       "bytes": 2222464,
       "sha256": "30a39f591da35c2f4802f6f49ffc0e2c6e74222cb0c31fd313538771fec2dfde",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "09",
@@ -217,7 +217,7 @@
       ],
       "bytes": 1322052,
       "sha256": "4774c6f471178f8526056c59f8eccd8e10ea34808401ee88d3a1a4e250dd20f7",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     },
     {
       "id": "10",
@@ -241,7 +241,7 @@
       ],
       "bytes": 1267148,
       "sha256": "cd16d59a5c5249730bb3f1bdbc1221dcf9451bf5529839ad8b4162d2c0496fe1",
-      "ground_truth_status": "not annotated"
+      "ground_truth_status": "Partial visible-content checks; assistant-reviewed, not independently human-adjudicated."
     }
   ]
 }

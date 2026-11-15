@@ -15,7 +15,7 @@ Most of us have accidentally washed something we meant to keep: a grocery list l
 | ID | Image | What makes it useful | Source |
 | --- | --- | --- | --- |
 | 01 | [Fox in Socks — wide view](images/01-fox-in-socks-wide.jpeg) | Surviving cover titles and publisher text amid detached paper pulp. | My nephew 💀 |
-| 02 | [Fox in Socks — close view](images/02-fox-in-socks-close.jpeg) | Closer view of surviving printed cover; wrinkles, missing material and pulp. | My nephew 💀 |
+| 02 | [Gödel, Escher, Bach](images/02-godel-escher-bach.jpg) | Title, subtitle and author lettering survive on a torn cover with missing patches. | [AlexKo / Alteryx Community](https://community.alteryx.com/en/discussion/426908/finding-a-book-in-my-laundry-an-inspire-nashville-photo-journal) |
 | 03 | [Anatomy textbook](images/03-anatomy-textbook.jpg) | Readable body-text fragments and headings on crumpled pages; many folds and missing regions. | [u/Pol_Slattery](https://www.reddit.com/r/Wellthatsucks/comments/m9024o/my_textbook_somehow_made_it_into_my_washing/) |
 | 04 | [Letters from a Stoic](images/04-stoic-book.jpeg) | Title fragments, SENECA and CAPSTONE survive on a torn, deformed book. | [u/gogodboss](https://www.reddit.com/r/mildlyinfuriating/comments/1ukoqxz/i_accidentally_put_my_book_in_the_washing_machine/) |
 | 05 | [Pokémon card pinned flat](images/05-pokemon-card.jpeg) | Attack names and numbers remain readable through wrinkles, reflections and thumbtack occlusion. | [u/rhubarb_thehawlic](https://www.reddit.com/r/Wellthatsucks/comments/1xqsui7/5th_grade_me_accidentally_washed_a_pokemon_card_i/) |
@@ -25,6 +25,14 @@ Most of us have accidentally washed something we meant to keep: a grocery list l
 | 09 | [Banknotes shredded in the wash](images/09-shredded-banknotes.jpg) | Denominations, lettering and serial-number fragments survive on scattered, torn banknote pieces. | [u/BocceBurger](https://www.reddit.com/r/mildlyinfuriating/comments/tyoljy/i_accidentally_washed_10/) |
 | 10 | [Game cartridge with its label washed away](images/10-washed-ds-cartridge.jpg) | The cartridge has a ruined printed label with handwritten markings; a readable game booklet sits beside it. | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
 
+## Evaluation
+
+Two complementary measures: **26 content checks** (two or three per image) and an **image-based PAIR-style judge**. The checks score useful recovered facts without requiring particular formatting. The judge compares two anonymous parses against the image, including unsupported guesses, in both output orders.
+
+[Read the checks](bench/CHECKS.md) · [Run the evaluations](bench/README.md)
+
+The content score measures partial recall; the judge gives a relative win rate. Keep both scores visible. The judge passed six small calibration comparisons; no parser leaderboard has been run yet.
+
 ## Image rights
 
-This repository is private. The eight online images remain third-party material; no redistribution license has been verified. Attribution and source links are recorded for every file. Inclusion does not grant permission to republish the photographs. The two supplied images have no public license specified either.
+This repository is private. The nine online images remain third-party material; no redistribution license has been verified. Attribution and source links are recorded for every file. Inclusion does not grant permission to republish the photographs. The supplied nephew photograph has no public license specified either.

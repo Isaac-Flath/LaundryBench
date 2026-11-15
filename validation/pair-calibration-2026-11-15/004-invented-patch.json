@@ -1,0 +1,57 @@
+{
+  "image_id": "invented-patch",
+  "round": 0,
+  "candidate_label": "B",
+  "image_sha256": "30a39f591da35c2f4802f6f49ffc0e2c6e74222cb0c31fd313538771fec2dfde",
+  "parses": {
+    "A": "silverTab\nbaggy pleated\nWaist: 36\nLength: 34\nOuter patch transcription: PREMIUM DENIM. WASH AT 40 DEGREES. MADE IN ITALY.",
+    "B": "silverTab\nbaggy pleated\nWaist: 36\nLength: 34\nOuter patch: unreadable."
+  },
+  "model_requested": "gemini-3.5-flash",
+  "points": 1.0,
+  "raw_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "{\n  \"verdict\": \"B\",\n  \"evidence\": [\n    \"Parse A hallucinates text on the blank/worn outer grey patch: 'PREMIUM DENIM. WASH AT 40 DEGREES. MADE IN ITALY.'\",\n    \"Parse B correctly notes that the outer patch is unreadable/blank.\"\n  ],\n  \"rationale\": \"Parse B accurately transcribes the visible text on the inner waistband tag ('baggy pleated', 'silverTab', 'W36 L34') and correctly identifies the blank outer patch as unreadable. Parse A invents text on the outer patch that does not exist in the image.\"\n}",
+              "thoughtSignature": "ErsHCrgHAWkUfRODiT4bsiG0jmQiqe628lBlKPLg+FQe6PkVXXcK89dFdFvON7IKR9zwg8RozEXtRL7qdDwdm9PuBZWK961EXGfHW8CADjQAQFzsTPKnr6dYudtvJqShGQBgTmU2CSub1Idcwt9pOFUTZjppKp/9MGAnULBXJYiAoqCs/CTXRoNMJaYzR5nTcaj9mSvgG2ugMEAipcuq5DlNDL6jtUZfsTSrjpXT0ft45A1U508PyuPjxlo9QydAeZUIGpD/fCgp31PgpE/FWyJnC7bJ7nnnhETfQB1rINBd1EmgkG5SNZf+fy+iIRTcamwhOtKvuge6khfyKzZzYzck/ormyBBlHTw15VisPK1kOIC+FHK9nb1QVM4bEk7dkYnC3h2zz4dB5SFcf01rr1Md/hQX0cz3KhYoLhdW4BIq/diLl9dlA6mXYyxV9RIJxZMpBJ9iNM73Oh4j5Ubw3vQsX13htABffIMW+oOXn6B9BLVqxEDY8tGyG6A05CORqaYXGb12hTuv88HKvQjD8qWeVYo8BvvxZky5TkYBet3ru0EJ6DVwXAUxz9/JtjgoSlvPGG1dB7txti39+b1bBx0DmLiwBJ77F3v34mks51e9oX9vpMlzhNBzOwzNHLD/j7gwUY2pTYeHPc4ssR8rO6UgFTC6OPB1GYL+LdhmtJ3AZcEPUDJlcVCdrKZOQgLkuBffD7N49WINDTzTbnDzRNXwUPIUloJmybZZQlovuqI6n++VnPrLx7rUafb+hz+P0zqgAENLIBpofkAr0Td55uJsrJ24AyGFwPz1aVtExrqQC3/59rnr+8RFYSXz691RumXK5LvVi5ILVWW30Lf3s0c8ONqFdCOHxYPT6l3OF7fuvA2q9zkMxuC/i28Omv8MKzu/c+oh5hrQSBPbdTPMs2rJccO5dmnttj6F1/AQkHM+ChjKjGlhT+8V/G6hbvpERLYi2FAMLmXGkceTJohqL4JPGtJ918QPRTmS22F3sTHsnQ+W8h6hp5KcMud5QH9rRnwZFxSnnp7XSqtzF+FBpsfRy1kU1Xg+omWf9aQ8JAZ4151mIpMbWnqY5BXvl6OrJo75cAZN/tTCn2dErnSi1nTFZhWGEhEaD0XtjY1//yfCxeq1CXeajkJ3v2dA25j2yA6O/aPeKPj/vBVQ/PSe74oQJI4oR5zXYreYQIHLIrziSXNMbbfDd9jCsZoieha3h4rot/QrBUtOkF8P9jJQxKQGfCxMpmV5v7FIDz5LxzI9upwP9Oy5nNv7303Ddg=="
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 1498,
+      "candidatesTokenCount": 139,
+      "totalTokenCount": 1894,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 434
+        },
+        {
+          "modality": "IMAGE",
+          "tokenCount": 1064
+        }
+      ],
+      "thoughtsTokenCount": 257,
+      "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.6-flash",
+    "responseId": "CPf5aofuLeeLiLMP3v2C-Aw"
+  },
+  "model_reported": "gemini-3.6-flash",
+  "judgment": {
+    "verdict": "B",
+    "evidence": [
+      "Parse A hallucinates text on the blank/worn outer grey patch: 'PREMIUM DENIM. WASH AT 40 DEGREES. MADE IN ITALY.'",
+      "Parse B correctly notes that the outer patch is unreadable/blank."
+    ],
+    "rationale": "Parse B accurately transcribes the visible text on the inner waistband tag ('baggy pleated', 'silverTab', 'W36 L34') and correctly identifies the blank outer patch as unreadable. Parse A invents text on the outer patch that does not exist in the image."
+  }
+}
