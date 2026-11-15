@@ -8,7 +8,7 @@ It was also a useful reminder about degraded documents. Some text is hard to rea
 
 Most of us have accidentally washed something we meant to keep: a grocery list left in a pocket, a receipt, a few bills. LaundryParseBench starts with ten images of books, cards, labels, and money after a wash.
 
-![All ten images](previews/contact-sheet.jpg)
+![Benchmark images](_benchmark-images.jpg)
 
 ## Images and checks
 
@@ -58,7 +58,7 @@ python3 -m scripts.compare \
   --model gemini-3.5-flash --out runs/a-vs-b
 ```
 
-The judge uses [this rubric](prompts/compare-outputs.txt), runs both A/B orders, and saves its reasons and raw responses. Default: 20 API calls for ten images. `--dry-run` previews the plan; `--image 01` compares one image. The output directory must be new. Wins score 1, ties 0.5, losses 0; failures or abstentions prevent a complete aggregate. This score is relative to the baseline and remains separate from the content score. Requested and reported judge versions are recorded.
+The judge uses [this rubric](prompts/compare-outputs.md), runs both A/B orders, and saves its reasons and raw responses. Default: 20 API calls for ten images. `--dry-run` previews the plan; `--image 01` compares one image. The output directory must be new. Wins score 1, ties 0.5, losses 0; failures or abstentions prevent a complete aggregate. This score is relative to the baseline and remains separate from the content score. Requested and reported judge versions are recorded.
 
 ## Results
 

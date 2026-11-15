@@ -14,7 +14,7 @@ from statistics import mean
 
 from .common import ROOT, digest, event_mean, load_dataset, read_outputs, save_json
 
-PROMPT = ROOT / 'prompts/compare-outputs.txt'
+PROMPT = ROOT / 'prompts/compare-outputs.md'
 SCHEMA = {'type': 'object', 'properties': {
     'verdict': {'type': 'string', 'enum': ['A', 'B', 'tie', 'unjudgeable']},
     'evidence': {'type': 'array', 'items': {'type': 'string'}},
