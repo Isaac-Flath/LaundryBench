@@ -19,7 +19,7 @@ This led me to create 2 novel AI benchmarks, `LaundryParseBench` and `LaundryExt
 | [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn OCR → Luna → Jev](solutions/extract/luna-jev/) |
 | [Datalab](solutions/parse/datalab/) | [Datalab](solutions/extract/datalab/) |
 
-Follow the solution’s setup instructions, then run `python run.py`. Add `--image 05` to try one image. Luna/Jev requires LightOn’s saved OCR; Datalab extraction accepts images directly.
+From the solution’s folder, run `python run.py`. Add `--image 05` to try one image. Luna/Jev requires LightOn’s saved OCR; Datalab extraction accepts images directly.
 
 Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. Model settings live in `run.py`; API keys go in `.env`. Keys and outputs are gitignored.
 
@@ -88,7 +88,7 @@ Open [the review app](http://127.0.0.1:8765/review.html). To change a check, edi
 Anyone can open a pull request:
 
 - **Data:** Put something with text through the wash, photograph what survives, and add it under `data/NN-name/` with the three JSON files shown above. Keep some text readable and add a few useful, visually verifiable checks. Add your photo credit to the source table.
-- **Solutions:** Add a parsing or extraction implementation under `solutions/parse/` or `solutions/extract/`. Include runnable code, dependencies, setup instructions, and an `.env.example` if it needs API keys. Follow an existing solution’s output format so the scorer can evaluate it.
+- **Solutions:** Add a parsing or extraction implementation under `solutions/parse/` or `solutions/extract/`. Include runnable code, dependencies, a short pipeline description, and an `.env.example` if it needs API keys. Follow an existing solution’s output format so the scorer can evaluate it.
 
 ## Roadmap
 
