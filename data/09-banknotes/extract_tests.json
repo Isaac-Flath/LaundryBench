@@ -3,23 +3,23 @@
     {
       "id": 1,
       "field": "left_fragment_serial",
-      "expected": "A16281584A",
+      "expected": "A16281158A",
       "basis": "visible",
-      "human_reference": "Upside-down green serial on the large left fragment."
+      "human_reference": "Upside-down green serial number on the large left fragment."
     },
     {
       "id": 2,
       "field": "currency_code",
       "expected": "USD",
       "basis": "inferred",
-      "human_reference": "U.S. banknote design and United States lettering identify the currency; USD itself is not printed."
+      "human_reference": "United States lettering and U.S. banknote design."
     },
     {
       "id": 3,
       "field": "original_total_value",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "Overlapping fragments do not establish how many distinct original notes there were. The source post is not an input."
+      "human_reference": "The overlapping fragments do not show how many banknotes there were."
     }
   ]
 }

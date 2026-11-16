@@ -6,21 +6,21 @@
         "string",
         "null"
       ],
-      "description": "Complete serial number on the large left-hand banknote fragment."
+      "description": "Complete serial number of the large left banknote fragment."
     },
     "currency_code": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Three-letter currency code. You may infer it from the surviving banknote text and design."
+      "description": "Three-letter currency code of the banknotes."
     },
     "original_total_value": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Exact total face value of all original banknotes before they were shredded. Return null unless the image establishes the original count and denominations without double-counting fragments."
+      "description": "Exact total face value of the original banknotes before shredding."
     }
   },
   "required": [

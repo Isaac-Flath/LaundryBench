@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Large lettering on the black inner label.",
+      "human_reference": "Large text on the black inner label.",
       "contains_all": [
         {
           "any_of": [
@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "human_reference": "Logo to the right of the fit.",
+      "human_reference": "Logo to the right of baggy pleated.",
       "contains_all": [
         {
           "any_of": [
@@ -25,7 +25,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Small pale tag below the inner label: W36 L34.",
+      "human_reference": "Small pale size tag: W36 L34.",
       "contains_all": [
         {
           "any_of": [
@@ -47,7 +47,7 @@
     },
     {
       "id": 4,
-      "human_reference": "Circular embossed lettering on the button below the labels: LEVI STRAUSS & CO and S F CAL.",
+      "human_reference": "Lettering around the metal button: LEVI STRAUSS & CO and S F CAL.",
       "contains_all": [
         {
           "any_of": [

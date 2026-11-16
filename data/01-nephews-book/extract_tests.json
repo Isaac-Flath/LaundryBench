@@ -5,21 +5,21 @@
       "field": "book_title",
       "expected": "Fox in Socks",
       "basis": "visible",
-      "human_reference": "Title runs down the surviving spine."
+      "human_reference": "Title on the spine."
     },
     {
       "id": 2,
       "field": "publisher_imprint",
       "expected": "Beginner Books",
       "basis": "visible",
-      "human_reference": "Red lettering in the central gray panel."
+      "human_reference": "Red lettering in the gray panel."
     },
     {
       "id": 3,
       "field": "minimum_catalogue_titles",
       "expected": 61,
       "basis": "inferred",
-      "human_reference": "Bottom of the gray panel says more than 60; the smallest whole number greater than 60 is 61."
+      "human_reference": "Bottom of the gray panel: more than 60 classic and new titles. The minimum is 61."
     }
   ]
 }

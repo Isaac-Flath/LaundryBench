@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Names at the top, above the artwork.",
+      "human_reference": "Names above the artwork.",
       "contains_all": [
         {
           "any_of": [
@@ -28,7 +28,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Attack heading in the lower middle.",
+      "human_reference": "Calamitous Slash below the artwork.",
       "contains_all": [
         {
           "any_of": [
@@ -40,7 +40,7 @@
     {
       "id": 4,
       "type": "order",
-      "human_reference": "HP 270 at the top right; Linear Attack below the artwork.",
+      "human_reference": "HP 270 at the top right, then Linear Attack below the artwork.",
       "sequence": [
         {
           "any_of": [
@@ -59,7 +59,7 @@
     },
     {
       "id": 5,
-      "human_reference": "Curved, small white text beneath GG End GX: can’t use more than 1 GX attack in a game.",
+      "human_reference": "Small white text below GG End GX: can’t use more than 1 GX attack in a game.",
       "contains_all": [
         {
           "any_of": [
@@ -77,7 +77,7 @@
     },
     {
       "id": 6,
-      "human_reference": "Small text in the yellow-bordered footer, toward the right: 3 Prize cards.",
+      "human_reference": "Small text at the bottom right: 3 Prize cards.",
       "contains_all": [
         {
           "any_of": [

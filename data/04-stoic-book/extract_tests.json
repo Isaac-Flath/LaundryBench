@@ -5,7 +5,7 @@
       "field": "title",
       "expected": "Letters from a Stoic",
       "basis": "inferred",
-      "human_reference": "Title begins with damaged letters before FROM A STOIC; SENECA and the Capstone imprint identify the work.",
+      "human_reference": "Damaged title near the top, above SENECA.",
       "reference_url": "https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9"
     },
     {
@@ -16,14 +16,28 @@
         "Lucius Annaeus Seneca"
       ],
       "basis": "visible",
-      "human_reference": "SENECA is visible below the main title."
+      "human_reference": "SENECA below the title."
     },
     {
       "id": 3,
       "field": "publisher_imprint",
       "expected": "Capstone",
       "basis": "visible",
-      "human_reference": "Logo near the bottom reads CAPSTONE above A Wiley Brand."
+      "human_reference": "CAPSTONE logo near the bottom."
+    },
+    {
+      "id": 4,
+      "field": "meditations_author",
+      "expected": "Marcus Aurelius",
+      "basis": "visible",
+      "human_reference": "Turned fragment: by Marcus Aurelius below Meditations."
+    },
+    {
+      "id": 5,
+      "field": "advertised_philosopher_surname",
+      "expected": "Nietzsche",
+      "basis": "visible",
+      "human_reference": "Turned fragment above Meditations: Nietzsche before (ISBN."
     }
   ]
 }

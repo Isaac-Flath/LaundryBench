@@ -2,18 +2,18 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Upside-down green serial on the left-hand banknote fragment.",
+      "human_reference": "Upside-down green serial number on the large left fragment.",
       "contains_all": [
         {
           "any_of": [
-            "A16281584A"
+            "A16281158A"
           ]
         }
       ]
     },
     {
       "id": 2,
-      "human_reference": "Large ONE on the reverse-side fragments. Only the visible word is required.",
+      "human_reference": "Large ONE on the banknote fragments.",
       "contains_all": [
         {
           "any_of": [

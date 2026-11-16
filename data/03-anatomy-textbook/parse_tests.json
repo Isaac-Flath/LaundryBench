@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Heading under the skull figures, left exposed page.",
+      "human_reference": "Heading below the skull diagrams on the left page.",
       "contains_all": [
         {
           "any_of": [
@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "human_reference": "The next heading on the same exposed page.",
+      "human_reference": "Heading below Sphenoid.",
       "contains_all": [
         {
           "any_of": [
@@ -24,7 +24,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Small body text in the lower half of the exposed page, above the pituitary-fossa paragraph.",
+      "human_reference": "Lower half of the page, beside turcica.",
       "contains_all": [
         {
           "any_of": [

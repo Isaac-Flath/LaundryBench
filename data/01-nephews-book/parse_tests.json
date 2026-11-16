@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Red lettering in the central panel.",
+      "human_reference": "Red lettering in the gray panel.",
       "contains_all": [
         {
           "any_of": [
@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "human_reference": "Small blue cover; all six words are visible.",
+      "human_reference": "Title on the small blue cover.",
       "contains_all": [
         {
           "any_of": [
@@ -24,7 +24,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Four stacked lines on the small yellow cover.",
+      "human_reference": "Four lines on the small yellow cover.",
       "contains_all": [
         {
           "any_of": [
@@ -35,7 +35,7 @@
     },
     {
       "id": 4,
-      "human_reference": "Bottom of the central gray panel: more than 60 classic and new titles.",
+      "human_reference": "Bottom of the gray panel: more than 60 classic and new titles.",
       "contains_all": [
         {
           "any_of": [

@@ -6,27 +6,43 @@
         "string",
         "null"
       ],
-      "description": "Complete main title, excluding subtitle. You may infer missing title letters from the surviving title and author."
+      "description": "Complete main book title, excluding the subtitle."
     },
     "author": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Name of the author of the main book, excluding authors named on loose catalogue fragments."
+      "description": "Author of the main book."
     },
     "publisher_imprint": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Publisher imprint, excluding its parent-company tagline."
+      "description": "Publisher imprint of the main book."
+    },
+    "meditations_author": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Author of Meditations, advertised on the torn fragment."
+    },
+    "advertised_philosopher_surname": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Surname of the philosopher named beside the ISBN above the Meditations entry."
     }
   },
   "required": [
     "title",
     "author",
-    "publisher_imprint"
+    "publisher_imprint",
+    "meditations_author",
+    "advertised_philosopher_surname"
   ],
   "additionalProperties": false
 }

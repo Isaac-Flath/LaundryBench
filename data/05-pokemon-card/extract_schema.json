@@ -6,21 +6,21 @@
         "integer",
         "null"
       ],
-      "description": "Printed HP value of the pinned Pokémon card."
+      "description": "HP of the Pokémon card."
     },
     "calamitous_slash_base_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Base damage of Calamitous Slash, before its conditional bonus or other modifiers."
+      "description": "Base damage of Calamitous Slash, without bonuses or modifiers."
     },
     "calamitous_slash_damaged_target_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Derive Calamitous Slash damage when the opposing Active Pokémon already has damage counters. Ignore Weakness, Resistance and all other modifiers."
+      "description": "Damage from Calamitous Slash when the opposing Active Pokémon already has damage counters, with no Weakness, Resistance, or other modifiers."
     }
   },
   "required": [

@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Top title bar.",
+      "human_reference": "Title at the top.",
       "contains_all": [
         {
           "any_of": [
@@ -14,7 +14,7 @@
     },
     {
       "id": 2,
-      "human_reference": "Type line immediately below the artwork.",
+      "human_reference": "Type line below the artwork.",
       "contains_all": [
         {
           "any_of": [
@@ -25,7 +25,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Both rules paragraphs state pay 3 life.",
+      "human_reference": "The rules text says pay 3 life.",
       "contains_all": [
         {
           "any_of": [
@@ -40,7 +40,7 @@
     {
       "id": 4,
       "type": "order",
-      "human_reference": "The middle rules paragraph: you may pay 3 life, then If you do.",
+      "human_reference": "Middle rules paragraph: you may pay 3 life, then If you do.",
       "sequence": [
         {
           "any_of": [
@@ -57,7 +57,7 @@
     },
     {
       "id": 5,
-      "human_reference": "Tiny white lettering beside EN, at the bottom left: Tiffany Turrill.",
+      "human_reference": "Small white name beside EN at the bottom left.",
       "contains_all": [
         {
           "any_of": [

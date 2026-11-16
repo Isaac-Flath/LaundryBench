@@ -6,21 +6,21 @@
         "string",
         "null"
       ],
-      "description": "Title of the card."
+      "description": "Card title."
     },
     "life_payment": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Life payment stated in the triggered abilities."
+      "description": "Number of life points in the payment described by the triggered abilities."
     },
     "opponent_declines_returns_to_you": {
       "type": [
         "boolean",
         "null"
       ],
-      "description": "From the printed rules, determine whether a dead opposing creature returns under your control if its controller declines the life payment."
+      "description": "Whether an opposing creature that dies returns under your control when its controller declines the life payment."
     }
   },
   "required": [

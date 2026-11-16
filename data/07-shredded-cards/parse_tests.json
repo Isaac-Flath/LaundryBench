@@ -24,7 +24,7 @@
     },
     {
       "id": 3,
-      "human_reference": "Final sentence on the rotated Serum-Core Chimera card, split across lines.",
+      "human_reference": "Last sentence on the diagonal card: Activate only as a sorcery.",
       "contains_all": [
         {
           "any_of": [
@@ -35,7 +35,7 @@
     },
     {
       "id": 4,
-      "human_reference": "Small white lettering along the rotated black bottom border: Johan Grenier.",
+      "human_reference": "Small white artist name on the diagonal card’s black bottom border.",
       "contains_all": [
         {
           "any_of": [

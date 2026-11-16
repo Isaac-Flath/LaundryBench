@@ -6,21 +6,21 @@
         "string",
         "null"
       ],
-      "description": "Game title printed on the intact instruction booklet."
+      "description": "Game title of the instruction booklet."
     },
     "likely_cartridge_title": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Likely game title of the washed cartridge. You may infer it from the accompanying case/booklet and surviving label; this is a contextual identification, not verification of the cartridge contents."
+      "description": "Likely game title of the washed cartridge."
     },
     "cartridge_product_code": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Complete original printed product code on the cartridge itself. Use only visible characters; do not supply a code from the booklet, memory or lookup."
+      "description": "Complete product code of the washed cartridge."
     }
   },
   "required": [

@@ -6,21 +6,21 @@
         "string",
         "null"
       ],
-      "description": "Bone named in the heading beneath the skull diagrams; return the anatomical name without the word bone."
+      "description": "Anatomical name of the bone in the heading below the skull diagrams."
     },
     "translated_phrase": {
       "type": [
         "string",
         "null"
       ],
-      "description": "English translation printed beside turcica in the body text."
+      "description": "English translation beside turcica in the body text."
     },
     "isbn": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Complete ISBN printed for this book. Use only visible characters; do not identify the edition from memory."
+      "description": "Complete ISBN of the damaged textbook."
     }
   },
   "required": [

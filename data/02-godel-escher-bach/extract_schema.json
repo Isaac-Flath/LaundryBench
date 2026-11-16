@@ -13,14 +13,14 @@
         "string",
         "null"
       ],
-      "description": "Book subtitle printed below the main title."
+      "description": "Book subtitle."
     },
     "author_surname": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Author surname printed on the cover."
+      "description": "Book author’s surname."
     }
   },
   "required": [

@@ -5,21 +5,39 @@
       "field": "waist_inches",
       "expected": 36,
       "basis": "visible",
-      "human_reference": "Pale size tag reads W36 L34."
+      "human_reference": "W36 on the small pale size tag."
     },
     {
       "id": 2,
       "field": "inseam_inches",
       "expected": 34,
       "basis": "visible",
-      "human_reference": "Pale size tag reads W36 L34."
+      "human_reference": "L34 on the small pale size tag."
     },
     {
       "id": 3,
       "field": "fit",
       "expected": "baggy pleated",
       "basis": "visible",
-      "human_reference": "Large pale lettering on the black inner label."
+      "human_reference": "Large text on the black inner label."
+    },
+    {
+      "id": 4,
+      "field": "button_company",
+      "expected": "Levi Strauss & Co",
+      "basis": "visible",
+      "human_reference": "Company name around the metal button: LEVI STRAUSS & CO."
+    },
+    {
+      "id": 5,
+      "field": "button_location_abbreviation",
+      "expected": "S F CAL",
+      "alternatives": [
+        "SF CAL",
+        "SFCAL"
+      ],
+      "basis": "visible",
+      "human_reference": "Location abbreviation around the metal button: S F CAL."
     }
   ]
 }

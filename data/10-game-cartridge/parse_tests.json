@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Intact booklet on the left, not the washed cartridge.",
+      "human_reference": "Game title on the booklet at the left.",
       "contains_all": [
         {
           "any_of": [
@@ -20,11 +20,12 @@
     },
     {
       "id": 2,
-      "human_reference": "White diagonal lettering on the booklet, not the cartridge.",
+      "human_reference": "White diagonal text on the booklet: TRUCTION BOOKLET.",
       "contains_all": [
         {
           "any_of": [
-            "Instruction Booklet"
+            "Instruction Booklet",
+            "TRUCTION BOOKLET"
           ]
         }
       ]

@@ -6,27 +6,43 @@
         "integer",
         "null"
       ],
-      "description": "Nominal waist size in inches from the jeans size tag."
+      "description": "Jeans waist size in inches."
     },
     "inseam_inches": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Nominal inseam size in inches from the jeans size tag."
+      "description": "Jeans inseam size in inches."
     },
     "fit": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Fit description on the inner label."
+      "description": "Jeans fit description."
+    },
+    "button_company": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Company name on the metal button."
+    },
+    "button_location_abbreviation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Location abbreviation on the metal button."
     }
   },
   "required": [
     "waist_inches",
     "inseam_inches",
-    "fit"
+    "fit",
+    "button_company",
+    "button_location_abbreviation"
   ],
   "additionalProperties": false
 }

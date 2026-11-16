@@ -12,14 +12,14 @@
       "field": "calamitous_slash_base_damage",
       "expected": 160,
       "basis": "visible",
-      "human_reference": "160+ at the right of Calamitous Slash."
+      "human_reference": "160+ beside Calamitous Slash."
     },
     {
       "id": 3,
       "field": "calamitous_slash_damaged_target_damage",
       "expected": 240,
       "basis": "inferred",
-      "human_reference": "The attack shows 160+ and adds 80 if the opposing Active Pokémon already has damage counters: 160 + 80 = 240.",
+      "human_reference": "Calamitous Slash: 160 plus 80 when the opposing Active Pokémon has damage counters. Total: 240.",
       "reference_url": "https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm11/228"
     }
   ]

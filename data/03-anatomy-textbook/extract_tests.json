@@ -5,21 +5,21 @@
       "field": "bone",
       "expected": "Sphenoid",
       "basis": "visible",
-      "human_reference": "Heading under the skull diagrams on the exposed left page."
+      "human_reference": "Heading below the skull diagrams on the left page."
     },
     {
       "id": 2,
       "field": "translated_phrase",
       "expected": "Turkish saddle",
       "basis": "visible",
-      "human_reference": "Lower half of the exposed page, above the pituitary-fossa paragraph."
+      "human_reference": "Lower half of the page, beside turcica."
     },
     {
       "id": 3,
       "field": "isbn",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "Only interior pages are exposed; no complete ISBN is visible."
+      "human_reference": "No complete ISBN is visible on these pages."
     }
   ]
 }

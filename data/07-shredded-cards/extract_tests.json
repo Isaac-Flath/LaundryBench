@@ -5,7 +5,7 @@
       "field": "front_card_title",
       "expected": "Elesh Norn, Mother of Machines",
       "basis": "inferred",
-      "human_reference": "Front title retains Elesh Norn, Mothe… and …Machines, separated by a tear.",
+      "human_reference": "Torn title at the front: Elesh Norn, Mothe… and …Machines.",
       "reference_url": "https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one"
     },
     {
@@ -20,7 +20,7 @@
       "field": "diagonal_card_artist",
       "expected": "Johan Grenier",
       "basis": "visible",
-      "human_reference": "Small white lettering on its rotated black bottom border."
+      "human_reference": "Small white artist name on the diagonal card’s black bottom border."
     }
   ]
 }

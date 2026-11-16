@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "SENECA on the main exposed page.",
+      "human_reference": "SENECA below the title.",
       "contains_all": [
         {
           "any_of": [
@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "human_reference": "Logo at the bottom of the exposed page.",
+      "human_reference": "CAPSTONE logo near the bottom.",
       "contains_all": [
         {
           "any_of": [
@@ -24,11 +24,38 @@
     },
     {
       "id": 3,
-      "human_reference": "Only FROM A STOIC is required; missing initial letters are not.",
+      "human_reference": "FROM A STOIC near the top.",
       "contains_all": [
         {
           "any_of": [
             "From a Stoic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "human_reference": "Turned fragment: Meditations, then by Marcus Aurelius on the next line.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Meditations"
+          ]
+        },
+        {
+          "any_of": [
+            "Marcus Aurelius"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "human_reference": "Turned fragment above Meditations: Nietzsche before (ISBN.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Nietzsche"
           ]
         }
       ]

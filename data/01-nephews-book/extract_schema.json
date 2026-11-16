@@ -6,21 +6,21 @@
         "string",
         "null"
       ],
-      "description": "Title of the damaged book itself, excluding the other books advertised on its back cover."
+      "description": "Title of the damaged book."
     },
     "publisher_imprint": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Publisher imprint printed in the central back-cover panel."
+      "description": "Publisher imprint of the damaged book."
     },
     "minimum_catalogue_titles": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Smallest whole-number catalogue size consistent with the printed claim. Derive it from the wording."
+      "description": "Smallest whole-number catalogue size consistent with the claim on the back cover."
     }
   },
   "required": [
