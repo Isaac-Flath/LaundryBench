@@ -8,11 +8,11 @@ To inspect images beside their checks: `python3 -m scripts.review`
 
 **The only benchmark you can trust for parsing documents that went through the wash.**
 
-My nephew put his copy of *Fox in Socks* in the washing machine. It came out ruined.  There was just enough surviving text among the debris to make out some text. 
+My nephew put his copy of *Fox in Socks* in the washing machine. It came out ruined.  There was just enough surviving text among the debris to make out some text.  I panicked.  
 
-I scrambled to figure out how to recover this lost data in a panic.  I checked every OCR benchmark I could find, and there was no category for "machine-washed documents".  How do I know what model to use to read what's left of the text?  😱
+Once I recovered my wits, I scambled to check every OCR benchmark I could find.  Alas, there was no category for "machine-washed documents".  How do I know what model to use to read what's left of the text?  😱
 
-This led me to create 2 novel AI benchmarks, `LaundryParseBench` and `LaundryExtractBench`.  If you left your grocery list in your pocket when you washed your clothes, there's now a benchmark to help you choose what OCR model can help you recover it with confidence.
+This led me to create two novel AI benchmarks, `LaundryParseBench` and `LaundryExtractBench`.  If you left your grocery list in your pocket when you washed your clothes, these will help you choose what OCR model can help you recover it with confidence.
 
 (Ok, but really it's just a good fun educational benchmark.  It will demonstrate a variety of types of tests for both parsing and extraction, and teach you about degraded documents, imputation, and evaluation)
 
