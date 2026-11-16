@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "left_fragment_serial",
+      "expected": "A16281584A",
+      "basis": "visible",
+      "human_reference": "Upside-down green serial on the large left fragment."
+    },
+    {
+      "id": 2,
+      "field": "currency_code",
+      "expected": "USD",
+      "basis": "inferred",
+      "human_reference": "U.S. banknote design and United States lettering identify the currency; USD itself is not printed."
+    },
+    {
+      "id": 3,
+      "field": "original_total_value",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "Overlapping fragments do not establish how many distinct original notes there were. The source post is not an input."
+    }
+  ]
+}

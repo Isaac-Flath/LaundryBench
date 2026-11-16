@@ -1,0 +1,48 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Gold type bar on the middle card.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Phyrexian Chimera"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "First rules line on the torn front card.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Vigilance"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Final sentence on the rotated Serum-Core Chimera card, split across lines.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Activate only as a sorcery"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "human_reference": "Small white lettering along the rotated black bottom border: Johan Grenier.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Johan Grenier"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "front_card_title",
+      "expected": "Elesh Norn, Mother of Machines",
+      "basis": "inferred",
+      "human_reference": "Front title retains Elesh Norn, Mothe… and …Machines, separated by a tear.",
+      "reference_url": "https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one"
+    },
+    {
+      "id": 2,
+      "field": "diagonal_card_subtypes",
+      "expected": "Phyrexian Chimera",
+      "basis": "visible",
+      "human_reference": "Gold type bar on the diagonal card."
+    },
+    {
+      "id": 3,
+      "field": "diagonal_card_artist",
+      "expected": "Johan Grenier",
+      "basis": "visible",
+      "human_reference": "Small white lettering on its rotated black bottom border."
+    }
+  ]
+}

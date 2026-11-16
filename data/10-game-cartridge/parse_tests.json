@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Intact booklet on the left, not the washed cartridge.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Pokemon"
+          ]
+        },
+        {
+          "any_of": [
+            "Black Version 2",
+            "Black 2 Version",
+            "Black 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "White diagonal lettering on the booklet, not the cartridge.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Instruction Booklet"
+          ]
+        }
+      ]
+    }
+  ]
+}

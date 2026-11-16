@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "book_title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Title of the damaged book itself, excluding the other books advertised on its back cover."
+    },
+    "publisher_imprint": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Publisher imprint printed in the central back-cover panel."
+    },
+    "minimum_catalogue_titles": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Smallest whole-number catalogue size consistent with the printed claim. Derive it from the wording."
+    }
+  },
+  "required": [
+    "book_title",
+    "publisher_imprint",
+    "minimum_catalogue_titles"
+  ],
+  "additionalProperties": false
+}

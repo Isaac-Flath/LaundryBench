@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "book_title",
+      "expected": "Fox in Socks",
+      "basis": "visible",
+      "human_reference": "Title runs down the surviving spine."
+    },
+    {
+      "id": 2,
+      "field": "publisher_imprint",
+      "expected": "Beginner Books",
+      "basis": "visible",
+      "human_reference": "Red lettering in the central gray panel."
+    },
+    {
+      "id": 3,
+      "field": "minimum_catalogue_titles",
+      "expected": 61,
+      "basis": "inferred",
+      "human_reference": "Bottom of the gray panel says more than 60; the smallest whole number greater than 60 is 61."
+    }
+  ]
+}

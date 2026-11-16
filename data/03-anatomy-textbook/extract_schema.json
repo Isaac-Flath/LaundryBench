@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "bone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Bone named in the heading beneath the skull diagrams; return the anatomical name without the word bone."
+    },
+    "translated_phrase": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "English translation printed beside turcica in the body text."
+    },
+    "isbn": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Complete ISBN printed for this book. Use only visible characters; do not identify the edition from memory."
+    }
+  },
+  "required": [
+    "bone",
+    "translated_phrase",
+    "isbn"
+  ],
+  "additionalProperties": false
+}

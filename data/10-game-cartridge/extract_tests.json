@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "booklet_title",
+      "expected": "Pokémon Black Version 2",
+      "alternatives": [
+        "Pokémon Black 2",
+        "Pokémon Black 2 Version"
+      ],
+      "basis": "visible",
+      "human_reference": "Title on the booklet at the left."
+    },
+    {
+      "id": 2,
+      "field": "likely_cartridge_title",
+      "expected": "Pokémon Black Version 2",
+      "alternatives": [
+        "Pokémon Black 2",
+        "Pokémon Black 2 Version"
+      ],
+      "basis": "inferred",
+      "human_reference": "The cartridge sits in the matching case beside the Black Version 2 booklet; treat the title as contextual inference."
+    },
+    {
+      "id": 3,
+      "field": "cartridge_product_code",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "The original cartridge label is washed away; no complete printed product code is visible."
+    }
+  ]
+}

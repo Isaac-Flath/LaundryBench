@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Heading under the skull figures, left exposed page.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Sphenoid"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "The next heading on the same exposed page.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Anatomy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Small body text in the lower half of the exposed page, above the pituitary-fossa paragraph.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Turkish saddle"
+          ]
+        }
+      ]
+    }
+  ]
+}

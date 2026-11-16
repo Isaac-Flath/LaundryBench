@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Names at the top, above the artwork.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Garchomp & Giratina",
+            "Garchomp and Giratina"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "HP 270 at the top right.",
+      "contains_all": [
+        {
+          "any_of": [
+            "HP 270",
+            "270 HP",
+            "hit points 270",
+            "270 hit points"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Attack heading in the lower middle.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Calamitous Slash"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "order",
+      "human_reference": "HP 270 at the top right; Linear Attack below the artwork.",
+      "sequence": [
+        {
+          "any_of": [
+            "HP 270",
+            "270 HP",
+            "hit points 270",
+            "270 hit points"
+          ]
+        },
+        {
+          "any_of": [
+            "Linear Attack"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "human_reference": "Curved, small white text beneath GG End GX: can’t use more than 1 GX attack in a game.",
+      "contains_all": [
+        {
+          "any_of": [
+            "can't use more than 1 GX attack",
+            "can't use more than one GX attack",
+            "cannot use more than 1 GX attack",
+            "cannot use more than one GX attack",
+            "can not use more than 1 GX attack",
+            "can not use more than one GX attack",
+            "cant use more than 1 GX attack",
+            "cant use more than one GX attack"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "human_reference": "Small text in the yellow-bordered footer, toward the right: 3 Prize cards.",
+      "contains_all": [
+        {
+          "any_of": [
+            "3 Prize cards",
+            "three Prize cards"
+          ]
+        }
+      ]
+    }
+  ]
+}

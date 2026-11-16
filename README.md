@@ -1,69 +1,95 @@
-# LaundryParseBench
+# LaundryBench
 
 **The only benchmark you can trust for parsing documents that went through the wash.**
 
-My nephew put his copy of *Fox in Socks* in the washing machine. It came out ruined: a wrinkled cover, a pile of paper pulp, and just enough surviving text to make me wonder what an OCR model could recover.
+My nephew put his copy of *Fox in Socks* in the washing machine. It came out ruined.  There was just enough surviving text among the debris to make out some text. 
 
-It was also a useful reminder about degraded documents. Some text is hard to read. Some is physically gone. A good parser needs to recover what survives and recognize where the evidence ends—even when it recognizes the book.
+I scrambled to figure out how to recover this lost data in a panic.  I checked every OCR benchmark I could find, and there was no category for "machine-washed documents".  How do I know what model to use to read what's left of the text?  😱
 
-Most of us have accidentally washed something we meant to keep: a grocery list left in a pocket, a receipt, a few bills. LaundryParseBench starts with ten images of books, cards, labels, and money after a wash.
+This led me to create 2 novel AI benchmarks, `LaundryParseBench` and `LaundryExtractBench`.  If you left your grocery list in your pocket when you washed your clothes, there's now a benchmark to help you choose what OCR model can help you recover it with confidence.
+
+(Ok, but really it's just a good fun educational benchmark.  It will demonstrate a variety of types of tests for both parsing and extraction, and teach you about degraded documents, imputation, and evaluation)
 
 ![Benchmark images](_benchmark-images.jpg)
 
-## Images and checks
+## Run a solution
+
+| Parse | Extract |
+| --- | --- |
+| [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn OCR → Luna → Jev](solutions/extract/luna-jev/) |
+| [Datalab](solutions/parse/datalab/) | [Datalab](solutions/extract/datalab/) |
+
+Follow the solution’s setup instructions, then run `python run.py`. Add `--image 05` to try one image. Luna/Jev requires LightOn’s saved OCR; Datalab extraction accepts images directly.
+
+Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. Model settings live in `run.py`; API keys go in `.env`. Keys and outputs are gitignored.
+
+## Score your own outputs
+
+Run these commands from the repository root with Python 3.10+. The scorers need no dependencies or API keys. Add `--image 05` to score one image.
+
+**Parse:** save unedited OCR as `01.md` through `10.md` (`.txt` and `.html` also work).
+
+```sh
+python3 -m scripts.check /path/to/predictions --out /path/to/parse-scores.json
+```
+
+**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `10.json`. Include every field; use `null` when unavailable. Infer values only where the schema permits it.
+
+```sh
+python3 -m scripts.extract /path/to/predictions --out /path/to/extract-scores.json
+```
+
+Do not give models the test files: they contain expected answers.
+
+## Data and checks
+
+Each `data/NN-name/` folder contains:
+
+```text
+image.jpg              # .jpeg and .png also supported
+parse_tests.json       # text and reading-order checks
+extract_tests.json     # expected field values
+extract_schema.json    # model-facing schema
+```
+
+- **Parse:** 34 text checks and 2 local reading-order checks. Matching ignores case, accents, whitespace, ordinary punctuation, Markdown, and HTML. Accepted alternatives are explicit; there is no fuzzy matching. `contains_all` requires every group; `any_of` accepts any alternative within a group.
+- **Extract:** 30 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Schema validity is reported separately.
+
+Checks pass or fail, and image scores are averaged with equal weight. These checks cover selected information, not every omission or hallucination. `human_reference` helps locate text and is not scored. Expected answers have not been independently human-reviewed.
+
+To inspect images beside their checks:
+
+```sh
+python3 -m scripts.review
+```
+
+Open [the review app](http://127.0.0.1:8765/review.html). To change a check, edit its JSON file and reload.
+
+<details>
+<summary>Images and sources</summary>
 
 | ID | Image / checks | Source |
 | --- | --- | --- |
-| 01 | [Fox in Socks — wide view](examples/01-nephews-book/README.md) | My nephew 💀 |
-| 02 | [Gödel, Escher, Bach](examples/02-godel-escher-bach/README.md) | [AlexKo / Alteryx Community](https://community.alteryx.com/en/discussion/426908/finding-a-book-in-my-laundry-an-inspire-nashville-photo-journal) |
-| 03 | [Anatomy textbook](examples/03-anatomy-textbook/README.md) | [u/Pol_Slattery](https://www.reddit.com/r/Wellthatsucks/comments/m9024o/my_textbook_somehow_made_it_into_my_washing/) |
-| 04 | [Letters from a Stoic](examples/04-stoic-book/README.md) | [u/gogodboss](https://www.reddit.com/r/mildlyinfuriating/comments/1ukoqxz/i_accidentally_put_my_book_in_the_washing_machine/) |
-| 05 | [Pokémon card pinned flat](examples/05-pokemon-card/README.md) | [u/rhubarb_thehawlic](https://www.reddit.com/r/Wellthatsucks/comments/1xqsui7/5th_grade_me_accidentally_washed_a_pokemon_card_i/) |
-| 06 | [Meathook Massacre II](examples/06-meathook-massacre/README.md) | [u/cartmicah3](https://www.reddit.com/r/mtg/comments/1fw9vqq/this_is_what_meathook_massacre_2_looks_like_going/) |
-| 07 | [Trading-card pack left in a pocket](examples/07-shredded-cards/README.md) | [u/Lipzilla](https://www.reddit.com/r/mtg/comments/129syxr/so_i_just_ruin_a_most_wanted_card_on_accident/) |
-| 08 | [Jeans with a washed-out patch](examples/08-jeans-label/README.md) | [u/carschap](https://www.reddit.com/r/VintageClothing/comments/xyrs37/rmildlyinfuriating_washed_these_one_time_and_the/) |
-| 09 | [Banknotes shredded in the wash](examples/09-banknotes/README.md) | [u/BocceBurger](https://www.reddit.com/r/mildlyinfuriating/comments/tyoljy/i_accidentally_washed_10/) |
-| 10 | [Game cartridge with its label washed away](examples/10-game-cartridge/README.md) | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
+| 01 | [Fox in Socks — wide view](data/01-nephews-book/) | My nephew 💀 |
+| 02 | [Gödel, Escher, Bach](data/02-godel-escher-bach/) | [AlexKo / Alteryx Community](https://community.alteryx.com/en/discussion/426908/finding-a-book-in-my-laundry-an-inspire-nashville-photo-journal) |
+| 03 | [Anatomy textbook](data/03-anatomy-textbook/) | [u/Pol_Slattery](https://www.reddit.com/r/Wellthatsucks/comments/m9024o/my_textbook_somehow_made_it_into_my_washing/) |
+| 04 | [Letters from a Stoic](data/04-stoic-book/) | [u/gogodboss](https://www.reddit.com/r/mildlyinfuriating/comments/1ukoqxz/i_accidentally_put_my_book_in_the_washing_machine/) |
+| 05 | [Pokémon card pinned flat](data/05-pokemon-card/) | [u/rhubarb_thehawlic](https://www.reddit.com/r/Wellthatsucks/comments/1xqsui7/5th_grade_me_accidentally_washed_a_pokemon_card_i/) |
+| 06 | [Meathook Massacre II](data/06-meathook-massacre/) | [u/cartmicah3](https://www.reddit.com/r/mtg/comments/1fw9vqq/this_is_what_meathook_massacre_2_looks_like_going/) |
+| 07 | [Trading-card pack left in a pocket](data/07-shredded-cards/) | [u/Lipzilla](https://www.reddit.com/r/mtg/comments/129syxr/so_i_just_ruin_a_most_wanted_card_on_accident/) |
+| 08 | [Jeans with a washed-out patch](data/08-jeans-label/) | [u/carschap](https://www.reddit.com/r/VintageClothing/comments/xyrs37/rmildlyinfuriating_washed_these_one_time_and_the/) |
+| 09 | [Banknotes shredded in the wash](data/09-banknotes/) | [u/BocceBurger](https://www.reddit.com/r/mildlyinfuriating/comments/tyoljy/i_accidentally_washed_10/) |
+| 10 | [Game cartridge with its label washed away](data/10-game-cartridge/) | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
 
-Each example contains only its image, `checks.json`, and a README showing the checks. There are 26 checks total. Expected answers were selected by visual inspection with an assistant; they have not been independently human-adjudicated.
+</details>
 
-## Run
+## Contribute
 
-Use any parser. Save its unedited text as `01.md` through `10.md` in a run’s `predictions/` directory (`.txt` and `.html` also work). Keep model/version, prompt, settings and benchmark commit with the run. The optional [reading prompt](prompts/read-image.txt) is shared across models.
+Anyone can open a pull request:
 
-```text
-examples/01-nephews-book/    # fixed benchmark data
-  image.jpeg
-  checks.json
-  README.md
-runs/<run-id>/             # local results; excluded from Git
-  predictions/01.md ... 10.md
-  run.json                # model and settings
-  content.json            # generated scores
-```
+- **Data:** Put something with text through the wash, photograph what survives, and add it under `data/NN-name/` with the three JSON files shown above. Keep some text readable and add a few useful, visually verifiable checks. Add your photo credit to the source table.
+- **Solutions:** Add a parsing or extraction implementation under `solutions/parse/` or `solutions/extract/`. Include runnable code, dependencies, setup instructions, and an `.env.example` if it needs API keys. Follow an existing solution’s output format so the scorer can evaluate it.
 
-Score the content checks with Python 3.10+; no dependencies or API keys:
+## Roadmap
 
-```sh
-python3 -m scripts.check runs/my-model/predictions --out runs/my-model/content.json
-```
-
-Add `--image 01` to score one image. Each check is pass/fail; image scores are averaged with equal weight per washing incident. Case, accents, whitespace, ordinary punctuation, Markdown and HTML are normalized; simple table label/value associations are preserved. Matching uses the explicit alternatives in `checks.json`, without fuzzy matching. These checks measure selected content recovery, not every omission or hallucination. Missing files are errors; a blank file represents an empty parse.
-
-For a separate [PAIR-style](https://reducto.ai/blog/pairwise-ai-ranking-parse-evaluation) image-based comparison, set `GEMINI_API_KEY` or `GOOGLE_API_KEY`:
-
-```sh
-python3 -m scripts.compare \
-  --candidate runs/model-a/predictions --baseline runs/model-b/predictions \
-  --model gemini-3.5-flash --out runs/a-vs-b
-```
-
-The judge uses [this rubric](prompts/compare-outputs.md), runs both A/B orders, and saves its reasons and raw responses. Default: 20 API calls for ten images. `--dry-run` previews the plan; `--image 01` compares one image. The output directory must be new. Wins score 1, ties 0.5, losses 0; failures or abstentions prevent a complete aggregate. This score is relative to the baseline and remains separate from the content score. Requested and reported judge versions are recorded.
-
-## Results
-
-Runs stay outside the dataset and are gitignored. There is no published leaderboard yet. Publish selected complete-run summaries with model/settings, benchmark revision, and a link to archived predictions and reports (for example, a Hugging Face results dataset or release asset). A hundred models means a hundred run records, not a hundred files in each image folder. Compare judge scores only under the same baseline, judge and rubric.
-
-## Image rights
-
-This repository is private. The nine online images remain third-party material; no redistribution license has been verified. Attribution and source links are recorded for every file. Inclusion does not grant permission to republish the photographs. The supplied nephew photograph has no public license specified either.
+More documents, a published baseline, and reproducible leaderboard submissions.

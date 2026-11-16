@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LaundryParseBench · Review</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; color: #202a35; background: #fff; font: 15px/1.5 system-ui, sans-serif; }
+  button, select { font: inherit; color: inherit; }
+  button, select { border: 1px solid #ccd2d8; border-radius: 6px; background: white; padding: 6px 12px; }
+  button { cursor: pointer; }
+  button:hover { background: #edf2f6; }
+  button:disabled { opacity: .4; cursor: default; }
+  :focus-visible { outline: 3px solid #3177b9; outline-offset: 2px; }
+  header { height: 64px; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #dce1e6; }
+  header strong { white-space: nowrap; }
+  select { flex: 1; min-width: 0; max-width: 560px; }
+  main { height: calc(100dvh - 64px); display: grid; grid-template-columns: 58% 42%; }
+  .pane { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .image-pane { border-right: 1px solid #dce1e6; }
+  .toolbar { min-height: 54px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 16px; border-bottom: 1px solid #dce1e6; }
+  #track { flex: none; }
+  .muted { color: #697582; font-size: 13px; }
+  .spacer { flex: 1; }
+  #viewport { flex: 1; overflow: auto; background: #e9edf0; cursor: grab; touch-action: pan-x pan-y; }
+  #viewport.dragging { cursor: grabbing; }
+  #stage { display: grid; place-items: center; }
+  #stage img { display: block; max-width: none; user-select: none; }
+  #zoom-label { min-width: 45px; text-align: center; font-variant-numeric: tabular-nums; }
+  #checks-pane { overflow: auto; flex: 1; padding: 18px 22px; }
+  article { border: 1px solid #dce1e6; border-radius: 8px; margin-bottom: 18px; overflow: hidden; }
+  .check-body { padding: 16px; }
+  .check-meta { display: flex; flex-wrap: wrap; gap: 8px; color: #697582; font-size: 12px; }
+  .kind { background: #eaf1f7; color: #245777; padding: 0 6px; border-radius: 3px; }
+  .rule { font-size: 13px; margin: 12px 0 8px; color: #526271; }
+  .expected { background: #f3f6f8; border-radius: 5px; padding: 10px 12px; margin: 0; }
+  .group + .group { border-top: 1px solid #dce1e6; margin-top: 10px; padding-top: 10px; }
+  .phrase { font: 14px/1.6 ui-monospace, monospace; overflow-wrap: anywhere; }
+  ol.expected { padding-left: 32px; }
+  ol .group { padding-left: 4px; }
+  summary { cursor: pointer; font-size: 13px; color: #526271; }
+  .alternatives { margin-top: 5px; }
+  .alternatives ul { margin: 6px 0 0; padding-left: 20px; }
+  .location { margin: 12px 0 0; font-size: 13px; color: #526271; }
+  .raw { border-top: 1px solid #dce1e6; padding: 10px 16px; }
+  pre { font: 12px/1.6 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0 0; }
+  #file-json, #schema-json { margin: 0; }
+  [aria-pressed="true"] { background: #243e53; border-color: #243e53; color: white; }
+  [hidden] { display: none !important; }
+  @media (max-width: 760px) {
+    header { padding: 10px; gap: 6px; }
+    header strong { display: none; }
+    main { grid-template-columns: 1fr; grid-template-rows: 48% 52%; }
+    .image-pane { border-right: 0; border-bottom: 1px solid #dce1e6; }
+    .toolbar { padding: 6px 10px; }
+    #checks-pane { padding: 14px; }
+  }
+</style>
+<header>
+  <strong>LaundryParseBench</strong>
+  <button id="previous" aria-label="Previous image" disabled>←</button>
+  <select id="image-select" aria-label="Image"></select>
+  <button id="next" aria-label="Next image" disabled>→</button>
+  <span id="position" class="muted"></span>
+</header>
+<main>
+  <section class="pane image-pane" aria-label="Original image">
+    <div class="toolbar">
+      <button id="fit">Fit</button>
+      <button id="actual">100%</button>
+      <button id="zoom-out" aria-label="Zoom out">−</button>
+      <span id="zoom-label" class="muted"></span>
+      <button id="zoom-in" aria-label="Zoom in">+</button>
+      <span class="spacer"></span><span class="muted">Drag to pan</span>
+    </div>
+    <div id="viewport"><div id="stage"></div></div>
+  </section>
+  <section class="pane" aria-label="Checks and JSON">
+    <div class="toolbar">
+      <select id="track" aria-label="Track"><option value="parse">Parse</option><option value="extract">Extract</option></select>
+      <strong id="check-count">Checks</strong><span class="spacer"></span>
+      <button id="show-checks" aria-pressed="true">Checks</button>
+      <button id="show-schema" aria-pressed="false" hidden>Schema</button>
+      <button id="show-json" aria-pressed="false">File JSON</button>
+    </div>
+    <div id="checks-pane">
+      <div id="cards"></div>
+      <pre id="schema-json" hidden></pre>
+      <pre id="file-json" hidden></pre>
+    </div>
+  </section>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  const viewport = $('viewport'), stage = $('stage'), picker = $('image-select');
+  let images = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
+
+  // All data is rendered as text, including raw JSON and accepted phrases.
+  function element(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  }
+  async function readJSON(path) {
+    return (await fetch(path, {cache: 'no-store'})).json();
+  }
+  function renderCheck(check, schema) {
+    const card = element('article'), body = element('div', undefined, 'check-body');
+    const order = check.type === 'order';
+    const meta = element('div', undefined, 'check-meta');
+    if (schema) {
+      const spec = schema.properties[check.field];
+      meta.append(element('span', `${spec.type[0]} · ${check.basis}`, 'kind'));
+      body.append(meta, element('p', check.field, 'phrase'), element('p', spec.description, 'rule'));
+      body.append(element('p', check.alternatives ? 'Must equal this value or an accepted alternative.' : 'Must equal this value.', 'rule'));
+      body.append(element('pre', JSON.stringify(check.expected), 'expected'));
+      if (check.alternatives) {
+        const aliases = element('details', undefined, 'alternatives');
+        aliases.append(element('summary', 'Accepted alternatives'), element('pre', JSON.stringify(check.alternatives, null, 2)));
+        body.append(aliases);
+      }
+    } else {
+      const groups = (order ? check.sequence : check.contains_all).map(group => group.any_of);
+      meta.append(element('span', order ? 'Reading order' : 'Text', 'kind'));
+      body.append(meta);
+      body.append(element('p', order
+        ? 'All snippets must appear in this order. Other text may occur between them.'
+        : groups.length > 1 ? 'All groups below are required. Any alternative within a group is accepted.'
+        : groups[0].length > 1 ? 'Must contain this text or one of its accepted alternatives.'
+        : 'Must contain this text.', 'rule'));
+      const expected = element(order ? 'ol' : 'div', undefined, 'expected');
+      for (const aliases of groups) {
+        const group = element(order ? 'li' : 'div', undefined, 'group');
+        group.append(element('div', aliases[0], 'phrase'));
+        if (aliases.length > 1) {
+          const details = element('details', undefined, 'alternatives');
+          details.append(element('summary', `${aliases.length - 1} accepted alternative${aliases.length > 2 ? 's' : ''}`));
+          const list = element('ul');
+          aliases.slice(1).forEach(alias => list.append(element('li', alias, 'phrase')));
+          details.append(list); group.append(details);
+        }
+        expected.append(group);
+      }
+      body.append(expected);
+    }
+    body.append(element('p', `${schema ? 'Human reference' : 'Find it'}: ${check.human_reference}`, 'location'));
+    const raw = element('details', undefined, 'raw');
+    raw.append(element('summary', 'Raw JSON'), element('pre', JSON.stringify(check, null, 2)));
+    card.append(body, raw);
+    return card;
+  }
+  function setView(mode) {
+    view = mode;
+    $('cards').hidden = mode !== 'checks';
+    $('file-json').hidden = mode !== 'json';
+    $('schema-json').hidden = mode !== 'schema';
+    for (const name of ['checks', 'json', 'schema']) $('show-' + name).setAttribute('aria-pressed', mode === name);
+  }
+  function zoom(value, fit = false) {
+    if (!photo) return;
+    const x = (viewport.scrollLeft + viewport.clientWidth / 2) / stage.offsetWidth;
+    const y = (viewport.scrollTop + viewport.clientHeight / 2) / stage.offsetHeight;
+    fitMode = fit;
+    scale = fit ? Math.min(viewport.clientWidth / photo.naturalWidth,
+      viewport.clientHeight / photo.naturalHeight) * .97 : Math.max(.05, Math.min(4, value));
+    const width = photo.naturalWidth * scale, height = photo.naturalHeight * scale;
+    photo.style.width = `${width}px`; photo.style.height = `${height}px`;
+    stage.style.width = `${Math.max(width, viewport.clientWidth)}px`;
+    stage.style.height = `${Math.max(height, viewport.clientHeight)}px`;
+    viewport.scrollLeft = fit ? 0 : x * stage.offsetWidth - viewport.clientWidth / 2;
+    viewport.scrollTop = fit ? 0 : y * stage.offsetHeight - viewport.clientHeight / 2;
+    $('zoom-label').textContent = `${Math.round(scale * 100)}%`;
+  }
+  async function loadImage() {
+    const ticket = ++request, index = Number(picker.value), item = images[index];
+    const extraction = $('track').value === 'extract';
+    $('show-schema').hidden = !extraction;
+    if (!extraction && view === 'schema') setView('checks');
+    $('previous').disabled = index === 0; $('next').disabled = index === images.length - 1;
+    $('position').textContent = `${index + 1} / ${images.length}`;
+    $('check-count').textContent = 'Loading…';
+    $('cards').replaceChildren(); $('file-json').textContent = ''; $('schema-json').textContent = '';
+    stage.replaceChildren(); photo = null;
+    const image = new Image(); image.alt = item.title; image.draggable = false;
+    image.src = item.file;
+    const folder = item.file.replace(/[^/]+$/, '');
+    const [data, schema] = await Promise.all([
+      readJSON(folder + (extraction ? 'extract_tests.json' : 'parse_tests.json')),
+      extraction ? readJSON(folder + 'extract_schema.json') : null, image.decode()]);
+    if (ticket !== request) return;
+    photo = image; stage.append(photo); zoom(1, true);
+    data.checks.forEach(check => $('cards').append(renderCheck(check, schema)));
+    $('check-count').textContent = `${data.checks.length} checks`;
+    $('file-json').textContent = JSON.stringify(data, null, 2);
+    $('schema-json').textContent = schema ? JSON.stringify(schema, null, 2) : '';
+    $('checks-pane').scrollTop = 0; setView(view);
+    const url = new URL(location.href);
+    if (extraction) url.searchParams.set('track', 'extract'); else url.searchParams.delete('track');
+    url.hash = item.id;
+    history.replaceState(null, '', url);
+  }
+  picker.onchange = loadImage;
+  $('track').value = new URLSearchParams(location.search).get('track') === 'extract' ? 'extract' : 'parse';
+  $('track').onchange = loadImage;
+  $('previous').onclick = () => { picker.value = Number(picker.value) - 1; loadImage(); };
+  $('next').onclick = () => { picker.value = Number(picker.value) + 1; loadImage(); };
+  $('fit').onclick = () => zoom(1, true);
+  $('actual').onclick = () => zoom(1);
+  $('zoom-in').onclick = () => zoom(scale * 1.4);
+  $('zoom-out').onclick = () => zoom(scale / 1.4);
+  $('show-checks').onclick = () => setView('checks');
+  $('show-json').onclick = () => setView('json');
+  $('show-schema').onclick = () => setView('schema');
+  new ResizeObserver(() => zoom(scale, fitMode)).observe(viewport);
+  let drag;
+  viewport.onpointerdown = event => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || !photo) return;
+    drag = [event.clientX, event.clientY, viewport.scrollLeft, viewport.scrollTop];
+    viewport.setPointerCapture(event.pointerId); viewport.classList.add('dragging');
+  };
+  viewport.onpointermove = event => {
+    if (!drag) return;
+    viewport.scrollLeft = drag[2] - event.clientX + drag[0];
+    viewport.scrollTop = drag[3] - event.clientY + drag[1];
+  };
+  viewport.onpointerup = viewport.onpointercancel = () => { drag = null; viewport.classList.remove('dragging'); };
+  (async () => {
+    images = await readJSON('images.json');
+    images.forEach((item, index) => picker.add(new Option(`${item.id} · ${item.title}`, index)));
+    picker.value = Math.max(0, images.findIndex(item => item.id === location.hash.slice(1)));
+    await loadImage();
+  })();
+</script>
+</html>

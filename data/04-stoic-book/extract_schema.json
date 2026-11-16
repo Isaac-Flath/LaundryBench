@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Complete main title, excluding subtitle. You may infer missing title letters from the surviving title and author."
+    },
+    "author": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Name of the author of the main book, excluding authors named on loose catalogue fragments."
+    },
+    "publisher_imprint": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Publisher imprint, excluding its parent-company tagline."
+    }
+  },
+  "required": [
+    "title",
+    "author",
+    "publisher_imprint"
+  ],
+  "additionalProperties": false
+}

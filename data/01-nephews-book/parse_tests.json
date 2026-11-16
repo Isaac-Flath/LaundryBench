@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Red lettering in the central panel.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Beginner Books"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "Small blue cover; all six words are visible.",
+      "contains_all": [
+        {
+          "any_of": [
+            "The Cat in the Hat"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Four stacked lines on the small yellow cover.",
+      "contains_all": [
+        {
+          "any_of": [
+            "One fish two fish red fish blue fish"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "human_reference": "Bottom of the central gray panel: more than 60 classic and new titles.",
+      "contains_all": [
+        {
+          "any_of": [
+            "more than 60",
+            "more than sixty",
+            "over 60",
+            "over sixty"
+          ]
+        }
+      ]
+    }
+  ]
+}

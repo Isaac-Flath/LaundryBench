@@ -1,19 +1,20 @@
 """A transparent partial-content recall score; this does not detect all hallucinations."""
 import argparse
 import html
-import json
 import re
 import unicodedata
 from html.parser import HTMLParser
+from pathlib import Path
+from statistics import mean
 
-from .common import ROOT, digest, event_mean, load_dataset, read_outputs, save_json
+from .common import load_dataset, save_json
 
 
-class VisibleHTML(HTMLParser):
+class HTMLTextReader(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.parts = []
-        self.hidden = 0
+        self.text_parts = []
+        self.hidden_tag_depth = 0
         self.tables = []
         self.rows = None
         self.row = None
@@ -27,11 +28,11 @@ class VisibleHTML(HTMLParser):
         elif tag in ('td', 'th') and self.row is not None:
             self.cell = []
         if tag in ('script', 'style'):
-            self.hidden += 1
+            self.hidden_tag_depth += 1
         if tag in ('td', 'th', 'tr', 'table'):
-            self.parts.append(' ␞ ')
+            self.text_parts.append(' ␞ ')
         elif tag not in ('b', 'strong', 'em', 'i', 'span', 'u'):
-            self.parts.append(' ')
+            self.text_parts.append(' ')
 
     def handle_endtag(self, tag):
         if tag in ('td', 'th') and self.cell is not None:
@@ -43,42 +44,41 @@ class VisibleHTML(HTMLParser):
         elif tag == 'table' and self.rows is not None:
             self.tables.append(self.rows)
             self.rows = None
-        if tag in ('script', 'style') and self.hidden:
-            self.hidden -= 1
+        if tag in ('script', 'style') and self.hidden_tag_depth:
+            self.hidden_tag_depth -= 1
         if tag in ('td', 'th', 'tr', 'table'):
-            self.parts.append(' ␞ ')
+            self.text_parts.append(' ␞ ')
         elif tag not in ('b', 'strong', 'em', 'i', 'span', 'u'):
-            self.parts.append(' ')
+            self.text_parts.append(' ')
 
     def handle_data(self, data):
-        if not self.hidden:
-            self.parts.append(data)
+        if not self.hidden_tag_depth:
+            self.text_parts.append(data)
             if self.cell is not None:
                 self.cell.append(data)
 
 
-def table_associations(tables):
+def read_table_labels_and_values(tables):
+    """Build searchable phrases such as 'HP 270' from table headers and cells."""
     # Recover column labels for rectangular tables, independent of their rendering.
     facts = []
     for rows in tables:
-        if len(rows) < 2 or not rows[0] or any(len(row) != len(rows[0]) for row in rows):
-            continue
-        for row in rows[1:]:
-            facts.extend(f'{label} {value}' for label, value in zip(rows[0], row))
-    for rows in tables:
+        if len(rows) >= 2 and rows[0] and all(len(row) == len(rows[0]) for row in rows):
+            for row in rows[1:]:
+                facts.extend(f'{label} {value}' for label, value in zip(rows[0], row))
         facts.extend(' '.join(row) for row in rows if len(row) == 2)
     return ' ␞ '.join(facts)
 
 
-def markdown_tables(text):
+def read_markdown_tables(text):
     tables, rows = [], []
     for line in text.splitlines() + ['']:
         if '|' in line:
             cells = [c.strip() for c in line.strip().strip('|').split('|')]
+            # Skip Markdown header separators: ---, :---, ---:, or :---:.
             if all(re.fullmatch(r':?-{3,}:?', c) for c in cells):
                 continue
-            else:
-                rows.append(cells)
+            rows.append(cells)
         else:
             if rows:
                 tables.append(rows)
@@ -86,54 +86,105 @@ def markdown_tables(text):
     return tables
 
 
-def tokens(text):
-    # Link targets, image alt text and HTML attributes are not recovered page text.
+def read_visible_text(text, include_table_labels=True):
+    """Read Markdown/HTML text, keeping table boundaries and optional label/value phrases."""
+    # Remove Markdown images: ![alt text](url) is not visible page text.
     text = re.sub(r'!\[[^\]]*\]\([^)]*\)', ' ', text)
+    # Keep a link's label: [text](url) -> text.
     text = re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', text)
+    # Remove reference definitions, such as a line containing [ref]: https://...
     text = re.sub(r'^\s*\[[^\]]+\]:\s*\S+.*$', '', text, flags=re.M)
+    # Keep reference-link labels: [text][ref] -> text.
     text = re.sub(r'\[([^\]]+)\]\[[^\]]*\]', r'\1', text)
+    # Strip repeated formatting markers, such as **, __, ~~, and ```.
     text = re.sub(r'([*_`~])\1+', '', text)
-    md_tables = markdown_tables(text)
-    text = '\n'.join(' ␞ '.join(line.strip().strip('|').split('|')) if '|' in line else line for line in text.splitlines())
-    parser = VisibleHTML()
-    parser.feed(text)
-    associations = table_associations(parser.tables + md_tables)
-    text = html.unescape(''.join(parser.parts) + ' ␞ ' + associations).replace('\u00ad', '')
+    markdown_tables = read_markdown_tables(text)
+    # Mark cell boundaries so a phrase cannot accidentally match across cells.
+    lines = []
+    for line in text.splitlines():
+        if '|' in line:
+            line = ' ␞ '.join(line.strip().strip('|').split('|'))
+        lines.append(line)
+    parser = HTMLTextReader()
+    parser.feed('\n'.join(lines))
+    text = ''.join(parser.text_parts) + ' ␞ '
+    if include_table_labels:
+        text += read_table_labels_and_values(parser.tables + markdown_tables)
+    return html.unescape(text).replace('\u00ad', '')
+
+
+def prepare_text_for_matching(text, include_table_labels=True):
+    """Return comparable words, numbers, and table boundaries, ignoring formatting."""
+    text = read_visible_text(text, include_table_labels)
+    # An ampersand is a connector, not optional punctuation.
+    text = text.replace('&', ' and ')
     text = unicodedata.normalize('NFKD', text.casefold())
     text = ''.join(c for c in text if not unicodedata.combining(c))
+    # Join words split by a hyphen and line break: inter-\nnational -> international.
     text = re.sub(r'(?<=\w)[-‐‑]\s*\n\s*(?=\w)', '', text)
-    # Keep decimals/signs; never make 27.0 or -270 equal to 270.
-    return re.findall(r'␞|[+-]?\d+(?:[.,]\d+)*|[^\W\d_]+', text)
+    return re.findall(r'''
+        ␞                       # Table boundary.
+        | [+-]?\d+(?:[.,]\d+)*  # Numbers with signs/decimals: -270, 27.0, 1,000.
+        | [^\W\d_]+             # Unicode words; exclude digits and underscores.
+    ''', text, re.VERBOSE)
 
 
-def contains(haystack, needle):
-    return bool(needle) and any(haystack[i:i+len(needle)] == needle
-                              for i in range(len(haystack) - len(needle) + 1))
+def find_phrase_end(text_parts, alternatives, search_from=0):
+    """Return the earliest end position of a matching phrase, or None."""
+    match_ends = []
+    for alternative in alternatives:
+        phrase = [word for word in prepare_text_for_matching(alternative) if word != '␞']
+        for start in range(search_from, len(text_parts) - len(phrase) + 1):
+            if text_parts[start:start + len(phrase)] == phrase:
+                match_ends.append(start + len(phrase))
+                break
+    return min(match_ends, default=None)
 
 
-def passes(text, check):
-    actual = tokens(text)
-    return all(any(contains(actual, [t for t in tokens(alias) if t != '␞']) for alias in aliases)
-               for aliases in check['all_of'])
+def passes_check(text, check):
+    requires_order = check.get('type') == 'order'
+    text_parts = prepare_text_for_matching(text, include_table_labels=not requires_order)
+    if requires_order:
+        text_parts = [part for part in text_parts if part != '␞']
+    search_from = 0
+    groups = check['sequence'] if requires_order else check['contains_all']
+    for group in groups:
+        phrase_end = find_phrase_end(text_parts, group['any_of'], search_from)
+        if phrase_end is None:
+            return False
+        if requires_order:
+            search_from = phrase_end
+    return True
 
 
-def score(outputs, images, checks):
-    if set(outputs) != set(images):
-        raise ValueError('Missing or extra image outputs; use an empty file for an empty parse')
-    rows = []
-    for case in checks['cases']:
-        image_id = case['image_id']
-        results = [{**c, 'pass': passes(outputs[image_id], c)} for c in case['checks']]
-        rows.append({'image_id': image_id, 'score': sum(c['pass'] for c in results)/len(results),
-                     'output_sha256': digest(outputs[image_id].encode()), 'checks': results})
-    return {'metric': 'content_recovery', 'checks_version': checks['version'],
-            'dataset_sha256': digest((ROOT / 'manifest.json').read_bytes()),
-            'scorer_sha256': digest((ROOT / 'scripts/check.py').read_bytes() + (ROOT / 'scripts/common.py').read_bytes()),
-            'images_evaluated': len(rows),
-            'checks_sha256': digest(json.dumps(checks, sort_keys=True).encode()),
-            'score': event_mean({r['image_id']: r['score'] for r in rows}, images),
-            'passed': sum(c['pass'] for r in rows for c in r['checks']),
-            'total': sum(len(r['checks']) for r in rows), 'images': rows}
+def score_outputs(outputs, dataset):
+    image_results = []
+    for image_id, image_tests in dataset.items():
+        check_results = [
+            {**check, 'pass': passes_check(outputs[image_id], check)}
+            for check in image_tests['checks']
+        ]
+        image_results.append({
+            'image_id': image_id,
+            'score': mean(check['pass'] for check in check_results),
+            'checks': check_results,
+        })
+    all_checks = [check for image_result in image_results for check in image_result['checks']]
+    return {'metric': 'content_recovery',
+            'images_evaluated': len(image_results),
+            'score': mean(image_result['score'] for image_result in image_results),
+            'passed': sum(check['pass'] for check in all_checks),
+            'total': len(all_checks), 'images': image_results}
+
+
+def read_ocr_outputs(directory, image_ids):
+    directory = Path(directory)
+    outputs = {}
+    for image_id in image_ids:
+        path, = [path for path in directory.glob(f'{image_id}.*')
+                 if path.suffix in ('.md', '.txt', '.html')]
+        outputs[image_id] = path.read_text(encoding='utf-8')
+    return outputs
 
 
 def main():
@@ -142,14 +193,21 @@ def main():
     parser.add_argument('--image', help='One image ID, e.g. 01; omit to check all ten')
     parser.add_argument('--out', help='Optional JSON report path')
     args = parser.parse_args()
-    images, checks = load_dataset(args.image)
-    result = score(read_outputs(args.outputs, images), images, checks)
+    dataset = load_dataset('parse', image_id=args.image)
+    outputs = read_ocr_outputs(args.outputs, dataset)
+    report = score_outputs(outputs, dataset)
     if args.out:
-        save_json(args.out, result)
-    for row in result['images']:
-        for c in row['checks']:
-            print(f"{row['image_id']} {'PASS' if c['pass'] else 'MISS'}: {c['question']}")
-    print(f"Content recovery: {result['score']:.1%}; {result['passed']}/{result['total']} checks")
+        save_json(args.out, report)
+    for image_result in report['images']:
+        for check in image_result['checks']:
+            requires_order = check.get('type') == 'order'
+            groups = check['sequence'] if requires_order else check['contains_all']
+            alternatives = [group['any_of'] for group in groups]
+            expected = (' → ' if requires_order else ' AND ').join(
+                '(' + ' OR '.join(group) + ')' if len(group) > 1 else group[0]
+                for group in alternatives)
+            print(f"{image_result['image_id']} {'PASS' if check['pass'] else 'MISS'}: {expected}")
+    print(f"Content recovery: {report['score']:.1%}; {report['passed']}/{report['total']} checks")
 
 
 if __name__ == '__main__':

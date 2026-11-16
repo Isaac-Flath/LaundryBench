@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Top title bar.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Meathook Massacre II",
+            "Meathook Massacre 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "Type line immediately below the artwork.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Legendary Enchantment"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Both rules paragraphs state pay 3 life.",
+      "contains_all": [
+        {
+          "any_of": [
+            "pay 3 life",
+            "pay three life",
+            "3 life",
+            "three life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "order",
+      "human_reference": "The middle rules paragraph: you may pay 3 life, then If you do.",
+      "sequence": [
+        {
+          "any_of": [
+            "you may pay 3 life",
+            "you may pay three life"
+          ]
+        },
+        {
+          "any_of": [
+            "If you do"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "human_reference": "Tiny white lettering beside EN, at the bottom left: Tiffany Turrill.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Tiffany Turrill"
+          ]
+        }
+      ]
+    }
+  ]
+}

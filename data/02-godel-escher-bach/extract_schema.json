@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Main book title, excluding the subtitle."
+    },
+    "subtitle": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Book subtitle printed below the main title."
+    },
+    "author_surname": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Author surname printed on the cover."
+    }
+  },
+  "required": [
+    "title",
+    "subtitle",
+    "author_surname"
+  ],
+  "additionalProperties": false
+}

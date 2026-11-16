@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "waist_inches": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Nominal waist size in inches from the jeans size tag."
+    },
+    "inseam_inches": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Nominal inseam size in inches from the jeans size tag."
+    },
+    "fit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Fit description on the inner label."
+    }
+  },
+  "required": [
+    "waist_inches",
+    "inseam_inches",
+    "fit"
+  ],
+  "additionalProperties": false
+}

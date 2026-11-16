@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Large white title across the lower half.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Godel Escher Bach"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "Italic line directly below the main title.",
+      "contains_all": [
+        {
+          "any_of": [
+            "An Eternal Golden Braid"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Large gold HOFSTADTER near the bottom; damaged initials are not required.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Hofstadter"
+          ]
+        }
+      ]
+    }
+  ]
+}

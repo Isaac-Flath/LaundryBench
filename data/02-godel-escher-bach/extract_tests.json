@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "title",
+      "expected": "Gödel, Escher, Bach",
+      "basis": "visible",
+      "human_reference": "Large white title across the lower half."
+    },
+    {
+      "id": 2,
+      "field": "subtitle",
+      "expected": "An Eternal Golden Braid",
+      "basis": "visible",
+      "human_reference": "Italic line below the main title."
+    },
+    {
+      "id": 3,
+      "field": "author_surname",
+      "expected": "Hofstadter",
+      "basis": "visible",
+      "human_reference": "Large gold surname near the bottom."
+    }
+  ]
+}

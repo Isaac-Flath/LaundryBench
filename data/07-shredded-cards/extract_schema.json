@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "front_card_title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Complete title of the torn frontmost card. You may infer missing letters and words from its surviving name and artwork."
+    },
+    "diagonal_card_subtypes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Creature subtypes printed on the diagonal middle card, excluding the word Creature."
+    },
+    "diagonal_card_artist": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Artist credited on the diagonal middle card."
+    }
+  },
+  "required": [
+    "front_card_title",
+    "diagonal_card_subtypes",
+    "diagonal_card_artist"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Large lettering on the black inner label.",
+      "contains_all": [
+        {
+          "any_of": [
+            "baggy pleated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "Logo to the right of the fit.",
+      "contains_all": [
+        {
+          "any_of": [
+            "silverTab",
+            "silver Tab"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Small pale tag below the inner label: W36 L34.",
+      "contains_all": [
+        {
+          "any_of": [
+            "W36",
+            "waist 36",
+            "36 waist"
+          ]
+        },
+        {
+          "any_of": [
+            "L34",
+            "length 34",
+            "inseam 34",
+            "34 length",
+            "34 inseam"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "human_reference": "Circular embossed lettering on the button below the labels: LEVI STRAUSS & CO and S F CAL.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Levi Strauss & Co",
+            "Levi Strauss and Co"
+          ]
+        },
+        {
+          "any_of": [
+            "SF CAL",
+            "S F CAL",
+            "San Francisco California"
+          ]
+        }
+      ]
+    }
+  ]
+}

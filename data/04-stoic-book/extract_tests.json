@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "title",
+      "expected": "Letters from a Stoic",
+      "basis": "inferred",
+      "human_reference": "Title begins with damaged letters before FROM A STOIC; SENECA and the Capstone imprint identify the work.",
+      "reference_url": "https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9"
+    },
+    {
+      "id": 2,
+      "field": "author",
+      "expected": "Seneca",
+      "alternatives": [
+        "Lucius Annaeus Seneca"
+      ],
+      "basis": "visible",
+      "human_reference": "SENECA is visible below the main title."
+    },
+    {
+      "id": 3,
+      "field": "publisher_imprint",
+      "expected": "Capstone",
+      "basis": "visible",
+      "human_reference": "Logo near the bottom reads CAPSTONE above A Wiley Brand."
+    }
+  ]
+}
