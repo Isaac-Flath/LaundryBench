@@ -1,6 +1,10 @@
 # LaundryBench
 
-TLDR: To inspect images beside their checks: `python3 -m scripts.review`
+## TLDR
+
+To inspect images beside their checks: `python3 -m scripts.review`
+
+## Motivation
 
 **The only benchmark you can trust for parsing documents that went through the wash.**
 
