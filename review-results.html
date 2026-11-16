@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LaundryParseBench · Results review</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; color: #202a35; background: #fff; font: 15px/1.5 system-ui, sans-serif; }
+  button, select { font: inherit; color: inherit; }
+  button, select { border: 1px solid #ccd2d8; border-radius: 6px; background: white; padding: 6px 12px; }
+  button { cursor: pointer; }
+  button:hover { background: #edf2f6; }
+  button:disabled { opacity: .4; cursor: default; }
+  :focus-visible { outline: 3px solid #3177b9; outline-offset: 2px; }
+  header { height: 64px; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #dce1e6; }
+  header strong { white-space: nowrap; }
+  select { flex: 1; min-width: 0; max-width: 560px; }
+  main { height: calc(100dvh - 64px); display: grid; grid-template-columns: 58% 42%; }
+  .pane { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .image-pane { border-right: 1px solid #dce1e6; }
+  .toolbar { min-height: 54px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 16px; border-bottom: 1px solid #dce1e6; }
+  #track { flex: none; }
+  .muted { color: #697582; font-size: 13px; }
+  .spacer { flex: 1; }
+  #viewport { flex: 1; overflow: auto; background: #e9edf0; cursor: grab; touch-action: pan-x pan-y; }
+  #viewport.dragging { cursor: grabbing; }
+  #stage { display: grid; place-items: center; }
+  #stage img { display: block; max-width: none; user-select: none; }
+  #zoom-label { min-width: 45px; text-align: center; font-variant-numeric: tabular-nums; }
+  #checks-pane { overflow: auto; flex: 1; padding: 18px 22px; }
+  article { border: 1px solid #dce1e6; border-radius: 8px; margin-bottom: 18px; overflow: hidden; }
+  .check-body { padding: 16px; }
+  .check-meta { display: flex; flex-wrap: wrap; gap: 8px; color: #697582; font-size: 12px; }
+  .kind { background: #eaf1f7; color: #245777; padding: 0 6px; border-radius: 3px; }
+  .rule { font-size: 13px; margin: 12px 0 8px; color: #526271; }
+  .expected { background: #f3f6f8; border-radius: 5px; padding: 10px 12px; margin: 0; }
+  .group + .group { border-top: 1px solid #dce1e6; margin-top: 10px; padding-top: 10px; }
+  .phrase { font: 14px/1.6 ui-monospace, monospace; overflow-wrap: anywhere; }
+  ol.expected { padding-left: 32px; }
+  ol .group { padding-left: 4px; }
+  summary { cursor: pointer; font-size: 13px; color: #526271; }
+  .alternatives { margin-top: 5px; }
+  .alternatives ul { margin: 6px 0 0; padding-left: 20px; }
+  .location { margin: 12px 0 0; font-size: 13px; color: #526271; }
+  .raw { border-top: 1px solid #dce1e6; padding: 10px 16px; }
+  pre { font: 12px/1.6 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0 0; }
+  #file-json, #schema-json { margin: 0; }
+  [aria-pressed="true"] { background: #243e53; border-color: #243e53; color: white; }
+  .results { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .badge { border-radius: 5px; padding: 4px 8px; font-size: 13px; font-weight: 650; }
+  .pass { background: #dcfce7; color: #166534; }
+  .fail { background: #fee2e2; color: #991b1b; }
+  .unknown { background: #e5e7eb; color: #374151; }
+  article.both-pass { border-left: 5px solid #16a34a; }
+  article.both-fail { border-left: 5px solid #dc2626; }
+  article.split { border-left: 5px solid #d97706; }
+  #results-summary { padding: 8px 16px; border-bottom: 1px solid #dce1e6; }
+  #results-summary .results { margin: 0 0 4px; }
+  .split-label { background: #fef3c7; color: #92400e; }
+  [hidden] { display: none !important; }
+  @media (max-width: 760px) {
+    header { padding: 10px; gap: 6px; }
+    header strong { display: none; }
+    main { grid-template-columns: 1fr; grid-template-rows: 48% 52%; }
+    .image-pane { border-right: 0; border-bottom: 1px solid #dce1e6; }
+    .toolbar { padding: 6px 10px; }
+    #checks-pane { padding: 14px; }
+  }
+</style>
+<header>
+  <strong>Temporary results review</strong>
+  <button id="previous" aria-label="Previous image" disabled>←</button>
+  <select id="image-select" aria-label="Image"></select>
+  <button id="next" aria-label="Next image" disabled>→</button>
+  <span id="position" class="muted"></span>
+</header>
+<main>
+  <section class="pane image-pane" aria-label="Original image">
+    <div class="toolbar">
+      <button id="fit">Fit</button>
+      <button id="actual">100%</button>
+      <button id="zoom-out" aria-label="Zoom out">−</button>
+      <span id="zoom-label" class="muted"></span>
+      <button id="zoom-in" aria-label="Zoom in">+</button>
+      <span class="spacer"></span><span class="muted">Drag to pan</span>
+    </div>
+    <div id="viewport"><div id="stage"></div></div>
+  </section>
+  <section class="pane" aria-label="Checks and JSON">
+    <div class="toolbar">
+      <select id="track" aria-label="Track"><option value="parse">Parse</option><option value="extract">Extract</option></select>
+      <strong id="check-count">Checks</strong><span class="spacer"></span>
+      <button id="show-checks" aria-pressed="true">Checks</button>
+      <button id="show-schema" aria-pressed="false" hidden>Schema</button>
+      <button id="show-json" aria-pressed="false">File JSON</button>
+    </div>
+    <div id="results-summary" aria-live="polite"></div>
+    <div id="checks-pane">
+      <div id="cards"></div>
+      <pre id="schema-json" hidden></pre>
+      <pre id="file-json" hidden></pre>
+    </div>
+  </section>
+</main>
+<script>
+  // Temporary snapshot rescored from saved outputs; no model calls or credentials.
+  // Delete this file to remove the comparison view.
+  const results = {"parse":{"datalab":{"01":[{"test":{"id":1,"human_reference":"Red lettering in the central panel.","contains_all":[{"any_of":["Beginner Books"]}]},"pass":true},{"test":{"id":2,"human_reference":"Small blue cover; all six words are visible.","contains_all":[{"any_of":["The Cat in the Hat"]}]},"pass":true},{"test":{"id":3,"human_reference":"Four stacked lines on the small yellow cover.","contains_all":[{"any_of":["One fish two fish red fish blue fish"]}]},"pass":true},{"test":{"id":4,"human_reference":"Bottom of the central gray panel: more than 60 classic and new titles.","contains_all":[{"any_of":["more than 60","more than sixty","over 60","over sixty"]}]},"pass":false}],"02":[{"test":{"id":1,"human_reference":"Large white title across the lower half.","contains_all":[{"any_of":["Godel Escher Bach"]}]},"pass":true},{"test":{"id":2,"human_reference":"Italic line directly below the main title.","contains_all":[{"any_of":["An Eternal Golden Braid"]}]},"pass":true},{"test":{"id":3,"human_reference":"Large gold HOFSTADTER near the bottom; damaged initials are not required.","contains_all":[{"any_of":["Hofstadter"]}]},"pass":true}],"03":[{"test":{"id":1,"human_reference":"Heading under the skull figures, left exposed page.","contains_all":[{"any_of":["Sphenoid"]}]},"pass":true},{"test":{"id":2,"human_reference":"The next heading on the same exposed page.","contains_all":[{"any_of":["Anatomy"]}]},"pass":true},{"test":{"id":3,"human_reference":"Small body text in the lower half of the exposed page, above the pituitary-fossa paragraph.","contains_all":[{"any_of":["Turkish saddle"]}]},"pass":false}],"04":[{"test":{"id":1,"human_reference":"SENECA on the main exposed page.","contains_all":[{"any_of":["Seneca"]}]},"pass":true},{"test":{"id":2,"human_reference":"Logo at the bottom of the exposed page.","contains_all":[{"any_of":["Capstone"]}]},"pass":true},{"test":{"id":3,"human_reference":"Only FROM A STOIC is required; missing initial letters are not.","contains_all":[{"any_of":["From a Stoic"]}]},"pass":true}],"05":[{"test":{"id":1,"human_reference":"Names at the top, above the artwork.","contains_all":[{"any_of":["Garchomp & Giratina","Garchomp and Giratina"]}]},"pass":true},{"test":{"id":2,"human_reference":"HP 270 at the top right.","contains_all":[{"any_of":["HP 270","270 HP","hit points 270","270 hit points"]}]},"pass":true},{"test":{"id":3,"human_reference":"Attack heading in the lower middle.","contains_all":[{"any_of":["Calamitous Slash"]}]},"pass":true},{"test":{"id":4,"type":"order","human_reference":"HP 270 at the top right; Linear Attack below the artwork.","sequence":[{"any_of":["HP 270","270 HP","hit points 270","270 hit points"]},{"any_of":["Linear Attack"]}]},"pass":true},{"test":{"id":5,"human_reference":"Curved, small white text beneath GG End GX: can’t use more than 1 GX attack in a game.","contains_all":[{"any_of":["can't use more than 1 GX attack","can't use more than one GX attack","cannot use more than 1 GX attack","cannot use more than one GX attack","can not use more than 1 GX attack","can not use more than one GX attack","cant use more than 1 GX attack","cant use more than one GX attack"]}]},"pass":true},{"test":{"id":6,"human_reference":"Small text in the yellow-bordered footer, toward the right: 3 Prize cards.","contains_all":[{"any_of":["3 Prize cards","three Prize cards"]}]},"pass":true}],"06":[{"test":{"id":1,"human_reference":"Top title bar.","contains_all":[{"any_of":["Meathook Massacre II","Meathook Massacre 2"]}]},"pass":true},{"test":{"id":2,"human_reference":"Type line immediately below the artwork.","contains_all":[{"any_of":["Legendary Enchantment"]}]},"pass":true},{"test":{"id":3,"human_reference":"Both rules paragraphs state pay 3 life.","contains_all":[{"any_of":["pay 3 life","pay three life","3 life","three life"]}]},"pass":true},{"test":{"id":4,"type":"order","human_reference":"The middle rules paragraph: you may pay 3 life, then If you do.","sequence":[{"any_of":["you may pay 3 life","you may pay three life"]},{"any_of":["If you do"]}]},"pass":true},{"test":{"id":5,"human_reference":"Tiny white lettering beside EN, at the bottom left: Tiffany Turrill.","contains_all":[{"any_of":["Tiffany Turrill"]}]},"pass":true}],"07":[{"test":{"id":1,"human_reference":"Gold type bar on the middle card.","contains_all":[{"any_of":["Phyrexian Chimera"]}]},"pass":true},{"test":{"id":2,"human_reference":"First rules line on the torn front card.","contains_all":[{"any_of":["Vigilance"]}]},"pass":true},{"test":{"id":3,"human_reference":"Final sentence on the rotated Serum-Core Chimera card, split across lines.","contains_all":[{"any_of":["Activate only as a sorcery"]}]},"pass":true},{"test":{"id":4,"human_reference":"Small white lettering along the rotated black bottom border: Johan Grenier.","contains_all":[{"any_of":["Johan Grenier"]}]},"pass":false}],"08":[{"test":{"id":1,"human_reference":"Large lettering on the black inner label.","contains_all":[{"any_of":["baggy pleated"]}]},"pass":true},{"test":{"id":2,"human_reference":"Logo to the right of the fit.","contains_all":[{"any_of":["silverTab","silver Tab"]}]},"pass":false},{"test":{"id":3,"human_reference":"Small pale tag below the inner label: W36 L34.","contains_all":[{"any_of":["W36","waist 36","36 waist"]},{"any_of":["L34","length 34","inseam 34","34 length","34 inseam"]}]},"pass":true},{"test":{"id":4,"human_reference":"Circular embossed lettering on the button below the labels: LEVI STRAUSS & CO and S F CAL.","contains_all":[{"any_of":["Levi Strauss & Co","Levi Strauss and Co"]},{"any_of":["SF CAL","S F CAL","San Francisco California"]}]},"pass":false}],"09":[{"test":{"id":1,"human_reference":"Upside-down green serial on the left-hand banknote fragment.","contains_all":[{"any_of":["A16281584A"]}]},"pass":false},{"test":{"id":2,"human_reference":"Large ONE on the reverse-side fragments. Only the visible word is required.","contains_all":[{"any_of":["ONE"]}]},"pass":true}],"10":[{"test":{"id":1,"human_reference":"Intact booklet on the left, not the washed cartridge.","contains_all":[{"any_of":["Pokemon"]},{"any_of":["Black Version 2","Black 2 Version","Black 2"]}]},"pass":true},{"test":{"id":2,"human_reference":"White diagonal lettering on the booklet, not the cartridge.","contains_all":[{"any_of":["Instruction Booklet"]}]},"pass":true}]},"lighton":{"01":[{"test":{"id":1,"human_reference":"Red lettering in the central panel.","contains_all":[{"any_of":["Beginner Books"]}]},"pass":true},{"test":{"id":2,"human_reference":"Small blue cover; all six words are visible.","contains_all":[{"any_of":["The Cat in the Hat"]}]},"pass":true},{"test":{"id":3,"human_reference":"Four stacked lines on the small yellow cover.","contains_all":[{"any_of":["One fish two fish red fish blue fish"]}]},"pass":true},{"test":{"id":4,"human_reference":"Bottom of the central gray panel: more than 60 classic and new titles.","contains_all":[{"any_of":["more than 60","more than sixty","over 60","over sixty"]}]},"pass":true}],"02":[{"test":{"id":1,"human_reference":"Large white title across the lower half.","contains_all":[{"any_of":["Godel Escher Bach"]}]},"pass":true},{"test":{"id":2,"human_reference":"Italic line directly below the main title.","contains_all":[{"any_of":["An Eternal Golden Braid"]}]},"pass":true},{"test":{"id":3,"human_reference":"Large gold HOFSTADTER near the bottom; damaged initials are not required.","contains_all":[{"any_of":["Hofstadter"]}]},"pass":true}],"03":[{"test":{"id":1,"human_reference":"Heading under the skull figures, left exposed page.","contains_all":[{"any_of":["Sphenoid"]}]},"pass":true},{"test":{"id":2,"human_reference":"The next heading on the same exposed page.","contains_all":[{"any_of":["Anatomy"]}]},"pass":true},{"test":{"id":3,"human_reference":"Small body text in the lower half of the exposed page, above the pituitary-fossa paragraph.","contains_all":[{"any_of":["Turkish saddle"]}]},"pass":false}],"04":[{"test":{"id":1,"human_reference":"SENECA on the main exposed page.","contains_all":[{"any_of":["Seneca"]}]},"pass":true},{"test":{"id":2,"human_reference":"Logo at the bottom of the exposed page.","contains_all":[{"any_of":["Capstone"]}]},"pass":true},{"test":{"id":3,"human_reference":"Only FROM A STOIC is required; missing initial letters are not.","contains_all":[{"any_of":["From a Stoic"]}]},"pass":true}],"05":[{"test":{"id":1,"human_reference":"Names at the top, above the artwork.","contains_all":[{"any_of":["Garchomp & Giratina","Garchomp and Giratina"]}]},"pass":true},{"test":{"id":2,"human_reference":"HP 270 at the top right.","contains_all":[{"any_of":["HP 270","270 HP","hit points 270","270 hit points"]}]},"pass":true},{"test":{"id":3,"human_reference":"Attack heading in the lower middle.","contains_all":[{"any_of":["Calamitous Slash"]}]},"pass":true},{"test":{"id":4,"type":"order","human_reference":"HP 270 at the top right; Linear Attack below the artwork.","sequence":[{"any_of":["HP 270","270 HP","hit points 270","270 hit points"]},{"any_of":["Linear Attack"]}]},"pass":true},{"test":{"id":5,"human_reference":"Curved, small white text beneath GG End GX: can’t use more than 1 GX attack in a game.","contains_all":[{"any_of":["can't use more than 1 GX attack","can't use more than one GX attack","cannot use more than 1 GX attack","cannot use more than one GX attack","can not use more than 1 GX attack","can not use more than one GX attack","cant use more than 1 GX attack","cant use more than one GX attack"]}]},"pass":true},{"test":{"id":6,"human_reference":"Small text in the yellow-bordered footer, toward the right: 3 Prize cards.","contains_all":[{"any_of":["3 Prize cards","three Prize cards"]}]},"pass":true}],"06":[{"test":{"id":1,"human_reference":"Top title bar.","contains_all":[{"any_of":["Meathook Massacre II","Meathook Massacre 2"]}]},"pass":true},{"test":{"id":2,"human_reference":"Type line immediately below the artwork.","contains_all":[{"any_of":["Legendary Enchantment"]}]},"pass":true},{"test":{"id":3,"human_reference":"Both rules paragraphs state pay 3 life.","contains_all":[{"any_of":["pay 3 life","pay three life","3 life","three life"]}]},"pass":true},{"test":{"id":4,"type":"order","human_reference":"The middle rules paragraph: you may pay 3 life, then If you do.","sequence":[{"any_of":["you may pay 3 life","you may pay three life"]},{"any_of":["If you do"]}]},"pass":true},{"test":{"id":5,"human_reference":"Tiny white lettering beside EN, at the bottom left: Tiffany Turrill.","contains_all":[{"any_of":["Tiffany Turrill"]}]},"pass":true}],"07":[{"test":{"id":1,"human_reference":"Gold type bar on the middle card.","contains_all":[{"any_of":["Phyrexian Chimera"]}]},"pass":true},{"test":{"id":2,"human_reference":"First rules line on the torn front card.","contains_all":[{"any_of":["Vigilance"]}]},"pass":true},{"test":{"id":3,"human_reference":"Final sentence on the rotated Serum-Core Chimera card, split across lines.","contains_all":[{"any_of":["Activate only as a sorcery"]}]},"pass":true},{"test":{"id":4,"human_reference":"Small white lettering along the rotated black bottom border: Johan Grenier.","contains_all":[{"any_of":["Johan Grenier"]}]},"pass":false}],"08":[{"test":{"id":1,"human_reference":"Large lettering on the black inner label.","contains_all":[{"any_of":["baggy pleated"]}]},"pass":false},{"test":{"id":2,"human_reference":"Logo to the right of the fit.","contains_all":[{"any_of":["silverTab","silver Tab"]}]},"pass":false},{"test":{"id":3,"human_reference":"Small pale tag below the inner label: W36 L34.","contains_all":[{"any_of":["W36","waist 36","36 waist"]},{"any_of":["L34","length 34","inseam 34","34 length","34 inseam"]}]},"pass":true},{"test":{"id":4,"human_reference":"Circular embossed lettering on the button below the labels: LEVI STRAUSS & CO and S F CAL.","contains_all":[{"any_of":["Levi Strauss & Co","Levi Strauss and Co"]},{"any_of":["SF CAL","S F CAL","San Francisco California"]}]},"pass":false}],"09":[{"test":{"id":1,"human_reference":"Upside-down green serial on the left-hand banknote fragment.","contains_all":[{"any_of":["A16281584A"]}]},"pass":false},{"test":{"id":2,"human_reference":"Large ONE on the reverse-side fragments. Only the visible word is required.","contains_all":[{"any_of":["ONE"]}]},"pass":false}],"10":[{"test":{"id":1,"human_reference":"Intact booklet on the left, not the washed cartridge.","contains_all":[{"any_of":["Pokemon"]},{"any_of":["Black Version 2","Black 2 Version","Black 2"]}]},"pass":false},{"test":{"id":2,"human_reference":"White diagonal lettering on the booklet, not the cartridge.","contains_all":[{"any_of":["Instruction Booklet"]}]},"pass":true}]}},"extract":{"datalab":{"01":[{"test":{"id":1,"field":"book_title","expected":"Fox in Socks","basis":"visible","human_reference":"Title runs down the surviving spine."},"pass":true},{"test":{"id":2,"field":"publisher_imprint","expected":"Beginner Books","basis":"visible","human_reference":"Red lettering in the central gray panel."},"pass":true},{"test":{"id":3,"field":"minimum_catalogue_titles","expected":61,"basis":"inferred","human_reference":"Bottom of the gray panel says more than 60; the smallest whole number greater than 60 is 61."},"pass":false}],"02":[{"test":{"id":1,"field":"title","expected":"Gödel, Escher, Bach","basis":"visible","human_reference":"Large white title across the lower half."},"pass":true},{"test":{"id":2,"field":"subtitle","expected":"An Eternal Golden Braid","basis":"visible","human_reference":"Italic line below the main title."},"pass":true},{"test":{"id":3,"field":"author_surname","expected":"Hofstadter","basis":"visible","human_reference":"Large gold surname near the bottom."},"pass":true}],"03":[{"test":{"id":1,"field":"bone","expected":"Sphenoid","basis":"visible","human_reference":"Heading under the skull diagrams on the exposed left page."},"pass":true},{"test":{"id":2,"field":"translated_phrase","expected":"Turkish saddle","basis":"visible","human_reference":"Lower half of the exposed page, above the pituitary-fossa paragraph."},"pass":false},{"test":{"id":3,"field":"isbn","expected":null,"basis":"unavailable","human_reference":"Only interior pages are exposed; no complete ISBN is visible."},"pass":true}],"04":[{"test":{"id":1,"field":"title","expected":"Letters from a Stoic","basis":"inferred","human_reference":"Title begins with damaged letters before FROM A STOIC; SENECA and the Capstone imprint identify the work.","reference_url":"https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9"},"pass":true},{"test":{"id":2,"field":"author","expected":"Seneca","alternatives":["Lucius Annaeus Seneca"],"basis":"visible","human_reference":"SENECA is visible below the main title."},"pass":true},{"test":{"id":3,"field":"publisher_imprint","expected":"Capstone","basis":"visible","human_reference":"Logo near the bottom reads CAPSTONE above A Wiley Brand."},"pass":true}],"05":[{"test":{"id":1,"field":"hp","expected":270,"basis":"visible","human_reference":"HP 270 at the top right."},"pass":true},{"test":{"id":2,"field":"calamitous_slash_base_damage","expected":160,"basis":"visible","human_reference":"160+ at the right of Calamitous Slash."},"pass":true},{"test":{"id":3,"field":"calamitous_slash_damaged_target_damage","expected":240,"basis":"inferred","human_reference":"The attack shows 160+ and adds 80 if the opposing Active Pokémon already has damage counters: 160 + 80 = 240.","reference_url":"https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm11/228"},"pass":true}],"06":[{"test":{"id":1,"field":"card_title","expected":"Meathook Massacre II","alternatives":["Meathook Massacre 2"],"basis":"visible","human_reference":"Title bar above the artwork."},"pass":true},{"test":{"id":2,"field":"life_payment","expected":3,"basis":"visible","human_reference":"Both relevant rules paragraphs say pay 3 life."},"pass":true},{"test":{"id":3,"field":"opponent_declines_returns_to_you","expected":true,"basis":"inferred","human_reference":"Last rules paragraph: if they do not pay, return that card under your control."},"pass":true}],"07":[{"test":{"id":1,"field":"front_card_title","expected":"Elesh Norn, Mother of Machines","basis":"inferred","human_reference":"Front title retains Elesh Norn, Mothe… and …Machines, separated by a tear.","reference_url":"https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one"},"pass":true},{"test":{"id":2,"field":"diagonal_card_subtypes","expected":"Phyrexian Chimera","basis":"visible","human_reference":"Gold type bar on the diagonal card."},"pass":true},{"test":{"id":3,"field":"diagonal_card_artist","expected":"Johan Grenier","basis":"visible","human_reference":"Small white lettering on its rotated black bottom border."},"pass":false}],"08":[{"test":{"id":1,"field":"waist_inches","expected":36,"basis":"visible","human_reference":"Pale size tag reads W36 L34."},"pass":true},{"test":{"id":2,"field":"inseam_inches","expected":34,"basis":"visible","human_reference":"Pale size tag reads W36 L34."},"pass":true},{"test":{"id":3,"field":"fit","expected":"baggy pleated","basis":"visible","human_reference":"Large pale lettering on the black inner label."},"pass":true}],"09":[{"test":{"id":1,"field":"left_fragment_serial","expected":"A16281584A","basis":"visible","human_reference":"Upside-down green serial on the large left fragment."},"pass":false},{"test":{"id":2,"field":"currency_code","expected":"USD","basis":"inferred","human_reference":"U.S. banknote design and United States lettering identify the currency; USD itself is not printed."},"pass":true},{"test":{"id":3,"field":"original_total_value","expected":null,"basis":"unavailable","human_reference":"Overlapping fragments do not establish how many distinct original notes there were. The source post is not an input."},"pass":true}],"10":[{"test":{"id":1,"field":"booklet_title","expected":"Pokémon Black Version 2","alternatives":["Pokémon Black 2","Pokémon Black 2 Version"],"basis":"visible","human_reference":"Title on the booklet at the left."},"pass":true},{"test":{"id":2,"field":"likely_cartridge_title","expected":"Pokémon Black Version 2","alternatives":["Pokémon Black 2","Pokémon Black 2 Version"],"basis":"inferred","human_reference":"The cartridge sits in the matching case beside the Black Version 2 booklet; treat the title as contextual inference."},"pass":true},{"test":{"id":3,"field":"cartridge_product_code","expected":null,"basis":"unavailable","human_reference":"The original cartridge label is washed away; no complete printed product code is visible."},"pass":true}]},"luna-jev":{"01":[{"test":{"id":1,"field":"book_title","expected":"Fox in Socks","basis":"visible","human_reference":"Title runs down the surviving spine."},"pass":false},{"test":{"id":2,"field":"publisher_imprint","expected":"Beginner Books","basis":"visible","human_reference":"Red lettering in the central gray panel."},"pass":true},{"test":{"id":3,"field":"minimum_catalogue_titles","expected":61,"basis":"inferred","human_reference":"Bottom of the gray panel says more than 60; the smallest whole number greater than 60 is 61."},"pass":true}],"02":[{"test":{"id":1,"field":"title","expected":"Gödel, Escher, Bach","basis":"visible","human_reference":"Large white title across the lower half."},"pass":true},{"test":{"id":2,"field":"subtitle","expected":"An Eternal Golden Braid","basis":"visible","human_reference":"Italic line below the main title."},"pass":true},{"test":{"id":3,"field":"author_surname","expected":"Hofstadter","basis":"visible","human_reference":"Large gold surname near the bottom."},"pass":true}],"03":[{"test":{"id":1,"field":"bone","expected":"Sphenoid","basis":"visible","human_reference":"Heading under the skull diagrams on the exposed left page."},"pass":true},{"test":{"id":2,"field":"translated_phrase","expected":"Turkish saddle","basis":"visible","human_reference":"Lower half of the exposed page, above the pituitary-fossa paragraph."},"pass":false},{"test":{"id":3,"field":"isbn","expected":null,"basis":"unavailable","human_reference":"Only interior pages are exposed; no complete ISBN is visible."},"pass":true}],"04":[{"test":{"id":1,"field":"title","expected":"Letters from a Stoic","basis":"inferred","human_reference":"Title begins with damaged letters before FROM A STOIC; SENECA and the Capstone imprint identify the work.","reference_url":"https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9"},"pass":true},{"test":{"id":2,"field":"author","expected":"Seneca","alternatives":["Lucius Annaeus Seneca"],"basis":"visible","human_reference":"SENECA is visible below the main title."},"pass":true},{"test":{"id":3,"field":"publisher_imprint","expected":"Capstone","basis":"visible","human_reference":"Logo near the bottom reads CAPSTONE above A Wiley Brand."},"pass":true}],"05":[{"test":{"id":1,"field":"hp","expected":270,"basis":"visible","human_reference":"HP 270 at the top right."},"pass":true},{"test":{"id":2,"field":"calamitous_slash_base_damage","expected":160,"basis":"visible","human_reference":"160+ at the right of Calamitous Slash."},"pass":true},{"test":{"id":3,"field":"calamitous_slash_damaged_target_damage","expected":240,"basis":"inferred","human_reference":"The attack shows 160+ and adds 80 if the opposing Active Pokémon already has damage counters: 160 + 80 = 240.","reference_url":"https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm11/228"},"pass":true}],"06":[{"test":{"id":1,"field":"card_title","expected":"Meathook Massacre II","alternatives":["Meathook Massacre 2"],"basis":"visible","human_reference":"Title bar above the artwork."},"pass":true},{"test":{"id":2,"field":"life_payment","expected":3,"basis":"visible","human_reference":"Both relevant rules paragraphs say pay 3 life."},"pass":true},{"test":{"id":3,"field":"opponent_declines_returns_to_you","expected":true,"basis":"inferred","human_reference":"Last rules paragraph: if they do not pay, return that card under your control."},"pass":true}],"07":[{"test":{"id":1,"field":"front_card_title","expected":"Elesh Norn, Mother of Machines","basis":"inferred","human_reference":"Front title retains Elesh Norn, Mothe… and …Machines, separated by a tear.","reference_url":"https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one"},"pass":false},{"test":{"id":2,"field":"diagonal_card_subtypes","expected":"Phyrexian Chimera","basis":"visible","human_reference":"Gold type bar on the diagonal card."},"pass":false},{"test":{"id":3,"field":"diagonal_card_artist","expected":"Johan Grenier","basis":"visible","human_reference":"Small white lettering on its rotated black bottom border."},"pass":false}],"08":[{"test":{"id":1,"field":"waist_inches","expected":36,"basis":"visible","human_reference":"Pale size tag reads W36 L34."},"pass":true},{"test":{"id":2,"field":"inseam_inches","expected":34,"basis":"visible","human_reference":"Pale size tag reads W36 L34."},"pass":true},{"test":{"id":3,"field":"fit","expected":"baggy pleated","basis":"visible","human_reference":"Large pale lettering on the black inner label."},"pass":true}],"09":[{"test":{"id":1,"field":"left_fragment_serial","expected":"A16281584A","basis":"visible","human_reference":"Upside-down green serial on the large left fragment."},"pass":false},{"test":{"id":2,"field":"currency_code","expected":"USD","basis":"inferred","human_reference":"U.S. banknote design and United States lettering identify the currency; USD itself is not printed."},"pass":false},{"test":{"id":3,"field":"original_total_value","expected":null,"basis":"unavailable","human_reference":"Overlapping fragments do not establish how many distinct original notes there were. The source post is not an input."},"pass":true}],"10":[{"test":{"id":1,"field":"booklet_title","expected":"Pokémon Black Version 2","alternatives":["Pokémon Black 2","Pokémon Black 2 Version"],"basis":"visible","human_reference":"Title on the booklet at the left."},"pass":false},{"test":{"id":2,"field":"likely_cartridge_title","expected":"Pokémon Black Version 2","alternatives":["Pokémon Black 2","Pokémon Black 2 Version"],"basis":"inferred","human_reference":"The cartridge sits in the matching case beside the Black Version 2 booklet; treat the title as contextual inference."},"pass":false},{"test":{"id":3,"field":"cartridge_product_code","expected":null,"basis":"unavailable","human_reference":"The original cartridge label is washed away; no complete printed product code is visible."},"pass":true}]}}};
+  const schemas = {"01":{"type":"object","properties":{"book_title":{"type":["string","null"],"description":"Title of the damaged book itself, excluding the other books advertised on its back cover."},"publisher_imprint":{"type":["string","null"],"description":"Publisher imprint printed in the central back-cover panel."},"minimum_catalogue_titles":{"type":["integer","null"],"description":"Smallest whole-number catalogue size consistent with the printed claim. Derive it from the wording."}},"required":["book_title","publisher_imprint","minimum_catalogue_titles"],"additionalProperties":false},"03":{"type":"object","properties":{"bone":{"type":["string","null"],"description":"Bone named in the heading beneath the skull diagrams; return the anatomical name without the word bone."},"translated_phrase":{"type":["string","null"],"description":"English translation printed beside turcica in the body text."},"isbn":{"type":["string","null"],"description":"Complete ISBN printed for this book. Use only visible characters; do not identify the edition from memory."}},"required":["bone","translated_phrase","isbn"],"additionalProperties":false},"06":{"type":"object","properties":{"card_title":{"type":["string","null"],"description":"Title of the card."},"life_payment":{"type":["integer","null"],"description":"Life payment stated in the triggered abilities."},"opponent_declines_returns_to_you":{"type":["boolean","null"],"description":"From the printed rules, determine whether a dead opposing creature returns under your control if its controller declines the life payment."}},"required":["card_title","life_payment","opponent_declines_returns_to_you"],"additionalProperties":false},"07":{"type":"object","properties":{"front_card_title":{"type":["string","null"],"description":"Complete title of the torn frontmost card. You may infer missing letters and words from its surviving name and artwork."},"diagonal_card_subtypes":{"type":["string","null"],"description":"Creature subtypes printed on the diagonal middle card, excluding the word Creature."},"diagonal_card_artist":{"type":["string","null"],"description":"Artist credited on the diagonal middle card."}},"required":["front_card_title","diagonal_card_subtypes","diagonal_card_artist"],"additionalProperties":false},"05":{"type":"object","properties":{"hp":{"type":["integer","null"],"description":"Printed HP value of the pinned Pokémon card."},"calamitous_slash_base_damage":{"type":["integer","null"],"description":"Base damage of Calamitous Slash, before its conditional bonus or other modifiers."},"calamitous_slash_damaged_target_damage":{"type":["integer","null"],"description":"Derive Calamitous Slash damage when the opposing Active Pokémon already has damage counters. Ignore Weakness, Resistance and all other modifiers."}},"required":["hp","calamitous_slash_base_damage","calamitous_slash_damaged_target_damage"],"additionalProperties":false},"04":{"type":"object","properties":{"title":{"type":["string","null"],"description":"Complete main title, excluding subtitle. You may infer missing title letters from the surviving title and author."},"author":{"type":["string","null"],"description":"Name of the author of the main book, excluding authors named on loose catalogue fragments."},"publisher_imprint":{"type":["string","null"],"description":"Publisher imprint, excluding its parent-company tagline."}},"required":["title","author","publisher_imprint"],"additionalProperties":false},"08":{"type":"object","properties":{"waist_inches":{"type":["integer","null"],"description":"Nominal waist size in inches from the jeans size tag."},"inseam_inches":{"type":["integer","null"],"description":"Nominal inseam size in inches from the jeans size tag."},"fit":{"type":["string","null"],"description":"Fit description on the inner label."}},"required":["waist_inches","inseam_inches","fit"],"additionalProperties":false},"09":{"type":"object","properties":{"left_fragment_serial":{"type":["string","null"],"description":"Complete serial number on the large left-hand banknote fragment."},"currency_code":{"type":["string","null"],"description":"Three-letter currency code. You may infer it from the surviving banknote text and design."},"original_total_value":{"type":["integer","null"],"description":"Exact total face value of all original banknotes before they were shredded. Return null unless the image establishes the original count and denominations without double-counting fragments."}},"required":["left_fragment_serial","currency_code","original_total_value"],"additionalProperties":false},"10":{"type":"object","properties":{"booklet_title":{"type":["string","null"],"description":"Game title printed on the intact instruction booklet."},"likely_cartridge_title":{"type":["string","null"],"description":"Likely game title of the washed cartridge. You may infer it from the accompanying case/booklet and surviving label; this is a contextual identification, not verification of the cartridge contents."},"cartridge_product_code":{"type":["string","null"],"description":"Complete original printed product code on the cartridge itself. Use only visible characters; do not supply a code from the booklet, memory or lookup."}},"required":["booklet_title","likely_cartridge_title","cartridge_product_code"],"additionalProperties":false},"02":{"type":"object","properties":{"title":{"type":["string","null"],"description":"Main book title, excluding the subtitle."},"subtitle":{"type":["string","null"],"description":"Book subtitle printed below the main title."},"author_surname":{"type":["string","null"],"description":"Author surname printed on the cover."}},"required":["title","subtitle","author_surname"],"additionalProperties":false}};
+  const $ = id => document.getElementById(id);
+  const viewport = $('viewport'), stage = $('stage'), picker = $('image-select');
+  let images = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
+
+  // All data is rendered as text, including raw JSON and accepted phrases.
+  function element(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  }
+  async function readJSON(path) {
+    return (await fetch(path, {cache: 'no-store'})).json();
+  }
+  function canonical(value) {
+    if (Array.isArray(value)) return value.map(canonical);
+    if (value && typeof value === 'object') return Object.fromEntries(
+      Object.keys(value).sort().map(key => [key, canonical(value[key])])
+    );
+    return value;
+  }
+  function resultFor(track, solution, imageId, check) {
+    const saved = results[track][solution][imageId]?.find(row => row.test.id === check.id);
+    return saved && JSON.stringify(canonical(saved.test)) === JSON.stringify(canonical(check))
+      ? saved.pass : null;
+  }
+  function comparison(track, imageId, check, schema) {
+    const personal = track === 'parse' ? 'lighton' : 'luna-jev';
+    const schemaMatches = track === 'parse' || JSON.stringify(canonical(schemas[imageId])) === JSON.stringify(canonical(schema));
+    const statuses = schemaMatches
+      ? [resultFor(track, 'datalab', imageId, check), resultFor(track, personal, imageId, check)] : [null, null];
+    const kind = statuses.includes(null) ? 'unknown'
+      : statuses.every(Boolean) ? 'both-pass'
+      : statuses.every(value => !value) ? 'both-fail' : 'split';
+    return {statuses, kind};
+  }
+  function renderResults(statuses, track) {
+    const row = element('div', undefined, 'results');
+    const labels = ['Datalab', track === 'parse' ? 'LightOn' : 'Luna/Jev'];
+    statuses.forEach((status, index) => {
+      const label = status === null ? '— Check changed / no result' : status ? '✓ Pass' : '✕ Fail';
+      row.append(element('span', `${labels[index]}: ${label}`, `badge ${status === null ? 'unknown' : status ? 'pass' : 'fail'}`));
+    });
+    return row;
+  }
+  function renderSummary(comparisons, track) {
+    const row = element('div', undefined, 'results');
+    for (const [kind, label, color] of [['both-pass', 'Both pass', 'pass'], ['split', 'Disagree', 'split-label'], ['both-fail', 'Both fail', 'fail'], ['unknown', 'Changed / missing', 'unknown']]) {
+      const count = comparisons.filter(item => item.kind === kind).length;
+      if (count) row.append(element('span', `${label}: ${count}`, `badge ${color}`));
+    }
+    $('results-summary').replaceChildren(row, element('div',
+      `Saved-output snapshot · Datalab accurate vs ${track === 'parse' ? 'LightOn' : 'LightOn → Luna/Jev'} · Changed checks show gray.`, 'muted'));
+  }
+  function renderCheck(check, schema, result, track) {
+    const card = element('article'), body = element('div', undefined, 'check-body');
+    card.classList.add(result.kind);
+    body.append(renderResults(result.statuses, track));
+    const order = check.type === 'order';
+    const meta = element('div', undefined, 'check-meta');
+    if (schema) {
+      const spec = schema.properties[check.field];
+      meta.append(element('span', `${spec.type[0]} · ${check.basis}`, 'kind'));
+      body.append(meta, element('p', check.field, 'phrase'), element('p', spec.description, 'rule'));
+      body.append(element('p', check.alternatives ? 'Must equal this value or an accepted alternative.' : 'Must equal this value.', 'rule'));
+      body.append(element('pre', JSON.stringify(check.expected), 'expected'));
+      if (check.alternatives) {
+        const aliases = element('details', undefined, 'alternatives');
+        aliases.append(element('summary', 'Accepted alternatives'), element('pre', JSON.stringify(check.alternatives, null, 2)));
+        body.append(aliases);
+      }
+    } else {
+      const groups = (order ? check.sequence : check.contains_all).map(group => group.any_of);
+      meta.append(element('span', order ? 'Reading order' : 'Text', 'kind'));
+      body.append(meta);
+      body.append(element('p', order
+        ? 'All snippets must appear in this order. Other text may occur between them.'
+        : groups.length > 1 ? 'All groups below are required. Any alternative within a group is accepted.'
+        : groups[0].length > 1 ? 'Must contain this text or one of its accepted alternatives.'
+        : 'Must contain this text.', 'rule'));
+      const expected = element(order ? 'ol' : 'div', undefined, 'expected');
+      for (const aliases of groups) {
+        const group = element(order ? 'li' : 'div', undefined, 'group');
+        group.append(element('div', aliases[0], 'phrase'));
+        if (aliases.length > 1) {
+          const details = element('details', undefined, 'alternatives');
+          details.append(element('summary', `${aliases.length - 1} accepted alternative${aliases.length > 2 ? 's' : ''}`));
+          const list = element('ul');
+          aliases.slice(1).forEach(alias => list.append(element('li', alias, 'phrase')));
+          details.append(list); group.append(details);
+        }
+        expected.append(group);
+      }
+      body.append(expected);
+    }
+    body.append(element('p', `${schema ? 'Human reference' : 'Find it'}: ${check.human_reference}`, 'location'));
+    const raw = element('details', undefined, 'raw');
+    raw.append(element('summary', 'Raw JSON'), element('pre', JSON.stringify(check, null, 2)));
+    card.append(body, raw);
+    return card;
+  }
+  function setView(mode) {
+    view = mode;
+    $('cards').hidden = mode !== 'checks';
+    $('file-json').hidden = mode !== 'json';
+    $('schema-json').hidden = mode !== 'schema';
+    for (const name of ['checks', 'json', 'schema']) $('show-' + name).setAttribute('aria-pressed', mode === name);
+  }
+  function zoom(value, fit = false) {
+    if (!photo) return;
+    const x = (viewport.scrollLeft + viewport.clientWidth / 2) / stage.offsetWidth;
+    const y = (viewport.scrollTop + viewport.clientHeight / 2) / stage.offsetHeight;
+    fitMode = fit;
+    scale = fit ? Math.min(viewport.clientWidth / photo.naturalWidth,
+      viewport.clientHeight / photo.naturalHeight) * .97 : Math.max(.05, Math.min(4, value));
+    const width = photo.naturalWidth * scale, height = photo.naturalHeight * scale;
+    photo.style.width = `${width}px`; photo.style.height = `${height}px`;
+    stage.style.width = `${Math.max(width, viewport.clientWidth)}px`;
+    stage.style.height = `${Math.max(height, viewport.clientHeight)}px`;
+    viewport.scrollLeft = fit ? 0 : x * stage.offsetWidth - viewport.clientWidth / 2;
+    viewport.scrollTop = fit ? 0 : y * stage.offsetHeight - viewport.clientHeight / 2;
+    $('zoom-label').textContent = `${Math.round(scale * 100)}%`;
+  }
+  async function loadImage() {
+    const ticket = ++request, index = Number(picker.value), item = images[index];
+    const extraction = $('track').value === 'extract';
+    $('show-schema').hidden = !extraction;
+    if (!extraction && view === 'schema') setView('checks');
+    $('previous').disabled = index === 0; $('next').disabled = index === images.length - 1;
+    $('position').textContent = `${index + 1} / ${images.length}`;
+    $('check-count').textContent = 'Loading…';
+    $('results-summary').textContent = 'Loading saved results…';
+    $('cards').replaceChildren(); $('file-json').textContent = ''; $('schema-json').textContent = '';
+    stage.replaceChildren(); photo = null;
+    const image = new Image(); image.alt = item.title; image.draggable = false;
+    image.src = item.file;
+    const folder = item.file.replace(/[^/]+$/, '');
+    const [data, schema] = await Promise.all([
+      readJSON(folder + (extraction ? 'extract_tests.json' : 'parse_tests.json')),
+      extraction ? readJSON(folder + 'extract_schema.json') : null, image.decode()]);
+    if (ticket !== request) return;
+    photo = image; stage.append(photo); zoom(1, true);
+    const track = extraction ? 'extract' : 'parse';
+    const comparisons = data.checks.map(check => comparison(track, item.id, check, schema));
+    data.checks.forEach((check, index) => $('cards').append(renderCheck(check, schema, comparisons[index], track)));
+    renderSummary(comparisons, track);
+    $('check-count').textContent = `${data.checks.length} checks`;
+    $('file-json').textContent = JSON.stringify(data, null, 2);
+    $('schema-json').textContent = schema ? JSON.stringify(schema, null, 2) : '';
+    $('checks-pane').scrollTop = 0; setView(view);
+    const url = new URL(location.href);
+    if (extraction) url.searchParams.set('track', 'extract'); else url.searchParams.delete('track');
+    url.hash = item.id;
+    history.replaceState(null, '', url);
+  }
+  picker.onchange = loadImage;
+  $('track').value = new URLSearchParams(location.search).get('track') === 'extract' ? 'extract' : 'parse';
+  $('track').onchange = loadImage;
+  $('previous').onclick = () => { picker.value = Number(picker.value) - 1; loadImage(); };
+  $('next').onclick = () => { picker.value = Number(picker.value) + 1; loadImage(); };
+  $('fit').onclick = () => zoom(1, true);
+  $('actual').onclick = () => zoom(1);
+  $('zoom-in').onclick = () => zoom(scale * 1.4);
+  $('zoom-out').onclick = () => zoom(scale / 1.4);
+  $('show-checks').onclick = () => setView('checks');
+  $('show-json').onclick = () => setView('json');
+  $('show-schema').onclick = () => setView('schema');
+  new ResizeObserver(() => zoom(scale, fitMode)).observe(viewport);
+  let drag;
+  viewport.onpointerdown = event => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || !photo) return;
+    drag = [event.clientX, event.clientY, viewport.scrollLeft, viewport.scrollTop];
+    viewport.setPointerCapture(event.pointerId); viewport.classList.add('dragging');
+  };
+  viewport.onpointermove = event => {
+    if (!drag) return;
+    viewport.scrollLeft = drag[2] - event.clientX + drag[0];
+    viewport.scrollTop = drag[3] - event.clientY + drag[1];
+  };
+  viewport.onpointerup = viewport.onpointercancel = () => { drag = null; viewport.classList.remove('dragging'); };
+  (async () => {
+    images = await readJSON('images.json');
+    images.forEach((item, index) => picker.add(new Option(`${item.id} · ${item.title}`, index)));
+    picker.value = Math.max(0, images.findIndex(item => item.id === location.hash.slice(1)));
+    await loadImage();
+  })();
+</script>
+</html>
