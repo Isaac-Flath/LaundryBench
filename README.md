@@ -1,5 +1,7 @@
 # LaundryBench
 
+TLDR: To inspect images beside their checks: `python3 -m scripts.review`
+
 **The only benchmark you can trust for parsing documents that went through the wash.**
 
 My nephew put his copy of *Fox in Socks* in the washing machine. It came out ruined.  There was just enough surviving text among the debris to make out some text. 
