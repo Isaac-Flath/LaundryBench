@@ -9,6 +9,10 @@
             "Beginner Books"
           ]
         }
+      ],
+      "tags": [
+        "small_text",
+        "damaged_or_occluded_text"
       ]
     },
     {
@@ -20,6 +24,9 @@
             "The Cat in the Hat"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     },
     {
@@ -31,6 +38,9 @@
             "One fish two fish red fish blue fish"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     },
     {
@@ -45,6 +55,10 @@
             "over sixty"
           ]
         }
+      ],
+      "tags": [
+        "small_text",
+        "damaged_or_occluded_text"
       ]
     }
   ]

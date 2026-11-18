@@ -99,7 +99,7 @@ def score_outputs(outputs, dataset):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('outputs', help='Directory containing 01.json through 10.json')
+    parser.add_argument('outputs', help='Directory containing one JSON file per image, e.g. 01.json')
     parser.add_argument('--image', help='Score one image ID')
     parser.add_argument('--out', help='Save a score report')
     args = parser.parse_args()

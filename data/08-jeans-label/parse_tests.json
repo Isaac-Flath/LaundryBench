@@ -9,7 +9,8 @@
             "baggy pleated"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 2,
@@ -21,6 +22,9 @@
             "silver Tab"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     },
     {
@@ -43,6 +47,10 @@
             "34 inseam"
           ]
         }
+      ],
+      "tags": [
+        "small_text",
+        "low_contrast"
       ]
     },
     {
@@ -62,6 +70,10 @@
             "San Francisco California"
           ]
         }
+      ],
+      "tags": [
+        "curved_text",
+        "small_text"
       ]
     }
   ]

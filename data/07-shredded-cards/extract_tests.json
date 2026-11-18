@@ -6,21 +6,37 @@
       "expected": "Elesh Norn, Mother of Machines",
       "basis": "inferred",
       "human_reference": "Torn title at the front: Elesh Norn, Mothe… and …Machines.",
-      "reference_url": "https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one"
+      "reference_url": "https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one",
+      "tags": [
+        "document_specific",
+        "damaged_or_occluded_text",
+        "multiple_objects"
+      ]
     },
     {
       "id": 2,
       "field": "diagonal_card_subtypes",
       "expected": "Phyrexian Chimera",
       "basis": "visible",
-      "human_reference": "Gold type bar on the diagonal card."
+      "human_reference": "Gold type bar on the diagonal card.",
+      "tags": [
+        "document_specific",
+        "rotated_text",
+        "multiple_objects"
+      ]
     },
     {
       "id": 3,
       "field": "diagonal_card_artist",
       "expected": "Johan Grenier",
       "basis": "visible",
-      "human_reference": "Small white artist name on the diagonal card’s black bottom border."
+      "human_reference": "Small white artist name on the diagonal card’s black bottom border.",
+      "tags": [
+        "document_specific",
+        "rotated_text",
+        "small_text",
+        "multiple_objects"
+      ]
     }
   ]
 }

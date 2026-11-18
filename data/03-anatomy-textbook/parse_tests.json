@@ -9,6 +9,9 @@
             "Sphenoid"
           ]
         }
+      ],
+      "tags": [
+        "low_contrast"
       ]
     },
     {
@@ -20,6 +23,9 @@
             "Anatomy"
           ]
         }
+      ],
+      "tags": [
+        "low_contrast"
       ]
     },
     {
@@ -31,6 +37,11 @@
             "Turkish saddle"
           ]
         }
+      ],
+      "tags": [
+        "small_text",
+        "low_contrast",
+        "damaged_or_occluded_text"
       ]
     }
   ]

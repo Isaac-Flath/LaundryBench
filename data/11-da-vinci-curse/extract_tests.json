@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "field": "title",
+      "expected": "The Da Vinci Curse",
+      "alternatives": [
+        "The DaVinci Curse"
+      ],
+      "basis": "visible",
+      "human_reference": "The complete title is repeated in the small back-cover paragraph; the large front-cover title is folded.",
+      "tags": [
+        "rotated_text",
+        "small_text"
+      ]
+    },
+    {
+      "id": 2,
+      "field": "subtitle",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "No complete subtitle is visible. The bold back-cover questions are promotional copy, not a subtitle.",
+      "tags": [
+        "damaged_or_occluded_text"
+      ]
+    },
+    {
+      "id": 3,
+      "field": "author_surname",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "No book-author credit is recoverable from the visible cover. Barbara Sher is credited in a review quotation, not as this book’s author.",
+      "tags": [
+        "damaged_or_occluded_text"
+      ]
+    }
+  ]
+}

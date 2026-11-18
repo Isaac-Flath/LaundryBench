@@ -18,6 +18,8 @@ This led me to create two novel AI benchmarks, `LaundryParseBench` and `LaundryE
 
 ![Benchmark images](_benchmark-images.jpg)
 
+The original ten examples; the review app includes all eleven.
+
 ## Project Goals and implications
 
 This project's primary goal is to be a fun and educational, not neccesarily the best benchmark to differentiate OCR models.  Though, it needs realism or it wouldn't be a very good learning example.  I will do my best to balance that.  That means:
@@ -31,7 +33,7 @@ This project's primary goal is to be a fun and educational, not neccesarily the 
 
 Anyone can open a pull request:
 
-- **Data:** Put something with text through the wash, photograph what's left, and add it under `data/NN-name/` with the three JSON files shown above. Keep some text readable and add a few useful, visually verifiable checks. Add your photo credit to the source table.  Try some of the same solutions, it's ideal if some models fail at at least one check (but not required if there's something new :D).
+- **Data:** Put something with text through the wash, photograph what's left, and add it under `data/NN-name/` with the three JSON files shown below. Keep some text readable and add a few useful, visually verifiable checks. Tag the attributes each check tests, and reuse an existing extraction schema when it fits. Add your photo credit to the source table. Try some of the same solutions, it's ideal if some models fail at at least one check (but not required if there's something new :D).
 - **Solutions:** Add a parsing or extraction implementation under `solutions/parse/` or `solutions/extract/`. Include runnable code, dependencies, a short pipeline description, and an `.env.example` if it needs API keys. Follow an existing solution’s output format so the scorer can evaluate it.
 
 ## Run a solution
@@ -46,11 +48,11 @@ Each solution saves predictions, raw responses, and `scores.json` in its `output
 
 ## Score your own outputs
 
-Run these commands from the repository root with Python 3.10+. The scorers need no dependencies or API keys. They score all ten images by default; add `--image 05` to score one image.
+Run these commands from the repository root with Python 3.10+. The scorers need no dependencies or API keys. They score all eleven images by default; add `--image 05` to score one image.
 
 The predictions path is the folder containing saved model outputs. `--out` specifies where to write the score report. Checks are read automatically from `data/`; these commands do not call models.
 
-**Parse:** save unedited OCR as `01.md` through `10.md` (`.txt` and `.html` also work).
+**Parse:** save unedited OCR as `01.md` through `11.md` (`.txt` and `.html` also work).
 
 ```sh
 python3 -m scripts.check /path/to/predictions --out /path/to/parse-scores.json
@@ -63,7 +65,7 @@ python3 -m scripts.check solutions/parse/lighton/output \
   --out solutions/parse/lighton/output/scores.json
 ```
 
-**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `10.json`. Include every field; use `null` when unavailable.
+**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Include every field; use `null` when unavailable.
 
 ```sh
 python3 -m scripts.extract /path/to/predictions --out /path/to/extract-scores.json
@@ -89,10 +91,26 @@ extract_tests.json     # expected field values
 extract_schema.json    # model-facing schema
 ```
 
-- **Parse:** 37 text checks and 2 local reading-order checks. Matching ignores case, accents, whitespace, ordinary punctuation, Markdown, and HTML. Accepted alternatives are explicit; there is no fuzzy matching. `contains_all` requires every group; `any_of` accepts any alternative within a group.
-- **Extract:** 34 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Schema validity is reported separately.
+- **Parse:** 40 text checks and 2 local reading-order checks. Matching ignores case, accents, whitespace, ordinary punctuation, Markdown, and HTML. Accepted alternatives are explicit; there is no fuzzy matching. `contains_all` requires every group; `any_of` accepts any alternative within a group. These are content-recovery checks: some explicitly accept expanded or completed wording. Text-presence checks do not establish which object a phrase belongs to or whether two phrases describe each other. Order checks require both snippets to be recovered in the stated order.
+- **Extract:** 37 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Schema validity is reported separately. Unavailable means the answer cannot be established from the supplied evidence.
 
 Checks pass or fail, and image scores are averaged with equal weight. These checks cover selected information, not every omission or hallucination. `human_reference` helps locate text and is not scored. Expected answers have not been independently human-reviewed.
+
+Each check has a `tags` list, shown in the review app. Tags describe what that check tests; an empty list means no special attribute is tagged. They do not change scoring, and a check may have several tags.
+
+| Tag | Use when the check involves |
+| --- | --- |
+| `document_specific` | A model-facing instruction tailored to this document's contents, arrangement, or particular rule. Evaluator-only location notes do not count. |
+| `rotated_text` | Text that must be read sideways, upside down, or at a substantial angle. |
+| `small_text` | Fine print or a small text region within the supplied image. |
+| `curved_text` | Lettering arranged along a curve, such as around a button. |
+| `damaged_or_occluded_text` | Damage, folds, cropping, or occlusion affecting the target text—not just another part of the object. |
+| `low_contrast` | Target text that is faint against its background. |
+| `multiple_objects` | Selecting an object, associating information across objects, or reasoning about several objects/fragments. Mere word presence does not test association. |
+
+Images **02 and 11 use identical book-metadata schemas**: `title`, `subtitle`, and `author_surname`. The schema requests visible evidence without naming either book. Image 02 supplies all three fields; image 11 has a readable title in the back-cover paragraph, but no recoverable subtitle or author credit. A reviewer's name on the cover should not become the book's author. Keep these two schema files identical when editing this reusable example.
+
+Check the dataset and scorer examples with `python3 -m unittest discover -s tests`.
 
 To inspect images beside their checks:
 
@@ -117,6 +135,7 @@ Open [the review app](http://127.0.0.1:8765/review.html). To change a check, edi
 | 08 | [Jeans with a washed-out patch](data/08-jeans-label/) | [u/carschap](https://www.reddit.com/r/VintageClothing/comments/xyrs37/rmildlyinfuriating_washed_these_one_time_and_the/) |
 | 09 | [Banknotes shredded in the wash](data/09-banknotes/) | [u/BocceBurger](https://www.reddit.com/r/mildlyinfuriating/comments/tyoljy/i_accidentally_washed_10/) |
 | 10 | [Game cartridge with its label washed away](data/10-game-cartridge/) | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
+| 11 | [The Da Vinci Curse — folded cover and paper pulp](data/11-da-vinci-curse/) | [u/Drysamel](https://www.reddit.com/r/Wellthatsucks/comments/i545sn/anyone_else_ever_not_realize_they_had_a_book_in/) |
 
 </details>
 

@@ -1,0 +1,49 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "human_reference": "Title repeated in the small back-cover paragraph, upside down in the original image.",
+      "contains_all": [
+        {
+          "any_of": [
+            "The DaVinci Curse",
+            "The Da Vinci Curse"
+          ]
+        }
+      ],
+      "tags": [
+        "rotated_text",
+        "small_text"
+      ]
+    },
+    {
+      "id": 2,
+      "human_reference": "Umlaut logo on the surviving back-cover flap.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Umlaut"
+          ]
+        }
+      ],
+      "tags": [
+        "rotated_text"
+      ]
+    },
+    {
+      "id": 3,
+      "human_reference": "Bold back-cover question: Do you keep switching from one hobby. The rest of the sentence is hidden.",
+      "contains_all": [
+        {
+          "any_of": [
+            "Do you keep switching from one hobby"
+          ]
+        }
+      ],
+      "tags": [
+        "rotated_text",
+        "damaged_or_occluded_text"
+      ]
+    }
+  ]
+}

@@ -5,14 +5,18 @@
       "field": "hp",
       "expected": 270,
       "basis": "visible",
-      "human_reference": "HP 270 at the top right."
+      "human_reference": "HP 270 at the top right.",
+      "tags": []
     },
     {
       "id": 2,
       "field": "calamitous_slash_base_damage",
       "expected": 160,
       "basis": "visible",
-      "human_reference": "160+ beside Calamitous Slash."
+      "human_reference": "160+ beside Calamitous Slash.",
+      "tags": [
+        "document_specific"
+      ]
     },
     {
       "id": 3,
@@ -20,7 +24,11 @@
       "expected": 240,
       "basis": "inferred",
       "human_reference": "Calamitous Slash: 160 plus 80 when the opposing Active Pokémon has damage counters. Total: 240.",
-      "reference_url": "https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm11/228"
+      "reference_url": "https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm11/228",
+      "tags": [
+        "document_specific",
+        "small_text"
+      ]
     }
   ]
 }

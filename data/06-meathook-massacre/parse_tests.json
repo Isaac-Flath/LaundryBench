@@ -10,7 +10,8 @@
             "Meathook Massacre 2"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 2,
@@ -21,7 +22,8 @@
             "Legendary Enchantment"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 3,
@@ -30,12 +32,11 @@
         {
           "any_of": [
             "pay 3 life",
-            "pay three life",
-            "3 life",
-            "three life"
+            "pay three life"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 4,
@@ -53,7 +54,8 @@
             "If you do"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 5,
@@ -64,6 +66,9 @@
             "Tiffany Turrill"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     }
   ]

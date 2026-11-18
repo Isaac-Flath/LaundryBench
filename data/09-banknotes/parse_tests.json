@@ -9,17 +9,25 @@
             "A16281158A"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text"
       ]
     },
     {
       "id": 2,
-      "human_reference": "Large ONE on the banknote fragments.",
+      "human_reference": "Small rotated text on the flap beside the serial-number fragment: FOR ALL DEBTS.",
       "contains_all": [
         {
           "any_of": [
-            "ONE"
+            "FOR ALL DEBTS"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text",
+        "small_text",
+        "damaged_or_occluded_text"
       ]
     }
   ]

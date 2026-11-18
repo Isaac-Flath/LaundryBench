@@ -5,21 +5,26 @@
       "field": "title",
       "expected": "Gödel, Escher, Bach",
       "basis": "visible",
-      "human_reference": "Large white title near the bottom."
+      "human_reference": "Large white title near the bottom.",
+      "tags": []
     },
     {
       "id": 2,
       "field": "subtitle",
       "expected": "An Eternal Golden Braid",
       "basis": "visible",
-      "human_reference": "Italic subtitle below the title."
+      "human_reference": "Italic subtitle below the title.",
+      "tags": []
     },
     {
       "id": 3,
       "field": "author_surname",
       "expected": "Hofstadter",
       "basis": "visible",
-      "human_reference": "Gold surname near the bottom."
+      "human_reference": "Gold surname near the bottom.",
+      "tags": [
+        "damaged_or_occluded_text"
+      ]
     }
   ]
 }

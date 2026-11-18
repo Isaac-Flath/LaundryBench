@@ -5,21 +5,30 @@
       "field": "left_fragment_serial",
       "expected": "A16281158A",
       "basis": "visible",
-      "human_reference": "Upside-down green serial number on the large left fragment."
+      "human_reference": "Upside-down green serial number on the large left fragment.",
+      "tags": [
+        "document_specific",
+        "rotated_text",
+        "multiple_objects"
+      ]
     },
     {
       "id": 2,
       "field": "currency_code",
       "expected": "USD",
       "basis": "inferred",
-      "human_reference": "United States lettering and U.S. banknote design."
+      "human_reference": "United States lettering and U.S. banknote design.",
+      "tags": []
     },
     {
       "id": 3,
       "field": "original_total_value",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "The overlapping fragments do not show how many banknotes there were."
+      "human_reference": "The overlapping fragments do not show how many banknotes there were.",
+      "tags": [
+        "multiple_objects"
+      ]
     }
   ]
 }

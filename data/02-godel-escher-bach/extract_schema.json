@@ -1,4 +1,5 @@
 {
+  "description": "Extract metadata of the damaged book from text visible in the supplied image or OCR. Use null for a field that cannot be recovered from that evidence; do not fill it from outside knowledge. Exclude review quotations and advertising copy from the subtitle.",
   "type": "object",
   "properties": {
     "title": {

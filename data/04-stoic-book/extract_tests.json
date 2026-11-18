@@ -6,7 +6,10 @@
       "expected": "Letters from a Stoic",
       "basis": "inferred",
       "human_reference": "Damaged title near the top, above SENECA.",
-      "reference_url": "https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9"
+      "reference_url": "https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9",
+      "tags": [
+        "damaged_or_occluded_text"
+      ]
     },
     {
       "id": 2,
@@ -16,28 +19,39 @@
         "Lucius Annaeus Seneca"
       ],
       "basis": "visible",
-      "human_reference": "SENECA below the title."
+      "human_reference": "SENECA below the title.",
+      "tags": []
     },
     {
       "id": 3,
       "field": "publisher_imprint",
       "expected": "Capstone",
       "basis": "visible",
-      "human_reference": "CAPSTONE logo near the bottom."
+      "human_reference": "CAPSTONE logo near the bottom.",
+      "tags": []
     },
     {
       "id": 4,
       "field": "meditations_author",
       "expected": "Marcus Aurelius",
       "basis": "visible",
-      "human_reference": "Turned fragment: by Marcus Aurelius below Meditations."
+      "human_reference": "Turned fragment: by Marcus Aurelius below Meditations.",
+      "tags": [
+        "document_specific",
+        "rotated_text"
+      ]
     },
     {
       "id": 5,
       "field": "advertised_philosopher_surname",
       "expected": "Nietzsche",
       "basis": "visible",
-      "human_reference": "Turned fragment above Meditations: Nietzsche before (ISBN."
+      "human_reference": "Turned fragment above Meditations: Nietzsche before (ISBN.",
+      "tags": [
+        "document_specific",
+        "rotated_text",
+        "damaged_or_occluded_text"
+      ]
     }
   ]
 }

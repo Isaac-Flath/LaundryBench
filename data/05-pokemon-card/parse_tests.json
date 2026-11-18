@@ -10,7 +10,8 @@
             "Garchomp and Giratina"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 2,
@@ -24,7 +25,8 @@
             "270 hit points"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 3,
@@ -35,7 +37,8 @@
             "Calamitous Slash"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 4,
@@ -55,7 +58,8 @@
             "Linear Attack"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 5,
@@ -73,6 +77,9 @@
             "cant use more than one GX attack"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     },
     {
@@ -85,6 +92,9 @@
             "three Prize cards"
           ]
         }
+      ],
+      "tags": [
+        "small_text"
       ]
     }
   ]

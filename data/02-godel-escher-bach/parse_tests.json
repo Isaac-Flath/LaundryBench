@@ -9,7 +9,8 @@
             "Godel Escher Bach"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 2,
@@ -20,7 +21,8 @@
             "An Eternal Golden Braid"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 3,
@@ -31,6 +33,9 @@
             "Hofstadter"
           ]
         }
+      ],
+      "tags": [
+        "damaged_or_occluded_text"
       ]
     },
     {
@@ -42,6 +47,10 @@
             "Anniversary Edition"
           ]
         }
+      ],
+      "tags": [
+        "small_text",
+        "damaged_or_occluded_text"
       ]
     }
   ]

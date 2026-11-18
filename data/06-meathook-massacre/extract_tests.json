@@ -8,21 +8,28 @@
         "Meathook Massacre 2"
       ],
       "basis": "visible",
-      "human_reference": "Title at the top."
+      "human_reference": "Title at the top.",
+      "tags": []
     },
     {
       "id": 2,
       "field": "life_payment",
       "expected": 3,
       "basis": "visible",
-      "human_reference": "The rules text says pay 3 life."
+      "human_reference": "The rules text says pay 3 life.",
+      "tags": [
+        "document_specific"
+      ]
     },
     {
       "id": 3,
       "field": "opponent_declines_returns_to_you",
       "expected": true,
       "basis": "inferred",
-      "human_reference": "Last rules paragraph: return that card under your control if they do not pay."
+      "human_reference": "Last rules paragraph: return that card under your control if they do not pay.",
+      "tags": [
+        "document_specific"
+      ]
     }
   ]
 }

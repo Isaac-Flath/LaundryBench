@@ -16,6 +16,9 @@
             "Black 2"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text"
       ]
     },
     {
@@ -28,6 +31,10 @@
             "TRUCTION BOOKLET"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text",
+        "damaged_or_occluded_text"
       ]
     }
   ]

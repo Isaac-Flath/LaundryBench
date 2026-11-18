@@ -189,8 +189,8 @@ def read_ocr_outputs(directory, image_ids):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('outputs', help='Directory containing 01.md through 10.md (txt/html also accepted)')
-    parser.add_argument('--image', help='One image ID, e.g. 01; omit to check all ten')
+    parser.add_argument('outputs', help='Directory containing one file per image, e.g. 01.md (txt/html also accepted)')
+    parser.add_argument('--image', help='One image ID, e.g. 01; omit to check all images')
     parser.add_argument('--out', help='Optional JSON report path')
     args = parser.parse_args()
     dataset = load_dataset('parse', image_id=args.image)

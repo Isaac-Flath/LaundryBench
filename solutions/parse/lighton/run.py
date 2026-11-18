@@ -36,7 +36,7 @@ def transcribe_image(image_path, model, processor):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--image', help='Run and score one image ID; omit for all ten')
+    parser.add_argument('--image', help='Run and score one image ID; omit for all images')
     args = parser.parse_args()
     model = Qwen3_5ForConditionalGeneration.from_pretrained(
         MODEL, revision=REVISION, dtype=torch.bfloat16, device_map='auto',

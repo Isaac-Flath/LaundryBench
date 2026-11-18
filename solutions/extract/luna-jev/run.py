@@ -132,7 +132,7 @@ def verify_values(answer, lines, schema, raw, image_id):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--image', help='Run and score one image ID; omit for all ten')
+    parser.add_argument('--image', help='Run and score one image ID; omit for all images')
     args = parser.parse_args()
     load_dotenv(SOLUTION / '.env')
     client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])

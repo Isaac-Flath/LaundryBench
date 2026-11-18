@@ -5,21 +5,32 @@
       "field": "bone",
       "expected": "Sphenoid",
       "basis": "visible",
-      "human_reference": "Heading below the skull diagrams on the left page."
+      "human_reference": "Heading below the skull diagrams on the left page.",
+      "tags": [
+        "document_specific",
+        "low_contrast"
+      ]
     },
     {
       "id": 2,
       "field": "translated_phrase",
       "expected": "Turkish saddle",
       "basis": "visible",
-      "human_reference": "Lower half of the page, beside turcica."
+      "human_reference": "Lower half of the page, beside turcica.",
+      "tags": [
+        "document_specific",
+        "small_text",
+        "low_contrast",
+        "damaged_or_occluded_text"
+      ]
     },
     {
       "id": 3,
       "field": "isbn",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "No complete ISBN is visible on these pages."
+      "human_reference": "No complete ISBN is visible on these pages.",
+      "tags": []
     }
   ]
 }

@@ -9,7 +9,10 @@
         "Pokémon Black 2 Version"
       ],
       "basis": "visible",
-      "human_reference": "Game title on the booklet at the left."
+      "human_reference": "Game title on the booklet at the left.",
+      "tags": [
+        "rotated_text"
+      ]
     },
     {
       "id": 2,
@@ -20,14 +23,21 @@
         "Pokémon Black 2 Version"
       ],
       "basis": "inferred",
-      "human_reference": "Cartridge in the case beside the Black Version 2 booklet."
+      "human_reference": "Cartridge in the case beside the Black Version 2 booklet.",
+      "tags": [
+        "multiple_objects",
+        "damaged_or_occluded_text"
+      ]
     },
     {
       "id": 3,
       "field": "cartridge_product_code",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "The cartridge label is washed away. No complete product code is visible."
+      "human_reference": "The cartridge label is washed away. No complete product code is visible.",
+      "tags": [
+        "damaged_or_occluded_text"
+      ]
     }
   ]
 }

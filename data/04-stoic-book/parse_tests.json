@@ -9,7 +9,8 @@
             "Seneca"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 2,
@@ -20,7 +21,8 @@
             "Capstone"
           ]
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": 3,
@@ -31,11 +33,14 @@
             "From a Stoic"
           ]
         }
+      ],
+      "tags": [
+        "damaged_or_occluded_text"
       ]
     },
     {
       "id": 4,
-      "human_reference": "Turned fragment: Meditations, then by Marcus Aurelius on the next line.",
+      "human_reference": "Turned fragment: Meditations and by Marcus Aurelius. Checks the presence of both text snippets, not their order or author/title association.",
       "contains_all": [
         {
           "any_of": [
@@ -47,6 +52,9 @@
             "Marcus Aurelius"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text"
       ]
     },
     {
@@ -58,6 +66,10 @@
             "Nietzsche"
           ]
         }
+      ],
+      "tags": [
+        "rotated_text",
+        "damaged_or_occluded_text"
       ]
     }
   ]
