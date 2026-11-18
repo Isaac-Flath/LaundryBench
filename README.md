@@ -90,48 +90,15 @@ Do not give models the test files: they contain expected answers.
 Each `data/NN-name/` folder contains:
 
 ```text
-image.jpg              # .jpeg and .png also supported
+image.jpg              # source image (.jpeg and .png also supported)
 parse_tests.json       # text and reading-order checks
 extract_tests.json     # expected field values
 extract_schema.json    # model-facing schema
 ```
 
-- **Parse:** 40 text checks and 2 local reading-order checks. Matching ignores case, accents, whitespace, ordinary punctuation, Markdown, and HTML. Accepted alternatives are explicit; there is no fuzzy matching. `contains_all` requires every group; `any_of` accepts any alternative within a group. These are content-recovery checks: some explicitly accept expanded or completed wording. Text-presence checks do not establish which object a phrase belongs to or whether two phrases describe each other. Order checks require both snippets to be recovered in the stated order.
-- **Extract:** 33 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Lists must contain exactly the expected items, in any order; missing, extra, or duplicate items fail. Record fields must match together, so a book title paired with another book's author is wrong. Each list is one field check. Schema validity is reported separately. Unavailable means the requested value is absent or cannot be established from the supplied evidence.
+Parse checks test text recovery and reading order; extraction checks test structured field values. Tags such as `rotated_text`, `small_text`, and `damaged_or_occluded_text` describe the challenges involved.
 
-Checks pass or fail, and image scores are averaged with equal weight. These checks cover selected information, not every omission or hallucination. `human_reference` helps locate text and is not scored. Expected answers have not been independently human-reviewed.
-
-Each check has a `tags` list, shown in the review app. Tags describe what that check tests; an empty list means no special attribute is tagged. They do not change scoring, and a check may have several tags.
-
-| Tag | Use when the check involves |
-| --- | --- |
-| `document_specific` | A model-facing instruction tailored to this document's contents, arrangement, or particular rule. Evaluator-only location notes do not count. |
-| `rotated_text` | Text that must be read sideways, upside down, or at a substantial angle. |
-| `small_text` | Fine print or a small text region within the supplied image. |
-| `curved_text` | Lettering arranged along a curve, such as around a button. |
-| `damaged_or_occluded_text` | Damage, folds, cropping, or occlusion affecting the target text—not just another part of the object. |
-| `low_contrast` | Target text that is faint against its background. |
-| `multiple_objects` | Selecting an object, associating information across objects, or reasoning about several objects/fragments. Mere word presence does not test association. |
-
-Images **02 and 11 use identical book-metadata schemas**: `title`, `subtitle`, and `author_surname`. The schema requests visible evidence without naming either book. Image 02 supplies all three fields; image 11 has a readable title in the back-cover paragraph, but no recoverable subtitle or author credit. A reviewer's name on the cover should not become the book's author. Keep these two schema files identical when editing this reusable example.
-
-Other reusable fields collect complete advertised book/author records, distinct life payments, creature subtype phrases, artist credits, and complete banknote serial numbers. Their instructions do not name the answers or select objects by this photograph's arrangement. Only the front-card title reconstruction retains `document_specific`, testing selection of an object by its position. The textbook phrase remains a parse check; extraction no longer names its neighboring term or asks the model to confirm the opponent-payment rule. The reusable `life_payments` field remains.
-
-Image **05 uses numbered printed-damage fields** for the first three attacks, counted top to bottom without skipping attacks that lack damage numbers. The expected values are `null`, `160`, and `null`. Damage mentioned only in rules prose is excluded; `null` can mean absent printed damage, an absent attack, or unreadable damage, so it does not establish the number of attacks. This replaces both the named attack/damage list and the document-specific conditional calculation. The model-facing schema contains no attack names.
-
-When a schema changes, rerun extraction before comparing results. Saved predictions using the old field names or scalar formats do not satisfy the updated schemas.
-
-Check the dataset and scorer examples with `python3 -m unittest discover -s tests`.
-
-To inspect images beside their checks:
-
-```sh
-python3 -m scripts.review
-```
-
-Open [the review app](http://127.0.0.1:8765/review.html). The Document dropdown and previous/next arrows always navigate all documents. The separate Category dropdown filters checks in the selected document, with test counts across the selected track. Changing either selection preserves the other; a document with no matches shows an empty state and a button to clear the category. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and document, and browser Back/Forward restores those selections. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
-
-The main viewer is only for the dataset. To compare saved Reducto, Datalab, Tesseract-based, and LightOn-based outputs separately, run `python3 -m scripts.review_results`, then open [the local results snapshot](http://127.0.0.1:8765/review-results.html) using the same server. This generates an ignored `review-results.html`; it does not call models or modify `review.html`. It shows per-check results, predicted values, and complete saved outputs for all four pipelines. Missing runs and changed inputs or schemas are marked unavailable. Regenerate after changing tests or running solutions; rerun extraction when its schema changes. No results are published or committed.
+Run `python3 -m scripts.review` to [browse images, checks, and schemas](http://127.0.0.1:8765/review.html), with category filtering. For a separate local comparison of saved solution outputs, run `python3 -m scripts.review_results` and open [the results snapshot](http://127.0.0.1:8765/review-results.html) using the same server.
 
 <details>
 <summary>Images and sources</summary>
@@ -151,7 +118,3 @@ The main viewer is only for the dataset. To compare saved Reducto, Datalab, Tess
 | 11 | [The Da Vinci Curse — folded cover and paper pulp](data/11-da-vinci-curse/) | [u/Drysamel](https://www.reddit.com/r/Wellthatsucks/comments/i545sn/anyone_else_ever_not_realize_they_had_a_book_in/) |
 
 </details>
-
-## Roadmap
-
-More teaching examples and reproducible solution comparisons, without a leaderboard.
