@@ -12,7 +12,7 @@ My nephew put his copy of *Fox in Socks* in the washing machine. It came out rui
 
 Once I recovered my wits, I scambled to check every OCR benchmark I could find.  Alas, there was no category for "machine-washed documents".  How do I know what model to use to read what's left of the text?  😱
 
-This led me to create two novel AI benchmarks, `LaundryParseBench` and `LaundryExtractBench`.  If you left your grocery list in your pocket when you washed your clothes, these will help you choose what OCR model can help you recover it with confidence.
+This led me to create `LaundryBench`, with parsing and extraction tracks. If you left your grocery list in your pocket when you washed your clothes, these will help you choose what OCR model can help you recover it with confidence.
 
 (Ok, but really it's just a good fun educational benchmark.  It will demonstrate a variety of types of tests for both parsing and extraction, and teach you about degraded documents, imputation, and evaluation)
 
@@ -122,7 +122,7 @@ To inspect images beside their checks:
 python3 -m scripts.review
 ```
 
-Open [the review app](http://127.0.0.1:8765/review.html). To change a check, edit its JSON file and reload.
+Open [the review app](http://127.0.0.1:8765/review.html). The Category dropdown shows test counts across the selected track and filters both checks and image navigation. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and image. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
 
 <details>
 <summary>Images and sources</summary>

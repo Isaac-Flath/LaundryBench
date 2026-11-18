@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LaundryParseBench · Review</title>
+<title>LaundryBench · Review</title>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; color: #202a35; background: #fff; font: 15px/1.5 system-ui, sans-serif; }
@@ -32,6 +32,9 @@
   .check-body { padding: 16px; }
   .check-meta { display: flex; flex-wrap: wrap; gap: 8px; color: #697582; font-size: 12px; }
   .kind { background: #eaf1f7; color: #245777; padding: 0 6px; border-radius: 3px; }
+  button.kind { border: 1px solid transparent; }
+  button.kind:hover { background: #d5e6f3; }
+  button.kind[aria-pressed="true"]:hover { background: #243e53; }
   .rule { font-size: 13px; margin: 12px 0 8px; color: #526271; }
   .expected { background: #f3f6f8; border-radius: 5px; padding: 10px 12px; margin: 0; }
   .group + .group { border-top: 1px solid #dce1e6; margin-top: 10px; padding-top: 10px; }
@@ -57,9 +60,9 @@
   }
 </style>
 <header>
-  <strong>LaundryParseBench</strong>
+  <strong>LaundryBench</strong>
   <button id="previous" aria-label="Previous image" disabled>←</button>
-  <select id="image-select" aria-label="Image"></select>
+  <select id="image-select" aria-label="Image" disabled></select>
   <button id="next" aria-label="Next image" disabled>→</button>
   <span id="position" class="muted"></span>
 </header>
@@ -77,7 +80,13 @@
   </section>
   <section class="pane" aria-label="Checks and JSON">
     <div class="toolbar">
-      <select id="track" aria-label="Track"><option value="parse">Parse</option><option value="extract">Extract</option></select>
+      <label for="category">Category</label>
+      <select id="category" aria-label="Category" title="Test counts across all images in the selected track. Categories can overlap." disabled>
+        <option value="all">All checks</option>
+      </select>
+    </div>
+    <div class="toolbar">
+      <select id="track" aria-label="Track" disabled><option value="parse">Parse</option><option value="extract">Extract</option></select>
       <strong id="check-count">Checks</strong><span class="spacer"></span>
       <button id="show-checks" aria-pressed="true">Checks</button>
       <button id="show-schema" aria-pressed="false" hidden>Schema</button>
@@ -93,7 +102,8 @@
 <script>
   const $ = id => document.getElementById(id);
   const viewport = $('viewport'), stage = $('stage'), picker = $('image-select');
-  let images = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
+  const category = $('category');
+  let images = [], filteredImages = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
 
   // All data is rendered as text, including raw JSON and accepted phrases.
   function element(tag, text, className) {
@@ -105,13 +115,76 @@
   async function readJSON(path) {
     return (await fetch(path, {cache: 'no-store'})).json();
   }
+  function matchesCategory(check) {
+    const [kind, value] = category.value.split(':');
+    if (kind === 'tag') return (check.tags || []).includes(value);
+    if (kind === 'basis') return check.basis === value;
+    if (kind === 'type') return (check.type || 'text') === value;
+    if (kind === 'untagged') return !(check.tags || []).length;
+    return true;
+  }
+  function matchingChecks(item) {
+    return item[$('track').value].checks.filter(matchesCategory);
+  }
+  function refreshCategories() {
+    const selected = category.value;
+    const checks = images.flatMap(item => item[$('track').value].checks);
+    category.replaceChildren(new Option(`All checks (${checks.length})`, 'all'));
+    const addGroup = (label, choices) => {
+      const group = element('optgroup'); group.label = label;
+      for (const [value, title, count] of choices) {
+        if (count) group.append(new Option(`${title} (${count})`, value));
+      }
+      if (group.children.length) category.append(group);
+    };
+    const tags = [...new Set(checks.flatMap(check => check.tags || []))].sort();
+    addGroup('Attributes', tags.map(tag => [
+      `tag:${tag}`, tag.replaceAll('_', ' ').replace(/^./, letter => letter.toUpperCase()),
+      checks.filter(check => (check.tags || []).includes(tag)).length,
+    ]));
+    if ($('track').value === 'extract') {
+      addGroup('Evidence', ['visible', 'inferred', 'unavailable'].map(basis => [
+        `basis:${basis}`, basis[0].toUpperCase() + basis.slice(1),
+        checks.filter(check => check.basis === basis).length,
+      ]));
+    } else {
+      addGroup('Check type', [['text', 'Text presence'], ['order', 'Reading order']].map(([type, title]) => [
+        `type:${type}`, title, checks.filter(check => (check.type || 'text') === type).length,
+      ]));
+    }
+    const untagged = checks.filter(check => !(check.tags || []).length).length;
+    if (untagged) category.add(new Option(`No special tags (${untagged})`, 'untagged'));
+    category.value = [...category.options].some(option => option.value === selected) ? selected : 'all';
+    category.disabled = false;
+  }
+  async function filterImages(preferredId = filteredImages[Number(picker.value)]?.id) {
+    filteredImages = images.filter(item => matchingChecks(item).length);
+    picker.replaceChildren();
+    filteredImages.forEach((item, index) => picker.add(new Option(
+      `${item.id} · ${item.title}${category.value === 'all' ? '' : ` (${matchingChecks(item).length})`}`, index)));
+    picker.value = Math.max(0, filteredImages.findIndex(item => item.id === preferredId));
+    await loadImage();
+  }
+  function selectCategory(value) {
+    category.value = value;
+    setView('checks');
+    filterImages();
+  }
+  function filterPill(label, value) {
+    const pill = element('button', label, 'kind');
+    pill.type = 'button';
+    pill.setAttribute('aria-label', `Filter by ${label}`);
+    pill.setAttribute('aria-pressed', category.value === value);
+    pill.onclick = () => selectCategory(value);
+    return pill;
+  }
   function renderCheck(check, schema) {
     const card = element('article'), body = element('div', undefined, 'check-body');
     const order = check.type === 'order';
     const meta = element('div', undefined, 'check-meta');
     if (schema) {
       const spec = schema.properties[check.field];
-      meta.append(element('span', `${spec.type[0]} · ${check.basis}`, 'kind'));
+      meta.append(element('span', spec.type[0]), filterPill(check.basis, `basis:${check.basis}`));
       body.append(meta, element('p', check.field, 'phrase'), element('p', spec.description, 'rule'));
       body.append(element('p', spec.type.includes('array')
         ? 'Must contain exactly these items, in any order. Missing, extra, or duplicate items fail.'
@@ -124,7 +197,7 @@
       }
     } else {
       const groups = (order ? check.sequence : check.contains_all).map(group => group.any_of);
-      meta.append(element('span', order ? 'Reading order' : 'Text', 'kind'));
+      meta.append(filterPill(order ? 'Reading order' : 'Text', `type:${order ? 'order' : 'text'}`));
       body.append(meta);
       body.append(element('p', order
         ? 'All snippets must appear in this order. Other text may occur between them.'
@@ -147,7 +220,7 @@
       body.append(expected);
     }
     for (const tag of check.tags || []) {
-      meta.append(element('span', tag.replaceAll('_', ' '), 'kind'));
+      meta.append(filterPill(tag.replaceAll('_', ' '), `tag:${tag}`));
     }
     body.append(element('p', `${schema ? 'Human reference' : 'Find it'}: ${check.human_reference}`, 'location'));
     const raw = element('details', undefined, 'raw');
@@ -178,12 +251,12 @@
     $('zoom-label').textContent = `${Math.round(scale * 100)}%`;
   }
   async function loadImage() {
-    const ticket = ++request, index = Number(picker.value), item = images[index];
+    const ticket = ++request, index = Number(picker.value), item = filteredImages[index];
     const extraction = $('track').value === 'extract';
     $('show-schema').hidden = !extraction;
     if (!extraction && view === 'schema') setView('checks');
-    $('previous').disabled = index === 0; $('next').disabled = index === images.length - 1;
-    $('position').textContent = `${index + 1} / ${images.length}`;
+    $('previous').disabled = index === 0; $('next').disabled = index === filteredImages.length - 1;
+    $('position').textContent = `${index + 1} / ${filteredImages.length}`;
     $('check-count').textContent = 'Loading…';
     $('cards').replaceChildren(); $('file-json').textContent = ''; $('schema-json').textContent = '';
     stage.replaceChildren(); photo = null;
@@ -191,23 +264,28 @@
     image.src = item.file;
     const folder = item.file.replace(/[^/]+$/, '');
     const [data, schema] = await Promise.all([
-      readJSON(folder + (extraction ? 'extract_tests.json' : 'parse_tests.json')),
+      item[extraction ? 'extract' : 'parse'],
       extraction ? readJSON(folder + 'extract_schema.json') : null, image.decode()]);
     if (ticket !== request) return;
     photo = image; stage.append(photo); zoom(1, true);
-    data.checks.forEach(check => $('cards').append(renderCheck(check, schema)));
-    $('check-count').textContent = `${data.checks.length} checks`;
+    const checks = matchingChecks(item);
+    checks.forEach(check => $('cards').append(renderCheck(check, schema)));
+    $('check-count').textContent = category.value === 'all'
+      ? `${checks.length} checks` : `${checks.length} of ${data.checks.length} checks`;
     $('file-json').textContent = JSON.stringify(data, null, 2);
     $('schema-json').textContent = schema ? JSON.stringify(schema, null, 2) : '';
     $('checks-pane').scrollTop = 0; setView(view);
     const url = new URL(location.href);
     if (extraction) url.searchParams.set('track', 'extract'); else url.searchParams.delete('track');
+    if (category.value === 'all') url.searchParams.delete('category');
+    else url.searchParams.set('category', category.value);
     url.hash = item.id;
     history.replaceState(null, '', url);
   }
   picker.onchange = loadImage;
   $('track').value = new URLSearchParams(location.search).get('track') === 'extract' ? 'extract' : 'parse';
-  $('track').onchange = loadImage;
+  $('track').onchange = () => { refreshCategories(); filterImages(); };
+  category.onchange = () => selectCategory(category.value);
   $('previous').onclick = () => { picker.value = Number(picker.value) - 1; loadImage(); };
   $('next').onclick = () => { picker.value = Number(picker.value) + 1; loadImage(); };
   $('fit').onclick = () => zoom(1, true);
@@ -232,9 +310,17 @@
   viewport.onpointerup = viewport.onpointercancel = () => { drag = null; viewport.classList.remove('dragging'); };
   (async () => {
     images = await readJSON('images.json');
-    images.forEach((item, index) => picker.add(new Option(`${item.id} · ${item.title}`, index)));
-    picker.value = Math.max(0, images.findIndex(item => item.id === location.hash.slice(1)));
-    await loadImage();
+    await Promise.all(images.map(async item => {
+      const folder = item.file.replace(/[^/]+$/, '');
+      [item.parse, item.extract] = await Promise.all([
+        readJSON(folder + 'parse_tests.json'), readJSON(folder + 'extract_tests.json'),
+      ]);
+    }));
+    refreshCategories();
+    picker.disabled = false; $('track').disabled = false;
+    const requested = new URLSearchParams(location.search).get('category');
+    if ([...category.options].some(option => option.value === requested)) category.value = requested;
+    await filterImages(location.hash.slice(1));
   })();
 </script>
 </html>
