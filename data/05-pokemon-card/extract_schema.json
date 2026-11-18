@@ -8,48 +8,33 @@
       ],
       "description": "HP of the Pokémon card."
     },
-    "printed_attack_damage": {
-      "type": [
-        "array"
-      ],
-      "description": "Attacks with a readable name and a numeric damage value printed beside that name. Extract the base number, ignoring a trailing + or multiplication symbol. Exclude damage amounts mentioned only in the rules prose and attacks without a numeric damage value beside their name. Return each distinct record once, in any order. Use [] when no complete records are readable; do not reconstruct missing text.",
-      "items": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "attack": {
-            "type": [
-              "string"
-            ],
-            "description": "Complete attack name as printed."
-          },
-          "base_damage": {
-            "type": [
-              "integer"
-            ],
-            "description": "Numeric base damage printed beside the attack name, without modifiers."
-          }
-        },
-        "required": [
-          "attack",
-          "base_damage"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "calamitous_slash_damaged_target_damage": {
+    "attack_1_printed_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Damage from Calamitous Slash when the opposing Active Pokémon already has damage counters, with no Weakness, Resistance, or other modifiers."
+      "description": "Numeric damage printed beside the name of attack 1, counting attacks from top to bottom. Count every attack, including GX attacks and attacks without printed damage; do not count Abilities or skip an attack because its text is unreadable. Extract only the number beside the attack name, ignoring a trailing + or multiplication symbol. Do not use numbers from energy costs or rules prose, calculate conditional damage, or reconstruct missing text. Return null if this attack is absent or its printed damage number is absent or unreadable."
+    },
+    "attack_2_printed_damage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Numeric damage printed beside the name of attack 2, counting attacks from top to bottom. Count every attack, including GX attacks and attacks without printed damage; do not count Abilities or skip an attack because its text is unreadable. Extract only the number beside the attack name, ignoring a trailing + or multiplication symbol. Do not use numbers from energy costs or rules prose, calculate conditional damage, or reconstruct missing text. Return null if this attack is absent or its printed damage number is absent or unreadable."
+    },
+    "attack_3_printed_damage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Numeric damage printed beside the name of attack 3, counting attacks from top to bottom. Count every attack, including GX attacks and attacks without printed damage; do not count Abilities or skip an attack because its text is unreadable. Extract only the number beside the attack name, ignoring a trailing + or multiplication symbol. Do not use numbers from energy costs or rules prose, calculate conditional damage, or reconstruct missing text. Return null if this attack is absent or its printed damage number is absent or unreadable."
     }
   },
   "required": [
     "hp",
-    "printed_attack_damage",
-    "calamitous_slash_damaged_target_damage"
+    "attack_1_printed_damage",
+    "attack_2_printed_damage",
+    "attack_3_printed_damage"
   ],
   "additionalProperties": false
 }

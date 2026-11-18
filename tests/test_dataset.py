@@ -74,20 +74,29 @@ class DatasetTests(unittest.TestCase):
         self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier']), (True, True))
         self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier', 'Nokar']), (True, False))
 
-    def test_attack_damage_preserves_name_value_association(self):
-        self.assertEqual(self.score_field('05', 'printed_attack_damage',
-                         [{'base_damage': 160, 'attack': 'calamitous slash'}]), (True, True))
-        for wrong in [[{'attack': 'Linear Attack', 'base_damage': 160}],
-                      [{'attack': 'Calamitous Slash', 'base_damage': 240}],
-                      [{'attack': 'Calamitous Slash', 'base_damage': 160},
-                       {'attack': 'Linear Attack', 'base_damage': 40}]]:
-            with self.subTest(wrong=wrong):
-                self.assertEqual(self.score_field('05', 'printed_attack_damage', wrong), (True, False))
-        for malformed in [[{'attack': 'Calamitous Slash', 'base_damage': '160'}],
-                          [{'attack': 'Calamitous Slash'}],
-                          [{'attack': 'Calamitous Slash', 'base_damage': 160, 'extra': True}]]:
+    def test_numbered_attack_damage_excludes_prose_and_conditional_totals(self):
+        output = {'hp': 270, 'attack_1_printed_damage': None,
+                  'attack_2_printed_damage': 160, 'attack_3_printed_damage': None}
+        result = score_image(json.dumps(output), self.extract['05'])
+        self.assertTrue(result['schema_valid'])
+        self.assertEqual(result['score'], 1)
+        # Rules-prose damage, a shifted attack, and calculated damage all fail.
+        for field, wrong in [('attack_1_printed_damage', 40),
+                             ('attack_1_printed_damage', 160),
+                             ('attack_2_printed_damage', 240),
+                             ('attack_3_printed_damage', 0)]:
+            with self.subTest(field=field, wrong=wrong):
+                self.assertEqual(self.score_field('05', field, wrong), (True, False))
+        for malformed in ['160', '160+', True]:
             with self.subTest(malformed=malformed):
-                self.assertEqual(self.score_field('05', 'printed_attack_damage', malformed), (False, False))
+                self.assertEqual(self.score_field('05', 'attack_2_printed_damage', malformed),
+                                 (False, False))
+        # Omitting a null field is not equivalent to explicitly returning null.
+        del output['attack_3_printed_damage']
+        result = score_image(json.dumps(output), self.extract['05'])
+        self.assertFalse(result['schema_valid'])
+        self.assertFalse(next(c for c in result['checks']
+                              if c['field'] == 'attack_3_printed_damage')['pass'])
 
     def test_life_payments_are_distinct_and_typed(self):
         self.assertEqual(self.score_field('06', 'life_payments', [3]), (True, True))
