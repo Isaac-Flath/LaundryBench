@@ -1,2 +1,0 @@
-python-dotenv==1.2.4
-datalab-python-sdk==0.10.0

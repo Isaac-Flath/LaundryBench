@@ -13,10 +13,8 @@ from .extract import score_image
 from .solution import prediction_status, metadata_path
 
 SOLUTIONS = {
-    'parse': {'Reducto': 'reducto', 'Datalab': 'datalab',
-              'Custom · Tesseract': 'tesseract', 'Custom · LightOn': 'lighton'},
-    'extract': {'Reducto': 'reducto', 'Datalab': 'datalab',
-                'Custom · Tesseract → Luna/Jev': 'tesseract-luna-jev',
+    'parse': {'Custom · Tesseract': 'tesseract', 'Custom · LightOn': 'lighton'},
+    'extract': {'Custom · Tesseract → Luna/Jev': 'tesseract-luna-jev',
                 'Custom · LightOn → Luna/Jev': 'luna-jev'},
 }
 

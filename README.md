@@ -40,14 +40,12 @@ Anyone can open a pull request:
 
 | Pipeline | Parse | Extract |
 | --- | --- | --- |
-| Reducto | [Reducto Parse](solutions/parse/reducto/) | [Reducto Extract](solutions/extract/reducto/) |
-| Datalab | [Datalab Convert](solutions/parse/datalab/) | [Datalab Extract](solutions/extract/datalab/) |
 | Custom · lightweight | [Tesseract](solutions/parse/tesseract/) | [Tesseract → Luna → Jev](solutions/extract/tesseract-luna-jev/) |
 | Custom · LightOn | [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn → Luna → Jev](solutions/extract/luna-jev/) |
 
-Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Reducto and Datalab extraction take the original image and schema directly. Each custom extraction pipeline requires its corresponding parser's saved OCR. Tesseract uses CPU only; LightOn runs model inference on your compute (the example was run on an H100). Reducto, Datalab, Luna, and Jev call paid APIs.
+Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Each custom extraction pipeline requires its corresponding parser's saved OCR. Tesseract uses CPU only; LightOn runs model inference on your compute (the example was run on an H100). Luna and Jev call paid APIs.
 
-Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. All four pipelines also record the input image, schema, output hashes, settings, and run date. Model settings live in `run.py`; API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
+Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. The pipelines also record the input image, schema, output hashes, settings, and run date. Model settings live in `run.py`; API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
 
 The Tesseract and LightOn variants keep separate output folders, so their OCR and extraction results retain the correct pipeline names.
 
