@@ -39,8 +39,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='Run and score one image ID; omit for all images')
     parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
+    parser.add_argument('--output-dir', type=Path, default=SOLUTION / 'output')
     args = parser.parse_args()
-    output_dir = SOLUTION / 'output'
+    output_dir = args.output_dir.resolve()
     (output_dir / 'raw').mkdir(parents=True, exist_ok=True)
     (output_dir / 'scores.json').unlink(missing_ok=True)
     settings = {'model': MODEL, 'revision': REVISION, 'max_image_side': MAX_IMAGE_SIDE,

@@ -15,10 +15,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='One image ID; omit for all images')
     parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
+    parser.add_argument('--output-dir', type=Path, default=SOLUTION / 'output')
     args = parser.parse_args()
     version = subprocess.run(['tesseract', '--version'], capture_output=True, text=True, check=True).stdout.splitlines()[0]
     settings = {'model': version, 'language': 'eng', 'psm': 11, 'oem': 1}
-    output = SOLUTION / 'output'
+    output = args.output_dir.resolve()
     (output / 'raw').mkdir(parents=True, exist_ok=True)
     (output / 'scores.json').unlink(missing_ok=True)
     for image in select_images(args.image):

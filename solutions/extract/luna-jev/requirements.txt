@@ -1,3 +1,4 @@
 openai==3.51.0
 requests==2.34.2
 python-dotenv==1.2.4
+-r ../../parse/lighton/requirements.txt
