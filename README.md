@@ -122,7 +122,7 @@ To inspect images beside their checks:
 python3 -m scripts.review
 ```
 
-Open [the review app](http://127.0.0.1:8765/review.html). The Category dropdown shows test counts across the selected track and filters both checks and image navigation. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and image. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
+Open [the review app](http://127.0.0.1:8765/review.html). The Document dropdown and previous/next arrows always navigate all documents. The separate Category dropdown filters checks in the selected document, with test counts across the selected track. Changing either selection preserves the other; a document with no matches shows an empty state and a button to clear the category. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and document, and browser Back/Forward restores those selections. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
 
 <details>
 <summary>Images and sources</summary>

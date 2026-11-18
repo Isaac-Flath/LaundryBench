@@ -61,9 +61,10 @@
 </style>
 <header>
   <strong>LaundryBench</strong>
-  <button id="previous" aria-label="Previous image" disabled>←</button>
-  <select id="image-select" aria-label="Image" disabled></select>
-  <button id="next" aria-label="Next image" disabled>→</button>
+  <label for="image-select">Document</label>
+  <button id="previous" aria-label="Previous document" disabled>←</button>
+  <select id="image-select" aria-label="Document" disabled></select>
+  <button id="next" aria-label="Next document" disabled>→</button>
   <span id="position" class="muted"></span>
 </header>
 <main>
@@ -103,7 +104,7 @@
   const $ = id => document.getElementById(id);
   const viewport = $('viewport'), stage = $('stage'), picker = $('image-select');
   const category = $('category');
-  let images = [], filteredImages = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
+  let images = [], photo, scale = 1, fitMode = true, request = 0, view = 'checks';
 
   // All data is rendered as text, including raw JSON and accepted phrases.
   function element(tag, text, className) {
@@ -157,18 +158,10 @@
     category.value = [...category.options].some(option => option.value === selected) ? selected : 'all';
     category.disabled = false;
   }
-  async function filterImages(preferredId = filteredImages[Number(picker.value)]?.id) {
-    filteredImages = images.filter(item => matchingChecks(item).length);
-    picker.replaceChildren();
-    filteredImages.forEach((item, index) => picker.add(new Option(
-      `${item.id} · ${item.title}${category.value === 'all' ? '' : ` (${matchingChecks(item).length})`}`, index)));
-    picker.value = Math.max(0, filteredImages.findIndex(item => item.id === preferredId));
-    await loadImage();
-  }
   function selectCategory(value) {
     category.value = value;
     setView('checks');
-    filterImages();
+    loadImage();
   }
   function filterPill(label, value) {
     const pill = element('button', label, 'kind');
@@ -250,13 +243,32 @@
     viewport.scrollTop = fit ? 0 : y * stage.offsetHeight - viewport.clientHeight / 2;
     $('zoom-label').textContent = `${Math.round(scale * 100)}%`;
   }
-  async function loadImage() {
-    const ticket = ++request, index = Number(picker.value), item = filteredImages[index];
+  function updateURL(mode) {
+    const url = new URL(location.href);
+    if ($('track').value === 'extract') url.searchParams.set('track', 'extract'); else url.searchParams.delete('track');
+    if (category.value === 'all') url.searchParams.delete('category');
+    else url.searchParams.set('category', category.value);
+    url.hash = images[Number(picker.value)].id;
+    if (url.href !== location.href) history[mode === 'replace' ? 'replaceState' : 'pushState'](null, '', url);
+  }
+  function restoreURL() {
+    const params = new URLSearchParams(location.search);
+    $('track').value = params.get('track') === 'extract' ? 'extract' : 'parse';
+    refreshCategories();
+    const requested = params.get('category');
+    category.value = [...category.options].some(option => option.value === requested) ? requested : 'all';
+    picker.value = Math.max(0, images.findIndex(item => item.id === location.hash.slice(1)));
+    setView('checks');
+    return loadImage('replace');
+  }
+  async function loadImage(historyMode = 'push') {
+    const ticket = ++request, index = Number(picker.value), item = images[index];
+    updateURL(historyMode);
     const extraction = $('track').value === 'extract';
     $('show-schema').hidden = !extraction;
     if (!extraction && view === 'schema') setView('checks');
-    $('previous').disabled = index === 0; $('next').disabled = index === filteredImages.length - 1;
-    $('position').textContent = `${index + 1} / ${filteredImages.length}`;
+    $('previous').disabled = index === 0; $('next').disabled = index === images.length - 1;
+    $('position').textContent = `${index + 1} / ${images.length}`;
     $('check-count').textContent = 'Loading…';
     $('cards').replaceChildren(); $('file-json').textContent = ''; $('schema-json').textContent = '';
     stage.replaceChildren(); photo = null;
@@ -270,21 +282,22 @@
     photo = image; stage.append(photo); zoom(1, true);
     const checks = matchingChecks(item);
     checks.forEach(check => $('cards').append(renderCheck(check, schema)));
+    if (!checks.length) {
+      const empty = element('div');
+      empty.append(element('p', 'No checks in this document match the selected category.'));
+      const clear = element('button', 'Show all checks in this document');
+      clear.onclick = () => selectCategory('all');
+      empty.append(clear);
+      $('cards').append(empty);
+    }
     $('check-count').textContent = category.value === 'all'
       ? `${checks.length} checks` : `${checks.length} of ${data.checks.length} checks`;
     $('file-json').textContent = JSON.stringify(data, null, 2);
     $('schema-json').textContent = schema ? JSON.stringify(schema, null, 2) : '';
     $('checks-pane').scrollTop = 0; setView(view);
-    const url = new URL(location.href);
-    if (extraction) url.searchParams.set('track', 'extract'); else url.searchParams.delete('track');
-    if (category.value === 'all') url.searchParams.delete('category');
-    else url.searchParams.set('category', category.value);
-    url.hash = item.id;
-    history.replaceState(null, '', url);
   }
-  picker.onchange = loadImage;
-  $('track').value = new URLSearchParams(location.search).get('track') === 'extract' ? 'extract' : 'parse';
-  $('track').onchange = () => { refreshCategories(); filterImages(); };
+  picker.onchange = () => loadImage();
+  $('track').onchange = () => { refreshCategories(); loadImage(); };
   category.onchange = () => selectCategory(category.value);
   $('previous').onclick = () => { picker.value = Number(picker.value) - 1; loadImage(); };
   $('next').onclick = () => { picker.value = Number(picker.value) + 1; loadImage(); };
@@ -316,11 +329,10 @@
         readJSON(folder + 'parse_tests.json'), readJSON(folder + 'extract_tests.json'),
       ]);
     }));
-    refreshCategories();
+    images.forEach((item, index) => picker.add(new Option(`${item.id} · ${item.title}`, index)));
     picker.disabled = false; $('track').disabled = false;
-    const requested = new URLSearchParams(location.search).get('category');
-    if ([...category.options].some(option => option.value === requested)) category.value = requested;
-    await filterImages(location.hash.slice(1));
+    window.addEventListener('popstate', restoreURL);
+    await restoreURL();
   })();
 </script>
 </html>
