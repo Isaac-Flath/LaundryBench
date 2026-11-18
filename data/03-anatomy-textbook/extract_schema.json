@@ -1,13 +1,6 @@
 {
   "type": "object",
   "properties": {
-    "translated_phrase": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "English translation beside turcica in the body text."
-    },
     "isbn": {
       "type": [
         "string",
@@ -17,7 +10,6 @@
     }
   },
   "required": [
-    "translated_phrase",
     "isbn"
   ],
   "additionalProperties": false

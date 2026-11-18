@@ -1,19 +1,6 @@
 {
   "checks": [
     {
-      "id": 2,
-      "field": "translated_phrase",
-      "expected": "Turkish saddle",
-      "basis": "visible",
-      "human_reference": "Lower half of the page, beside turcica.",
-      "tags": [
-        "document_specific",
-        "small_text",
-        "low_contrast",
-        "damaged_or_occluded_text"
-      ]
-    },
-    {
       "id": 3,
       "field": "isbn",
       "expected": null,

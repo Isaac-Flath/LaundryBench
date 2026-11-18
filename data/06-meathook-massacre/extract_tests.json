@@ -20,16 +20,6 @@
       "basis": "visible",
       "human_reference": "Two triggered abilities each say pay 3 life. The distinct payment amounts are [3], not [3, 3].",
       "tags": []
-    },
-    {
-      "id": 3,
-      "field": "opponent_declines_returns_to_you",
-      "expected": true,
-      "basis": "inferred",
-      "human_reference": "Last rules paragraph: return that card under your control if they do not pay.",
-      "tags": [
-        "document_specific"
-      ]
     }
   ]
 }

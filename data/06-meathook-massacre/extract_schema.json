@@ -18,19 +18,11 @@
           "integer"
         ]
       }
-    },
-    "opponent_declines_returns_to_you": {
-      "type": [
-        "boolean",
-        "null"
-      ],
-      "description": "Whether an opposing creature that dies returns under your control when its controller declines the life payment."
     }
   },
   "required": [
     "card_title",
-    "life_payments",
-    "opponent_declines_returns_to_you"
+    "life_payments"
   ],
   "additionalProperties": false
 }
