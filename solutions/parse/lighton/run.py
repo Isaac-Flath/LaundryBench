@@ -2,7 +2,6 @@
 import argparse
 import json
 from pathlib import Path
-import subprocess
 import sys
 
 from PIL import Image, ImageOps
@@ -11,6 +10,8 @@ from transformers import AutoProcessor, Qwen3_5ForConditionalGeneration
 
 SOLUTION = Path(__file__).resolve().parent
 BENCHMARK = SOLUTION.parents[2]
+sys.path.insert(0, str(BENCHMARK))
+from scripts.solution import select_images, record_prediction, prediction_status, score_solution
 MODEL = "lightonai/LightOnOCR-3-4B"
 REVISION = "b71010f095dc3735de7ee6b9969bff8f8f50b39a"
 MAX_NEW_TOKENS = 4096
@@ -37,18 +38,27 @@ def transcribe_image(image_path, model, processor):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='Run and score one image ID; omit for all images')
+    parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
     args = parser.parse_args()
+    output_dir = SOLUTION / 'output'
+    (output_dir / 'raw').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'scores.json').unlink(missing_ok=True)
+    settings = {'model': MODEL, 'revision': REVISION, 'max_image_side': MAX_IMAGE_SIDE,
+                'max_new_tokens': MAX_NEW_TOKENS, 'do_sample': False}
+    images = select_images(args.image)
+    if args.resume:
+        images = [path for path in images if prediction_status(
+            output_dir / f'{path.parent.name.split("-", 1)[0]}.md', path,
+            settings=settings) != 'current']
+    if not images:
+        score_solution('parse', output_dir, args.image)
+        return
     model = Qwen3_5ForConditionalGeneration.from_pretrained(
         MODEL, revision=REVISION, dtype=torch.bfloat16, device_map='auto',
     ).eval()
     processor = AutoProcessor.from_pretrained(MODEL, revision=REVISION)
-    output_dir = SOLUTION / 'output'
-    (output_dir / 'raw').mkdir(parents=True, exist_ok=True)
-    (output_dir / 'scores.json').unlink(missing_ok=True)
-    for image_path in sorted((BENCHMARK / 'data').glob('*/image.*')):
+    for image_path in images:
         image_id = image_path.parent.name.split('-', 1)[0]
-        if args.image and image_id != args.image:
-            continue
         print(f'Transcribing {image_id}', flush=True)
         text, token_count = transcribe_image(image_path, model, processor)
         (output_dir / f'{image_id}.md').write_text(text, encoding='utf-8')
@@ -56,11 +66,8 @@ def main():
                     'max_image_side': MAX_IMAGE_SIDE, 'max_new_tokens': MAX_NEW_TOKENS,
                     'generated_tokens': token_count, 'hit_token_limit': token_count == MAX_NEW_TOKENS}
         (output_dir / 'raw' / f'{image_id}.json').write_text(json.dumps(metadata, indent=2))
-    command = [sys.executable, '-m', 'scripts.check', str(output_dir),
-               '--out', str(output_dir / 'scores.json')]
-    if args.image:
-        command += ['--image', args.image]
-    subprocess.run(command, cwd=BENCHMARK, check=True)
+        record_prediction(output_dir / f'{image_id}.md', image_path, settings)
+    score_solution('parse', output_dir, args.image)
 
 
 if __name__ == '__main__':

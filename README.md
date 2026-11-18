@@ -42,13 +42,14 @@ Anyone can open a pull request:
 | --- | --- | --- |
 | Reducto | [Reducto Parse](solutions/parse/reducto/) | [Reducto Extract](solutions/extract/reducto/) |
 | Datalab | [Datalab Convert](solutions/parse/datalab/) | [Datalab Extract](solutions/extract/datalab/) |
-| Custom | [Tesseract](solutions/parse/tesseract/) | [Tesseract → Luna → Jev](solutions/extract/tesseract-luna-jev/) |
+| Custom · lightweight | [Tesseract](solutions/parse/tesseract/) | [Tesseract → Luna → Jev](solutions/extract/tesseract-luna-jev/) |
+| Custom · LightOn | [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn → Luna → Jev](solutions/extract/luna-jev/) |
 
-Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Reducto and Datalab extraction take the original image and schema directly. The custom extraction pipeline requires Tesseract's saved OCR. Tesseract uses CPU only; the other stages call paid APIs.
+Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Reducto and Datalab extraction take the original image and schema directly. Each custom extraction pipeline requires its corresponding parser's saved OCR. Tesseract uses CPU only; LightOn runs model inference on your compute (the example was run on an H100). Reducto, Datalab, Luna, and Jev call paid APIs.
 
-Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. The three current pipelines also record the input image, schema, output hashes, settings, and run date. Model settings live in `run.py`; API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
+Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. All four pipelines also record the input image, schema, output hashes, settings, and run date. Model settings live in `run.py`; API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
 
-The historical [LightOnOCR-3-4B](solutions/parse/lighton/) and [LightOn → Luna → Jev](solutions/extract/luna-jev/) examples and their saved outputs remain under their original names.
+The Tesseract and LightOn variants keep separate output folders, so their OCR and extraction results retain the correct pipeline names.
 
 ## Score your own outputs
 
@@ -130,7 +131,7 @@ python3 -m scripts.review
 
 Open [the review app](http://127.0.0.1:8765/review.html). The Document dropdown and previous/next arrows always navigate all documents. The separate Category dropdown filters checks in the selected document, with test counts across the selected track. Changing either selection preserves the other; a document with no matches shows an empty state and a button to clear the category. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and document, and browser Back/Forward restores those selections. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
 
-The main viewer is only for the dataset. To compare saved Reducto, Datalab, and custom outputs separately, run `python3 -m scripts.review_results`, then open [the local results snapshot](http://127.0.0.1:8765/review-results.html) using the same server. This generates an ignored `review-results.html`; it does not call models or modify `review.html`. It shows per-check results, predicted values, and complete saved outputs for all three pipelines. Missing runs and changed inputs or schemas are marked unavailable. Regenerate after changing tests or running solutions; rerun extraction when its schema changes. No results are published or committed.
+The main viewer is only for the dataset. To compare saved Reducto, Datalab, Tesseract-based, and LightOn-based outputs separately, run `python3 -m scripts.review_results`, then open [the local results snapshot](http://127.0.0.1:8765/review-results.html) using the same server. This generates an ignored `review-results.html`; it does not call models or modify `review.html`. It shows per-check results, predicted values, and complete saved outputs for all four pipelines. Missing runs and changed inputs or schemas are marked unavailable. Regenerate after changing tests or running solutions; rerun extraction when its schema changes. No results are published or committed.
 
 <details>
 <summary>Images and sources</summary>

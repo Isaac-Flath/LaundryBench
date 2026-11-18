@@ -13,8 +13,11 @@ from .extract import score_image
 from .solution import prediction_status, metadata_path
 
 SOLUTIONS = {
-    'parse': {'Reducto': 'reducto', 'Datalab': 'datalab', 'Custom · Tesseract': 'tesseract'},
-    'extract': {'Reducto': 'reducto', 'Datalab': 'datalab', 'Custom · Tesseract → Luna/Jev': 'tesseract-luna-jev'},
+    'parse': {'Reducto': 'reducto', 'Datalab': 'datalab',
+              'Custom · Tesseract': 'tesseract', 'Custom · LightOn': 'lighton'},
+    'extract': {'Reducto': 'reducto', 'Datalab': 'datalab',
+                'Custom · Tesseract → Luna/Jev': 'tesseract-luna-jev',
+                'Custom · LightOn → Luna/Jev': 'luna-jev'},
 }
 
 
@@ -58,6 +61,11 @@ STYLES = '''
   .unknown { background: #e5e7eb; color: #374151; }
   #results-summary { padding: 8px 16px; border-bottom: 1px solid #dce1e6; max-height: 25vh; overflow: auto; }
   #results-summary details + details { margin-top: 4px; }
+  @media (max-width: 760px) {
+    .pane[aria-label="Checks and JSON"] { display: block; overflow-y: auto; }
+    #results-summary { max-height: none; }
+    #checks-pane { overflow: visible; }
+  }
 '''
 
 JAVASCRIPT = '''
