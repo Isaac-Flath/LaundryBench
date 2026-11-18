@@ -12,6 +12,8 @@ import requests
 
 SOLUTION = Path(__file__).resolve().parent
 BENCHMARK = SOLUTION.parents[2]
+sys.path.insert(0, str(BENCHMARK))
+from scripts.solution import select_images, record_prediction, prediction_status, sha256
 EXTRACT_MODEL = "gpt-6-luna"
 JEV_MODEL = "jev-latest"
 SUPPORT_THRESHOLD = 0.5
@@ -134,27 +136,37 @@ def verify_values(answer, lines, schema, raw, image_id):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='Run and score one image ID; omit for all images')
+    parser.add_argument('--ocr-dir', type=Path, default=BENCHMARK / 'solutions/parse/lighton/output')
+    parser.add_argument('--output-dir', type=Path, default=SOLUTION / 'output')
+    parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
     args = parser.parse_args()
     load_dotenv(SOLUTION / '.env')
     client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
-    ocr_dir = BENCHMARK / 'solutions/parse/lighton/output'
-    output_dir = SOLUTION / 'output'
+    ocr_dir = args.ocr_dir.resolve()
+    output_dir = args.output_dir.resolve()
     raw = output_dir / 'raw'
     raw.mkdir(parents=True, exist_ok=True)
     (output_dir / 'scores.json').unlink(missing_ok=True)
-    for image_path in sorted((BENCHMARK / 'data').glob('*/image.*')):
+    for image_path in select_images(args.image):
         image_id = image_path.parent.name.split('-', 1)[0]
-        if args.image and image_id != args.image:
+        ocr_path = ocr_dir / f'{image_id}.md'
+        schema = json.loads((image_path.parent / 'extract_schema.json').read_text())
+        settings = {'extract_model': EXTRACT_MODEL, 'verification_model': JEV_MODEL,
+                    'instructions': INSTRUCTIONS, 'support_threshold': SUPPORT_THRESHOLD,
+                    'ocr_source': str(ocr_dir.relative_to(BENCHMARK)) if ocr_dir.is_relative_to(BENCHMARK) else ocr_dir.name,
+                    'ocr_sha256': sha256(ocr_path)}
+        prediction = output_dir / f'{image_id}.json'
+        if args.resume and prediction_status(prediction, image_path, schema, settings) == 'current':
             continue
         print(f'Extracting and verifying {image_id}', flush=True)
-        text = (ocr_dir / f'{image_id}.md').read_text()
+        text = ocr_path.read_text()
         (raw / f'{image_id}.md').write_text(text)
         lines = {f'L{index}': line for index, line in enumerate(text.splitlines(), 1) if line.strip()}
-        schema = json.loads((image_path.parent / 'extract_schema.json').read_text())
         answer = extract_values(client, lines, schema, raw, image_id)
         # Verification flags never silently change Luna's values or the benchmark score.
         save_json(output_dir / f'{image_id}.json', answer['values'])
         verify_values(answer, lines, schema, raw, image_id)
+        record_prediction(prediction, image_path, settings, schema)
     command = [sys.executable, '-m', 'scripts.extract', str(output_dir),
                '--out', str(output_dir / 'scores.json')]
     if args.image:

@@ -38,13 +38,17 @@ Anyone can open a pull request:
 
 ## Run a solution
 
-| Parse | Extract |
-| --- | --- |
-| [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn OCR → Luna → Jev](solutions/extract/luna-jev/) |
+| Pipeline | Parse | Extract |
+| --- | --- | --- |
+| Reducto | [Reducto Parse](solutions/parse/reducto/) | [Reducto Extract](solutions/extract/reducto/) |
+| Datalab | [Datalab Convert](solutions/parse/datalab/) | [Datalab Extract](solutions/extract/datalab/) |
+| Custom | [Tesseract](solutions/parse/tesseract/) | [Tesseract → Luna → Jev](solutions/extract/tesseract-luna-jev/) |
 
-From the solution’s folder, run `python run.py`. Add `--image 05` to try one image. Luna/Jev requires LightOn’s saved OCR.
+Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Reducto and Datalab extraction take the original image and schema directly. The custom extraction pipeline requires Tesseract's saved OCR. Tesseract uses CPU only; the other stages call paid APIs.
 
-Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. Model settings live in `run.py`; API keys go in `.env`. Keys and outputs are gitignored.
+Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. The three current pipelines also record the input image, schema, output hashes, settings, and run date. Model settings live in `run.py`; API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
+
+The historical [LightOnOCR-3-4B](solutions/parse/lighton/) and [LightOn → Luna → Jev](solutions/extract/luna-jev/) examples and their saved outputs remain under their original names.
 
 ## Score your own outputs
 
@@ -58,11 +62,11 @@ The predictions path is the folder containing saved model outputs. `--out` speci
 python3 -m scripts.check /path/to/predictions --out /path/to/parse-scores.json
 ```
 
-For example, score LightOn’s saved parsing outputs:
+For example, score Tesseract's saved parsing outputs:
 
 ```sh
-python3 -m scripts.check solutions/parse/lighton/output \
-  --out solutions/parse/lighton/output/scores.json
+python3 -m scripts.check solutions/parse/tesseract/output \
+  --out solutions/parse/tesseract/output/scores.json
 ```
 
 **Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Include every field; use `null` for unavailable scalar values and `[]` when no qualifying list items are readable. Follow each field's description.
@@ -71,11 +75,11 @@ python3 -m scripts.check solutions/parse/lighton/output \
 python3 -m scripts.extract /path/to/predictions --out /path/to/extract-scores.json
 ```
 
-For example, score Luna/Jev’s saved extraction outputs:
+For example, score the custom pipeline's saved extraction outputs:
 
 ```sh
-python3 -m scripts.extract solutions/extract/luna-jev/output \
-  --out solutions/extract/luna-jev/output/scores.json
+python3 -m scripts.extract solutions/extract/tesseract-luna-jev/output \
+  --out solutions/extract/tesseract-luna-jev/output/scores.json
 ```
 
 Do not give models the test files: they contain expected answers.
@@ -126,6 +130,8 @@ python3 -m scripts.review
 
 Open [the review app](http://127.0.0.1:8765/review.html). The Document dropdown and previous/next arrows always navigate all documents. The separate Category dropdown filters checks in the selected document, with test counts across the selected track. Changing either selection preserves the other; a document with no matches shows an empty state and a button to clear the category. Click a check's category pill to select the same filter. Only one filter is active at a time; select All checks to clear it. Options include attribute tags, extraction evidence groups, parse check types, and checks with no special tags. Categories can overlap. The URL preserves the selected track, category, and document, and browser Back/Forward restores those selections. Schema and File JSON show the complete source files. To change a check, edit its JSON file and reload.
 
+The main viewer is only for the dataset. To compare saved Reducto, Datalab, and custom outputs separately, run `python3 -m scripts.review_results`, then open [the local results snapshot](http://127.0.0.1:8765/review-results.html) using the same server. This generates an ignored `review-results.html`; it does not call models or modify `review.html`. It shows per-check results, predicted values, and complete saved outputs for all three pipelines. Missing runs and changed inputs or schemas are marked unavailable. Regenerate after changing tests or running solutions; rerun extraction when its schema changes. No results are published or committed.
+
 <details>
 <summary>Images and sources</summary>
 
@@ -147,4 +153,4 @@ Open [the review app](http://127.0.0.1:8765/review.html). The Document dropdown 
 
 ## Roadmap
 
-More documents, a published baseline, and reproducible leaderboard submissions.
+More teaching examples and reproducible solution comparisons, without a leaderboard.
