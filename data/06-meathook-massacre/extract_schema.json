@@ -8,12 +8,16 @@
       ],
       "description": "Card title."
     },
-    "life_payment": {
+    "life_payments": {
       "type": [
-        "integer",
-        "null"
+        "array"
       ],
-      "description": "Number of life points in the payment described by the triggered abilities."
+      "description": "All distinct numeric life-payment amounts explicitly stated in the card rules. Include payments made by any player; exclude life gain, life loss that is not a payment, and amounts not readable as numbers. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "integer"
+        ]
+      }
     },
     "opponent_declines_returns_to_you": {
       "type": [
@@ -25,7 +29,7 @@
   },
   "required": [
     "card_title",
-    "life_payment",
+    "life_payments",
     "opponent_declines_returns_to_you"
   ],
   "additionalProperties": false

@@ -8,12 +8,35 @@
       ],
       "description": "HP of the Pokémon card."
     },
-    "calamitous_slash_base_damage": {
+    "printed_attack_damage": {
       "type": [
-        "integer",
-        "null"
+        "array"
       ],
-      "description": "Base damage of Calamitous Slash, without bonuses or modifiers."
+      "description": "Attacks with a readable name and a numeric damage value printed beside that name. Extract the base number, ignoring a trailing + or multiplication symbol. Exclude damage amounts mentioned only in the rules prose and attacks without a numeric damage value beside their name. Return each distinct record once, in any order. Use [] when no complete records are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "attack": {
+            "type": [
+              "string"
+            ],
+            "description": "Complete attack name as printed."
+          },
+          "base_damage": {
+            "type": [
+              "integer"
+            ],
+            "description": "Numeric base damage printed beside the attack name, without modifiers."
+          }
+        },
+        "required": [
+          "attack",
+          "base_damage"
+        ],
+        "additionalProperties": false
+      }
     },
     "calamitous_slash_damaged_target_damage": {
       "type": [
@@ -25,7 +48,7 @@
   },
   "required": [
     "hp",
-    "calamitous_slash_base_damage",
+    "printed_attack_damage",
     "calamitous_slash_damaged_target_damage"
   ],
   "additionalProperties": false

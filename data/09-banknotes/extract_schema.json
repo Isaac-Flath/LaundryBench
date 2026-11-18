@@ -1,12 +1,16 @@
 {
   "type": "object",
   "properties": {
-    "left_fragment_serial": {
+    "complete_serial_numbers": {
       "type": [
-        "string",
-        "null"
+        "array"
       ],
-      "description": "Complete serial number of the large left banknote fragment."
+      "description": "All complete banknote serial numbers readable anywhere in the image. Exclude partial serial numbers; do not join text from different fragments to invent a complete serial. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "string"
+        ]
+      }
     },
     "currency_code": {
       "type": [
@@ -24,7 +28,7 @@
     }
   },
   "required": [
-    "left_fragment_serial",
+    "complete_serial_numbers",
     "currency_code",
     "original_total_value"
   ],

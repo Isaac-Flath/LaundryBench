@@ -1,17 +1,6 @@
 {
   "checks": [
     {
-      "id": 1,
-      "field": "bone",
-      "expected": "Sphenoid",
-      "basis": "visible",
-      "human_reference": "Heading below the skull diagrams on the left page.",
-      "tags": [
-        "document_specific",
-        "low_contrast"
-      ]
-    },
-    {
       "id": 2,
       "field": "translated_phrase",
       "expected": "Turkish saddle",

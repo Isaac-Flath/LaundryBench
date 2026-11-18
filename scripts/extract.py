@@ -20,11 +20,43 @@ def has_allowed_type(value, allowed_types):
             return 'integer' in allowed_types
         case float():
             return 'integer' in allowed_types and value.is_integer()
+        case list():
+            return 'array' in allowed_types
+        case dict():
+            return 'object' in allowed_types
         case _:
             return False
 
 
+def matches_schema(value, spec):
+    """Validate the types and object shapes used by this benchmark's schemas."""
+    if not has_allowed_type(value, spec['type']):
+        return False
+    if isinstance(value, list):
+        return all(matches_schema(item, spec['items']) for item in value)
+    if isinstance(value, dict):
+        properties = spec['properties']
+        return (set(value) == set(properties)
+                and all(matches_schema(value[field], child) for field, child in properties.items()))
+    return True
+
+
 def values_match(actual, expected):
+    if isinstance(actual, dict) and isinstance(expected, dict):
+        return (set(actual) == set(expected)
+                and all(values_match(actual[key], expected[key]) for key in expected))
+    if isinstance(actual, list) and isinstance(expected, list):
+        # Lists are unordered, but each expected item must match exactly once.
+        if len(actual) != len(expected):
+            return False
+        unmatched = list(expected)
+        for item in actual:
+            index = next((i for i, candidate in enumerate(unmatched)
+                          if values_match(item, candidate)), None)
+            if index is None:
+                return False
+            unmatched.pop(index)
+        return True
     if isinstance(actual, str) and isinstance(expected, str):
         return prepare_text_for_matching(actual) == prepare_text_for_matching(expected)
     if type(actual) in (int, float) and type(expected) in (int, float):
@@ -60,15 +92,14 @@ def parse_json_output(text):
 def score_image(text, image_tests):
     output, error = parse_json_output(text)
     properties = image_tests['schema']['properties']
-    schema_valid = error is None and set(output) == set(properties) and all(
-        has_allowed_type(output[field], spec['type']) for field, spec in properties.items())
+    schema_valid = error is None and matches_schema(output, image_tests['schema'])
     check_results = []
     for check in image_tests['checks']:
         field = check['field']
         present = field in output
         actual = output.get(field)
         accepted = [check['expected'], *check.get('alternatives', [])]
-        correct_type = has_allowed_type(actual, properties[field]['type'])
+        correct_type = matches_schema(actual, properties[field])
         correct_value = any(values_match(actual, value) for value in accepted)
         passed = present and correct_type and correct_value
         check_results.append({**check, 'actual': actual, 'missing': not present, 'pass': passed})

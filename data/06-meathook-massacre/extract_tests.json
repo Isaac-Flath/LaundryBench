@@ -13,13 +13,13 @@
     },
     {
       "id": 2,
-      "field": "life_payment",
-      "expected": 3,
+      "field": "life_payments",
+      "expected": [
+        3
+      ],
       "basis": "visible",
-      "human_reference": "The rules text says pay 3 life.",
-      "tags": [
-        "document_specific"
-      ]
+      "human_reference": "Two triggered abilities each say pay 3 life. The distinct payment amounts are [3], not [3, 3].",
+      "tags": []
     },
     {
       "id": 3,

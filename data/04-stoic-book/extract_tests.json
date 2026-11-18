@@ -32,25 +32,17 @@
     },
     {
       "id": 4,
-      "field": "meditations_author",
-      "expected": "Marcus Aurelius",
+      "field": "advertised_books",
+      "expected": [
+        {
+          "title": "Meditations",
+          "author": "Marcus Aurelius"
+        }
+      ],
       "basis": "visible",
-      "human_reference": "Turned fragment: by Marcus Aurelius below Meditations.",
+      "human_reference": "The turned advertisement shows Meditations and by Marcus Aurelius. The other advertised entries have incomplete main titles or author credits and are excluded.",
       "tags": [
-        "document_specific",
         "rotated_text"
-      ]
-    },
-    {
-      "id": 5,
-      "field": "advertised_philosopher_surname",
-      "expected": "Nietzsche",
-      "basis": "visible",
-      "human_reference": "Turned fragment above Meditations: Nietzsche before (ISBN.",
-      "tags": [
-        "document_specific",
-        "rotated_text",
-        "damaged_or_occluded_text"
       ]
     }
   ]

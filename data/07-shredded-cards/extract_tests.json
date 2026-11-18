@@ -15,24 +15,27 @@
     },
     {
       "id": 2,
-      "field": "diagonal_card_subtypes",
-      "expected": "Phyrexian Chimera",
+      "field": "creature_subtypes",
+      "expected": [
+        "Phyrexian Praetor",
+        "Phyrexian Chimera"
+      ],
       "basis": "visible",
-      "human_reference": "Gold type bar on the diagonal card.",
+      "human_reference": "The front card reads Legendary Creature — Phyrexian Praetor; the rotated card reads Creature — Phyrexian Chimera. Both subtype phrases are required.",
       "tags": [
-        "document_specific",
         "rotated_text",
         "multiple_objects"
       ]
     },
     {
       "id": 3,
-      "field": "diagonal_card_artist",
-      "expected": "Johan Grenier",
+      "field": "artist_credits",
+      "expected": [
+        "Johan Grenier"
+      ],
       "basis": "visible",
-      "human_reference": "Small white artist name on the diagonal card’s black bottom border.",
+      "human_reference": "Johan Grenier is readable on the rotated card border. Other card artist credits are missing or obscured. Nokar in the rear card’s flavor text is not an artist credit.",
       "tags": [
-        "document_specific",
         "rotated_text",
         "small_text",
         "multiple_objects"

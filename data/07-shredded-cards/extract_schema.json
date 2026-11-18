@@ -8,25 +8,33 @@
       ],
       "description": "Complete title of the torn card at the front."
     },
-    "diagonal_card_subtypes": {
+    "creature_subtypes": {
       "type": [
-        "string",
-        "null"
+        "array"
       ],
-      "description": "Creature subtypes of the diagonal middle card."
+      "description": "All complete creature-subtype phrases readable in the type lines of any cards in the image. Preserve each whole phrase as one item, excluding card types and supertypes such as Creature or Legendary. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "string"
+        ]
+      }
     },
-    "diagonal_card_artist": {
+    "artist_credits": {
       "type": [
-        "string",
-        "null"
+        "array"
       ],
-      "description": "Artist credited on the diagonal middle card."
+      "description": "All complete artist names readable in the illustration-credit lines of any cards in the image. Exclude names in rules text or flavor-text attributions. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "string"
+        ]
+      }
     }
   },
   "required": [
     "front_card_title",
-    "diagonal_card_subtypes",
-    "diagonal_card_artist"
+    "creature_subtypes",
+    "artist_credits"
   ],
   "additionalProperties": false
 }

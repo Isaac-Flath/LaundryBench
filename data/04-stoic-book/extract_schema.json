@@ -22,27 +22,42 @@
       ],
       "description": "Publisher imprint of the main book."
     },
-    "meditations_author": {
+    "advertised_books": {
       "type": [
-        "string",
-        "null"
+        "array"
       ],
-      "description": "Author of Meditations, advertised on the torn fragment."
-    },
-    "advertised_philosopher_surname": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "Surname of the philosopher named beside the ISBN above the Meditations entry."
+      "description": "Books advertised in the document for which both the complete main title and the complete author credit are readable. Exclude the main book being photographed. Omit subtitles and skip entries with an incomplete main title or author credit. Return each distinct record once, in any order. Use [] when no complete records are readable; do not reconstruct missing text.",
+      "items": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "title": {
+            "type": [
+              "string"
+            ],
+            "description": "Complete advertised main book title, without its subtitle."
+          },
+          "author": {
+            "type": [
+              "string"
+            ],
+            "description": "Complete author name as printed in the advertised entry."
+          }
+        },
+        "required": [
+          "title",
+          "author"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
     "title",
     "author",
     "publisher_imprint",
-    "meditations_author",
-    "advertised_philosopher_surname"
+    "advertised_books"
   ],
   "additionalProperties": false
 }

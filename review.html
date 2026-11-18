@@ -113,8 +113,10 @@
       const spec = schema.properties[check.field];
       meta.append(element('span', `${spec.type[0]} · ${check.basis}`, 'kind'));
       body.append(meta, element('p', check.field, 'phrase'), element('p', spec.description, 'rule'));
-      body.append(element('p', check.alternatives ? 'Must equal this value or an accepted alternative.' : 'Must equal this value.', 'rule'));
-      body.append(element('pre', JSON.stringify(check.expected), 'expected'));
+      body.append(element('p', spec.type.includes('array')
+        ? 'Must contain exactly these items, in any order. Missing, extra, or duplicate items fail.'
+        : check.alternatives ? 'Must equal this value or an accepted alternative.' : 'Must equal this value.', 'rule'));
+      body.append(element('pre', JSON.stringify(check.expected, null, 2), 'expected'));
       if (check.alternatives) {
         const aliases = element('details', undefined, 'alternatives');
         aliases.append(element('summary', 'Accepted alternatives'), element('pre', JSON.stringify(check.alternatives, null, 2)));

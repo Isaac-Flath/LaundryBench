@@ -65,7 +65,7 @@ python3 -m scripts.check solutions/parse/lighton/output \
   --out solutions/parse/lighton/output/scores.json
 ```
 
-**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Include every field; use `null` when unavailable.
+**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Include every field; use `null` for unavailable scalar values and `[]` when no qualifying list items are readable. Follow each field's description.
 
 ```sh
 python3 -m scripts.extract /path/to/predictions --out /path/to/extract-scores.json
@@ -92,7 +92,7 @@ extract_schema.json    # model-facing schema
 ```
 
 - **Parse:** 40 text checks and 2 local reading-order checks. Matching ignores case, accents, whitespace, ordinary punctuation, Markdown, and HTML. Accepted alternatives are explicit; there is no fuzzy matching. `contains_all` requires every group; `any_of` accepts any alternative within a group. These are content-recovery checks: some explicitly accept expanded or completed wording. Text-presence checks do not establish which object a phrase belongs to or whether two phrases describe each other. Order checks require both snippets to be recovered in the stated order.
-- **Extract:** 37 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Schema validity is reported separately. Unavailable means the answer cannot be established from the supplied evidence.
+- **Extract:** 34 field checks, grouped as visible, inferred, or unavailable. Strings must match the whole value after normalization; numbers and booleans must have the correct type. Lists must contain exactly the expected items, in any order; missing, extra, or duplicate items fail. Record fields must match together, so an attack name paired with another attack's damage is wrong. Each list is one field check. Schema validity is reported separately. Unavailable means the answer cannot be established from the supplied evidence.
 
 Checks pass or fail, and image scores are averaged with equal weight. These checks cover selected information, not every omission or hallucination. `human_reference` helps locate text and is not scored. Expected answers have not been independently human-reviewed.
 
@@ -109,6 +109,10 @@ Each check has a `tags` list, shown in the review app. Tags describe what that c
 | `multiple_objects` | Selecting an object, associating information across objects, or reasoning about several objects/fragments. Mere word presence does not test association. |
 
 Images **02 and 11 use identical book-metadata schemas**: `title`, `subtitle`, and `author_surname`. The schema requests visible evidence without naming either book. Image 02 supplies all three fields; image 11 has a readable title in the back-cover paragraph, but no recoverable subtitle or author credit. A reviewer's name on the cover should not become the book's author. Keep these two schema files identical when editing this reusable example.
+
+Other reusable fields collect complete advertised book/author records, printed attack/damage records, distinct life payments, creature subtype phrases, artist credits, and complete banknote serial numbers. Their instructions do not name the answers or select objects by this photograph's arrangement. Four checks retain `document_specific`: the textbook translation, conditional attack damage, opponent-payment rule, and front-card title reconstruction.
+
+When a schema changes, rerun extraction before comparing results. Saved predictions using the old field names or scalar formats do not satisfy the updated schemas.
 
 Check the dataset and scorer examples with `python3 -m unittest discover -s tests`.
 

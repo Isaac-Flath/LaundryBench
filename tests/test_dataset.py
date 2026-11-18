@@ -4,7 +4,7 @@ import unittest
 
 from scripts.check import passes_check
 from scripts.common import load_dataset
-from scripts.extract import has_allowed_type, score_image
+from scripts.extract import matches_schema, score_image
 
 
 class DatasetTests(unittest.TestCase):
@@ -54,6 +54,59 @@ class DatasetTests(unittest.TestCase):
         self.assertTrue(result['schema_valid'])
         self.assertFalse(next(c for c in result['checks'] if c['field'] == 'author_surname')['pass'])
 
+    def score_field(self, image_id, field, value):
+        data = self.extract[image_id]
+        output = {c['field']: c['expected'] for c in data['checks']}
+        output[field] = value
+        result = score_image(json.dumps(output), data)
+        check = next(c for c in result['checks'] if c['field'] == field)
+        return result['schema_valid'], check['pass']
+
+    def test_subtypes_allow_reordering_but_not_omissions_or_duplicates(self):
+        self.assertEqual(self.score_field('07', 'creature_subtypes',
+                         ['Phyrexian Chimera', 'Phyrexian Praetor']), (True, True))
+        for wrong in [[], ['Phyrexian Chimera'], ['Phyrexian Chimera', 'Phyrexian Chimera'],
+                      ['Phyrexian Chimera', 'Phyrexian Praetor', 'Human']]:
+            with self.subTest(wrong=wrong):
+                self.assertEqual(self.score_field('07', 'creature_subtypes', wrong), (True, False))
+
+    def test_flavor_attribution_is_not_an_artist_credit(self):
+        self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier']), (True, True))
+        self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier', 'Nokar']), (True, False))
+
+    def test_attack_damage_preserves_name_value_association(self):
+        self.assertEqual(self.score_field('05', 'printed_attack_damage',
+                         [{'base_damage': 160, 'attack': 'calamitous slash'}]), (True, True))
+        for wrong in [[{'attack': 'Linear Attack', 'base_damage': 160}],
+                      [{'attack': 'Calamitous Slash', 'base_damage': 240}],
+                      [{'attack': 'Calamitous Slash', 'base_damage': 160},
+                       {'attack': 'Linear Attack', 'base_damage': 40}]]:
+            with self.subTest(wrong=wrong):
+                self.assertEqual(self.score_field('05', 'printed_attack_damage', wrong), (True, False))
+        for malformed in [[{'attack': 'Calamitous Slash', 'base_damage': '160'}],
+                          [{'attack': 'Calamitous Slash'}],
+                          [{'attack': 'Calamitous Slash', 'base_damage': 160, 'extra': True}]]:
+            with self.subTest(malformed=malformed):
+                self.assertEqual(self.score_field('05', 'printed_attack_damage', malformed), (False, False))
+
+    def test_life_payments_are_distinct_and_typed(self):
+        self.assertEqual(self.score_field('06', 'life_payments', [3]), (True, True))
+        self.assertEqual(self.score_field('06', 'life_payments', [3, 3]), (True, False))
+        for malformed in [['3'], [True], 3, None]:
+            with self.subTest(malformed=malformed):
+                self.assertEqual(self.score_field('06', 'life_payments', malformed), (False, False))
+
+    def test_advertised_book_requires_correct_author(self):
+        self.assertEqual(self.score_field('04', 'advertised_books',
+                         [{'title': 'Meditations', 'author': 'Marcus Aurelius'}]), (True, True))
+        self.assertEqual(self.score_field('04', 'advertised_books',
+                         [{'title': 'Meditations', 'author': 'Seneca'}]), (True, False))
+
+    def test_banknote_list_excludes_partial_serials(self):
+        self.assertEqual(self.score_field('09', 'complete_serial_numbers', ['A16281158A']), (True, True))
+        self.assertEqual(self.score_field('09', 'complete_serial_numbers',
+                         ['A16281158A', 'L133']), (True, False))
+
     def test_dataset_contract(self):
         tags = {'document_specific', 'rotated_text', 'small_text', 'curved_text',
                 'damaged_or_occluded_text', 'low_contrast', 'multiple_objects'}
@@ -79,7 +132,7 @@ class DatasetTests(unittest.TestCase):
                             self.assertEqual(check['expected'] is None, check['basis'] == 'unavailable')
                             spec = data['schema']['properties'][check['field']]
                             for value in [check['expected'], *check.get('alternatives', [])]:
-                                self.assertTrue(has_allowed_type(value, spec['type']))
+                                self.assertTrue(matches_schema(value, spec))
                     if track == 'extract':
                         fields = [c['field'] for c in checks]
                         self.assertEqual(len(fields), len(set(fields)))

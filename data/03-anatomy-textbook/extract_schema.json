@@ -1,13 +1,6 @@
 {
   "type": "object",
   "properties": {
-    "bone": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "Anatomical name of the bone in the heading below the skull diagrams."
-    },
     "translated_phrase": {
       "type": [
         "string",
@@ -24,7 +17,6 @@
     }
   },
   "required": [
-    "bone",
     "translated_phrase",
     "isbn"
   ],

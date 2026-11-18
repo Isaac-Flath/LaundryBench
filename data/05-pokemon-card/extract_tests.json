@@ -10,13 +10,16 @@
     },
     {
       "id": 2,
-      "field": "calamitous_slash_base_damage",
-      "expected": 160,
+      "field": "printed_attack_damage",
+      "expected": [
+        {
+          "attack": "Calamitous Slash",
+          "base_damage": 160
+        }
+      ],
       "basis": "visible",
-      "human_reference": "160+ beside Calamitous Slash.",
-      "tags": [
-        "document_specific"
-      ]
+      "human_reference": "160+ is printed beside Calamitous Slash. Linear Attack mentions 40 only in rules prose; GG End GX has no numeric damage beside its name. Both are excluded.",
+      "tags": []
     },
     {
       "id": 3,

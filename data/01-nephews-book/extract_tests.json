@@ -22,18 +22,6 @@
         "small_text",
         "damaged_or_occluded_text"
       ]
-    },
-    {
-      "id": 3,
-      "field": "minimum_catalogue_titles",
-      "expected": 61,
-      "basis": "inferred",
-      "human_reference": "Bottom of the gray panel: more than 60 classic and new titles. The minimum is 61.",
-      "tags": [
-        "document_specific",
-        "small_text",
-        "damaged_or_occluded_text"
-      ]
     }
   ]
 }

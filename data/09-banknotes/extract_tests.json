@@ -2,12 +2,13 @@
   "checks": [
     {
       "id": 1,
-      "field": "left_fragment_serial",
-      "expected": "A16281158A",
+      "field": "complete_serial_numbers",
+      "expected": [
+        "A16281158A"
+      ],
       "basis": "visible",
-      "human_reference": "Upside-down green serial number on the large left fragment.",
+      "human_reference": "A16281158A is complete on the large rotated fragment. Other visible serial-number fragments are incomplete and are excluded.",
       "tags": [
-        "document_specific",
         "rotated_text",
         "multiple_objects"
       ]

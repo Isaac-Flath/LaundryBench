@@ -14,19 +14,11 @@
         "null"
       ],
       "description": "Publisher imprint of the damaged book."
-    },
-    "minimum_catalogue_titles": {
-      "type": [
-        "integer",
-        "null"
-      ],
-      "description": "Smallest whole-number catalogue size consistent with the claim on the back cover."
     }
   },
   "required": [
     "book_title",
-    "publisher_imprint",
-    "minimum_catalogue_titles"
+    "publisher_imprint"
   ],
   "additionalProperties": false
 }
