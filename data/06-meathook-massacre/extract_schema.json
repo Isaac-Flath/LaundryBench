@@ -6,7 +6,7 @@
         "string",
         "null"
       ],
-      "description": "Card title."
+      "description": "Card title as printed. Preserve Roman numerals rather than converting them to digits."
     },
     "life_payments": {
       "type": [

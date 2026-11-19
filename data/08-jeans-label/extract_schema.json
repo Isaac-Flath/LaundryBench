@@ -34,7 +34,7 @@
         "string",
         "null"
       ],
-      "description": "Location abbreviation on the metal button."
+      "description": "Location abbreviation as printed on the metal button. Do not expand it into a city or state name."
     }
   },
   "required": [

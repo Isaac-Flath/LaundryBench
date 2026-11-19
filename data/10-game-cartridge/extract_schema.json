@@ -6,14 +6,14 @@
         "string",
         "null"
       ],
-      "description": "Game title of the instruction booklet."
+      "description": "Game title as printed on the instruction booklet, including edition or version wording."
     },
-    "likely_cartridge_title": {
+    "cartridge_title": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Likely game title of the washed cartridge."
+      "description": "Complete game title readable on the cartridge itself. Return null if the complete title is not readable there. Do not expand handwritten abbreviations or infer the title from a nearby booklet or case."
     },
     "cartridge_product_code": {
       "type": [
@@ -25,7 +25,7 @@
   },
   "required": [
     "booklet_title",
-    "likely_cartridge_title",
+    "cartridge_title",
     "cartridge_product_code"
   ],
   "additionalProperties": false

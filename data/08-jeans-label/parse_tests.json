@@ -33,18 +33,12 @@
       "contains_all": [
         {
           "any_of": [
-            "W36",
-            "waist 36",
-            "36 waist"
+            "W36"
           ]
         },
         {
           "any_of": [
-            "L34",
-            "length 34",
-            "inseam 34",
-            "34 length",
-            "34 inseam"
+            "L34"
           ]
         }
       ],
@@ -66,8 +60,7 @@
         {
           "any_of": [
             "SF CAL",
-            "S F CAL",
-            "San Francisco California"
+            "S F CAL"
           ]
         }
       ],

@@ -6,8 +6,7 @@
       "contains_all": [
         {
           "any_of": [
-            "Meathook Massacre II",
-            "Meathook Massacre 2"
+            "Meathook Massacre II"
           ]
         }
       ],
@@ -31,8 +30,7 @@
       "contains_all": [
         {
           "any_of": [
-            "pay 3 life",
-            "pay three life"
+            "pay 3 life"
           ]
         }
       ],
@@ -45,8 +43,7 @@
       "sequence": [
         {
           "any_of": [
-            "you may pay 3 life",
-            "you may pay three life"
+            "you may pay 3 life"
           ]
         },
         {

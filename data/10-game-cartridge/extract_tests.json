@@ -5,7 +5,6 @@
       "field": "booklet_title",
       "expected": "Pokémon Black Version 2",
       "alternatives": [
-        "Pokémon Black 2",
         "Pokémon Black 2 Version"
       ],
       "basis": "visible",
@@ -16,14 +15,10 @@
     },
     {
       "id": 2,
-      "field": "likely_cartridge_title",
-      "expected": "Pokémon Black Version 2",
-      "alternatives": [
-        "Pokémon Black 2",
-        "Pokémon Black 2 Version"
-      ],
-      "basis": "inferred",
-      "human_reference": "Cartridge in the case beside the Black Version 2 booklet.",
+      "field": "cartridge_title",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "The original cartridge label is washed away. Surviving handwriting is not a complete game title, and the nearby booklet does not establish what is printed on the cartridge.",
       "tags": [
         "multiple_objects",
         "damaged_or_occluded_text"

@@ -3,14 +3,18 @@
     {
       "id": 1,
       "field": "front_card_title",
-      "expected": "Elesh Norn, Mother of Machines",
-      "basis": "inferred",
-      "human_reference": "Torn title at the front: Elesh Norn, Mothe… and …Machines.",
-      "reference_url": "https://magic.wizards.com/en/news/feature/the-legends-of-phyrexia-all-will-be-one",
+      "expected": "Elesh Norn, Mothe … Machines",
+      "basis": "visible",
+      "human_reference": "Surviving title fragments: Elesh Norn, Mothe … Machines. The E and M at torn edges are partially visible, so variants omitting those boundary letters are accepted. The missing r of Mother and the word of cannot be supplied from knowledge of the card.",
       "tags": [
         "document_specific",
         "damaged_or_occluded_text",
         "multiple_objects"
+      ],
+      "alternatives": [
+        "lesh Norn, Mothe … Machines",
+        "Elesh Norn, Mothe … achines",
+        "lesh Norn, Mothe … achines"
       ]
     },
     {

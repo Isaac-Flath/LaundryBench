@@ -12,8 +12,7 @@
         {
           "any_of": [
             "Black Version 2",
-            "Black 2 Version",
-            "Black 2"
+            "Black 2 Version"
           ]
         }
       ],
@@ -27,7 +26,6 @@
       "contains_all": [
         {
           "any_of": [
-            "Instruction Booklet",
             "TRUCTION BOOKLET"
           ]
         }

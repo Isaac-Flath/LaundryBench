@@ -49,10 +49,7 @@
       "contains_all": [
         {
           "any_of": [
-            "more than 60",
-            "more than sixty",
-            "over 60",
-            "over sixty"
+            "more than 60"
           ]
         }
       ],

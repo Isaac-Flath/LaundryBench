@@ -3,10 +3,9 @@
     {
       "id": 1,
       "field": "title",
-      "expected": "Letters from a Stoic",
-      "basis": "inferred",
-      "human_reference": "Damaged title near the top, above SENECA.",
-      "reference_url": "https://www.wiley-vch.de/en/areas-interest/humanities-social-sciences/philosophy-12pl/historical-western-philosophy-12pl4/ancient-philosophy-12pl41/letters-from-a-stoic-978-1-119-75135-9",
+      "expected": "RS FROM A STOIC",
+      "basis": "visible",
+      "human_reference": "The surviving main title reads RS FROM A STOIC. The beginning of the first word is covered; do not complete it to Letters.",
       "tags": [
         "damaged_or_occluded_text"
       ]
@@ -15,9 +14,6 @@
       "id": 2,
       "field": "author",
       "expected": "Seneca",
-      "alternatives": [
-        "Lucius Annaeus Seneca"
-      ],
       "basis": "visible",
       "human_reference": "SENECA below the title.",
       "tags": []

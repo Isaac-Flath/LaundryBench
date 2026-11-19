@@ -18,8 +18,43 @@ class DatasetTests(unittest.TestCase):
     def test_payment_requires_payment_wording(self):
         check = self.check('06', 3)
         self.assertTrue(passes_check('You may **pay 3 life**.', check))
-        self.assertTrue(passes_check('You may pay three life.', check))
+        self.assertFalse(passes_check('You may pay three life.', check))
         self.assertFalse(passes_check('They refuse 3 life.', check))
+
+    def test_parse_requires_printed_words_instead_of_expansions(self):
+        for image_id, check_id, visible, expanded in [
+            ('01', 4, 'more than 60', 'over sixty'),
+            ('05', 2, 'HP 270', 'hit points 270'),
+            ('05', 5, "can't use more than 1 GX attack", 'cannot use more than one GX attack'),
+            ('05', 6, '3 Prize cards', 'three Prize cards'),
+            ('06', 1, 'Meathook Massacre II', 'Meathook Massacre 2'),
+            ('08', 3, 'W36 L34', 'waist 36 inseam 34'),
+            ('08', 4, 'LEVI STRAUSS & CO. S.F. CAL.', 'Levi Strauss & Co San Francisco California'),
+            ('10', 2, 'TRUCTION\nBOOKLET', 'Instruction Booklet'),
+        ]:
+            with self.subTest(image_id=image_id, check_id=check_id):
+                check = self.check(image_id, check_id)
+                self.assertTrue(passes_check(visible, check))
+                self.assertFalse(passes_check(expanded, check))
+
+    def test_extract_preserves_fragments_and_abbreviations(self):
+        for image_id, field, visible, completed in [
+            ('04', 'title', 'RS FROM A STOIC', 'Letters from a Stoic'),
+            ('04', 'author', 'Seneca', 'Lucius Annaeus Seneca'),
+            ('07', 'front_card_title', 'Elesh Norn, Mothe ... Machines', 'Elesh Norn, Mother of Machines'),
+            ('06', 'card_title', 'Meathook Massacre II', 'Meathook Massacre 2'),
+            ('08', 'button_location_abbreviation', 'SF CAL', 'San Francisco California'),
+            ('10', 'cartridge_title', None, 'Pokémon Black Version 2'),
+        ]:
+            with self.subTest(image_id=image_id, field=field):
+                self.assertEqual(self.score_field(image_id, field, visible), (True, True))
+                self.assertEqual(self.score_field(image_id, field, completed), (True, False))
+        # Boundary letters are partly clipped; the missing words are not optional.
+        self.assertEqual(self.score_field('07', 'front_card_title',
+                         'lesh Norn, Mothe … achines'), (True, True))
+        for wrong in ['Elesh Norn, Mother … Machines', 'Elesh Norn, Mothe of Machines',
+                      'Elesh Norn', None]:
+            self.assertFalse(self.score_field('07', 'front_card_title', wrong)[1])
 
     def test_banknote_requires_the_visible_phrase(self):
         check = self.check('09', 2)

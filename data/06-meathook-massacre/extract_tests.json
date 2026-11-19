@@ -4,9 +4,6 @@
       "id": 1,
       "field": "card_title",
       "expected": "Meathook Massacre II",
-      "alternatives": [
-        "Meathook Massacre 2"
-      ],
       "basis": "visible",
       "human_reference": "Title at the top.",
       "tags": []

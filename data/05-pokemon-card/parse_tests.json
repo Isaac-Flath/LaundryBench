@@ -20,9 +20,7 @@
         {
           "any_of": [
             "HP 270",
-            "270 HP",
-            "hit points 270",
-            "270 hit points"
+            "270 HP"
           ]
         }
       ],
@@ -48,9 +46,7 @@
         {
           "any_of": [
             "HP 270",
-            "270 HP",
-            "hit points 270",
-            "270 hit points"
+            "270 HP"
           ]
         },
         {
@@ -68,13 +64,7 @@
         {
           "any_of": [
             "can't use more than 1 GX attack",
-            "can't use more than one GX attack",
-            "cannot use more than 1 GX attack",
-            "cannot use more than one GX attack",
-            "can not use more than 1 GX attack",
-            "can not use more than one GX attack",
-            "cant use more than 1 GX attack",
-            "cant use more than one GX attack"
+            "cant use more than 1 GX attack"
           ]
         }
       ],
@@ -88,8 +78,7 @@
       "contains_all": [
         {
           "any_of": [
-            "3 Prize cards",
-            "three Prize cards"
+            "3 Prize cards"
           ]
         }
       ],
