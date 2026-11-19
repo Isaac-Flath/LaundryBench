@@ -76,7 +76,8 @@ class DatasetTests(unittest.TestCase):
 
     def test_numbered_attack_damage_excludes_prose_and_conditional_totals(self):
         output = {'hp': 270, 'attack_1_printed_damage': None,
-                  'attack_2_printed_damage': 160, 'attack_3_printed_damage': None}
+                  'attack_2_printed_damage': 160, 'attack_3_printed_damage': None,
+                  'attack_2_damage_against_damaged_active': 240}
         result = score_image(json.dumps(output), self.extract['05'])
         self.assertTrue(result['schema_valid'])
         self.assertEqual(result['score'], 1)
@@ -97,6 +98,19 @@ class DatasetTests(unittest.TestCase):
         self.assertFalse(result['schema_valid'])
         self.assertFalse(next(c for c in result['checks']
                               if c['field'] == 'attack_3_printed_damage')['pass'])
+
+    def test_inferences_require_the_bound_and_conditional_bonus(self):
+        for image_id, field, correct, wrong_values in [
+            ('01', 'minimum_catalogue_titles', 61, [60, 62, None, '61', True]),
+            ('05', 'attack_2_damage_against_damaged_active', 240, [160, 80, None, '240', True]),
+        ]:
+            self.assertEqual(self.score_field(image_id, field, correct), (True, True))
+            for wrong in wrong_values:
+                with self.subTest(field=field, wrong=wrong):
+                    self.assertFalse(self.score_field(image_id, field, wrong)[1])
+        spec = self.extract['05']['schema']['properties']['attack_2_damage_against_damaged_active']
+        for clue in ['Calamitous', '160', '80', '240']:
+            self.assertNotIn(clue, spec['description'])
 
     def test_life_payments_are_distinct_and_typed(self):
         self.assertEqual(self.score_field('06', 'life_payments', [3]), (True, True))

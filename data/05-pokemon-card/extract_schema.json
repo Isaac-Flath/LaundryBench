@@ -28,13 +28,21 @@
         "null"
       ],
       "description": "Numeric damage printed beside the name of attack 3, counting attacks from top to bottom. Count every attack, including GX attacks and attacks without printed damage; do not count Abilities or skip an attack because its text is unreadable. Extract only the number beside the attack name, ignoring a trailing + or multiplication symbol. Do not use numbers from energy costs or rules prose, calculate conditional damage, or reconstruct missing text. Return null if this attack is absent or its printed damage number is absent or unreadable."
+    },
+    "attack_2_damage_against_damaged_active": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Damage dealt by attack 2 to the opposing Active Pokémon when that Pokémon already has damage counters. Count attacks from top to bottom, including GX attacks and attacks without printed damage; do not count Abilities. Apply the attack’s readable rules for this situation, ignoring Weakness, Resistance, and effects outside this attack. Return null if the attack is absent or the damage cannot be determined from the visible text. Do not use outside knowledge."
     }
   },
   "required": [
     "hp",
     "attack_1_printed_damage",
     "attack_2_printed_damage",
-    "attack_3_printed_damage"
+    "attack_3_printed_damage",
+    "attack_2_damage_against_damaged_active"
   ],
   "additionalProperties": false
 }

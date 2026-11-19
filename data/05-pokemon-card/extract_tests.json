@@ -31,6 +31,16 @@
       "basis": "unavailable",
       "human_reference": "The third attack, GG End GX, has no numeric damage beside its name. Numbers in its rules prose and energy costs are excluded. This null means absent printed damage, not an absent attack.",
       "tags": []
+    },
+    {
+      "id": 5,
+      "field": "attack_2_damage_against_damaged_active",
+      "expected": 240,
+      "basis": "inferred",
+      "human_reference": "Attack 2 is Calamitous Slash: 160 printed damage plus 80 when the opposing Active Pokémon already has damage counters. Total: 240. The schema identifies the attack by position, without revealing its name, numbers, or whether a bonus exists.",
+      "tags": [
+        "small_text"
+      ]
     }
   ]
 }
