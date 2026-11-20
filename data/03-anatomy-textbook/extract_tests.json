@@ -1,7 +1,7 @@
 {
   "checks": [
     {
-      "id": 3,
+      "id": 1,
       "field": "isbn",
       "expected": null,
       "basis": "unavailable",

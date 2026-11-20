@@ -5,9 +5,8 @@
       "field": "book_title",
       "expected": "Fox in Socks",
       "basis": "visible",
-      "human_reference": "Title on the spine.",
+      "human_reference": "Title at the top of the gray back-cover panel (and partially on the spine, where the S is torn).",
       "tags": [
-        "rotated_text",
         "damaged_or_occluded_text",
         "multiple_objects"
       ]

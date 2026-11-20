@@ -6,7 +6,7 @@
         "string",
         "null"
       ],
-      "description": "Readable text in the title of the torn card at the front. Preserve readable partial words; separate portions divided by missing text with an ellipsis. Do not reconstruct missing letters or words. Return null only if no title text is readable."
+      "description": "Readable text in the title of the torn card at the front. Preserve readable partial words (you may use ... for missing gaps); do not reconstruct missing letters or words. Return null only if no title text is readable."
     },
     "creature_subtypes": {
       "type": [

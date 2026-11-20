@@ -46,8 +46,7 @@
       "field": "button_location_abbreviation",
       "expected": "S F CAL",
       "alternatives": [
-        "SF CAL",
-        "SFCAL"
+        "SF CAL"
       ],
       "basis": "visible",
       "human_reference": "Location abbreviation around the metal button: S F CAL.",

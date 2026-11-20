@@ -39,7 +39,8 @@
       "basis": "inferred",
       "human_reference": "Attack 2 is Calamitous Slash: 160 printed damage plus 80 when the opposing Active Pokémon already has damage counters. Total: 240. The schema identifies the attack by position, without revealing its name, numbers, or whether a bonus exists.",
       "tags": [
-        "small_text"
+        "document_specific",
+        "damaged_or_occluded_text"
       ]
     }
   ]

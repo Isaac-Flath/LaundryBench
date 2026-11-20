@@ -8,7 +8,7 @@
         "The DaVinci Curse"
       ],
       "basis": "visible",
-      "human_reference": "The complete title is repeated in the small back-cover paragraph; the large front-cover title is folded.",
+      "human_reference": "The complete title is repeated in the small back-cover paragraph (seen upside down and horizontally mirrored through the translucent back of the laminated cover); the large front-cover title is folded.",
       "tags": [
         "rotated_text",
         "small_text"
@@ -29,7 +29,7 @@
       "field": "author_surname",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "No book-author credit is recoverable from the visible cover. Barbara Sher is credited in a review quotation, not as this book’s author.",
+      "human_reference": "No book-author credit is recoverable from the visible cover. Robert Shaw is credited in a review quotation, not as this book’s author.",
       "tags": [
         "damaged_or_occluded_text"
       ]

@@ -34,7 +34,7 @@
         "integer",
         "null"
       ],
-      "description": "Damage dealt by attack 2 to the opposing Active Pokémon when that Pokémon already has damage counters. Count attacks from top to bottom, including GX attacks and attacks without printed damage; do not count Abilities. Apply the attack’s readable rules for this situation, ignoring Weakness, Resistance, and effects outside this attack. Return null if the attack is absent or the damage cannot be determined from the visible text. Do not use outside knowledge."
+      "description": "Damage dealt by attack 2 to the opposing Active Pokémon when that Pokémon already has damage counters. Count attacks from top to bottom, including GX attacks and attacks without printed damage; do not count Abilities. Apply the attack’s readable rules for this situation, ignoring Weakness, Resistance, and effects outside this attack. Return null if the attack is absent or the damage cannot be determined from the visible text."
     }
   },
   "required": [

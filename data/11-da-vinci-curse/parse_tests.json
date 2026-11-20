@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "human_reference": "Title repeated in the small back-cover paragraph, upside down in the original image.",
+      "human_reference": "Title repeated in the small back-cover paragraph, seen upside down and horizontally mirrored through the translucent back of the laminated cover.",
       "contains_all": [
         {
           "any_of": [
@@ -32,11 +32,11 @@
     },
     {
       "id": 3,
-      "human_reference": "Bold back-cover question: Do you keep switching from one hobby. The rest of the sentence is hidden.",
+      "human_reference": "Bold back-cover question seen upside down and horizontally mirrored through the translucent back of the laminated cover: Do you keep jumping from hobby to hobby every few months?",
       "contains_all": [
         {
           "any_of": [
-            "Do you keep switching from one hobby"
+            "Do you keep jumping from hobby"
           ]
         }
       ],

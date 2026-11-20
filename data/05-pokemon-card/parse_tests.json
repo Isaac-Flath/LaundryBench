@@ -6,8 +6,7 @@
       "contains_all": [
         {
           "any_of": [
-            "Garchomp & Giratina",
-            "Garchomp and Giratina"
+            "Garchomp & Giratina"
           ]
         }
       ],

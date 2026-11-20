@@ -84,7 +84,7 @@ class DatasetTests(unittest.TestCase):
         result = score_image(json.dumps(output), self.extract['11'])
         self.assertTrue(result['schema_valid'])
         self.assertEqual(result['score'], 1)
-        output['author_surname'] = 'Sher'
+        output['author_surname'] = 'Shaw'
         result = score_image(json.dumps(output), self.extract['11'])
         self.assertTrue(result['schema_valid'])
         self.assertFalse(next(c for c in result['checks'] if c['field'] == 'author_surname')['pass'])

@@ -18,8 +18,11 @@
       "field": "currency_code",
       "expected": "USD",
       "basis": "inferred",
-      "human_reference": "United States lettering and U.S. banknote design.",
-      "tags": []
+      "human_reference": "U.S. banknote text cues (such as UNITED ST..., FOR ALL DEBTS, and LEGAL TENDER) and U.S. banknote design.",
+      "tags": [
+        "rotated_text",
+        "damaged_or_occluded_text"
+      ]
     },
     {
       "id": 3,

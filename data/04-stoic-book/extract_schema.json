@@ -6,14 +6,14 @@
         "string",
         "null"
       ],
-      "description": "Readable text in the main book title, excluding the subtitle. Preserve readable partial words; separate portions divided by missing text with an ellipsis. Do not reconstruct missing letters or words. Return null only if no title text is readable."
+      "description": "Readable text in the main book title, excluding the subtitle. Preserve readable partial words (you may use ... for missing gaps); do not reconstruct missing letters or words. Return null only if no title text is readable."
     },
     "author": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Author name as printed on the main book. Do not expand the name using outside knowledge."
+      "description": "Author name as printed on the main book. Do not expand shortened names."
     },
     "publisher_imprint": {
       "type": [
