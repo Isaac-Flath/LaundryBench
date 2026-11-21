@@ -3,24 +3,96 @@
   "properties": {
     "title": {
       "type": [
-        "string",
-        "null"
+        "object"
       ],
-      "description": "Readable main title, without subtitle."
+      "description": "Main title, without subtitle, and whether it is complete, incomplete, or unavailable.",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Visible main title text without subtitle, or null if unavailable."
+        },
+        "status": {
+          "type": [
+            "string"
+          ],
+          "enum": [
+            "complete",
+            "incomplete",
+            "unavailable"
+          ],
+          "description": "Whether the field value is complete, incomplete, or unavailable."
+        }
+      },
+      "required": [
+        "value",
+        "status"
+      ],
+      "additionalProperties": false
     },
     "author": {
       "type": [
-        "string",
-        "null"
+        "object"
       ],
-      "description": "Author name as printed."
+      "description": "Author name as printed, and whether it is complete, incomplete, or unavailable.",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Visible author name as printed, or null if unavailable."
+        },
+        "status": {
+          "type": [
+            "string"
+          ],
+          "enum": [
+            "complete",
+            "incomplete",
+            "unavailable"
+          ],
+          "description": "Whether the field value is complete, incomplete, or unavailable."
+        }
+      },
+      "required": [
+        "value",
+        "status"
+      ],
+      "additionalProperties": false
     },
     "publisher_imprint": {
       "type": [
-        "string",
-        "null"
+        "object"
       ],
-      "description": "Publisher imprint."
+      "description": "Publisher imprint, and whether it is complete, incomplete, or unavailable.",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Visible publisher imprint, or null if unavailable."
+        },
+        "status": {
+          "type": [
+            "string"
+          ],
+          "enum": [
+            "complete",
+            "incomplete",
+            "unavailable"
+          ],
+          "description": "Whether the field value is complete, incomplete, or unavailable."
+        }
+      },
+      "required": [
+        "value",
+        "status"
+      ],
+      "additionalProperties": false
     },
     "advertised_works": {
       "type": [

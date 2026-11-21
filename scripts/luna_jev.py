@@ -110,12 +110,13 @@ def verify_values(answer, lines, schema, raw, image_id):
             quotation_is_present(citation['quote'], lines.get(citation['line_id'], ''))
             for citation in citations
         )
+        missing = value is None or (isinstance(value, dict) and value.get('value') is None)
         verification[field] = {
             'value': value, 'citations': citations, 'quotes_found': quotes_found,
-            'status': 'missing' if value is None else 'flagged',
+            'status': 'missing' if missing else 'flagged',
             'support_probability': None,
         }
-        if value is None or not quotes_found:
+        if missing or not quotes_found:
             continue
         questions[field] = make_verification_question(
             field, schema['properties'][field]['description'], value, citations,

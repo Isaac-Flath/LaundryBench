@@ -39,12 +39,15 @@ class DatasetTests(unittest.TestCase):
 
     def test_extract_preserves_fragments_and_abbreviations(self):
         for image_id, field, visible, completed in [
-            ('04', 'title', 'RS FROM A STOIC', 'Letters from a Stoic'),
-            ('04', 'author', 'Seneca', 'Lucius Annaeus Seneca'),
+            ('04', 'title', {'value': 'RS FROM A STOIC', 'status': 'incomplete'},
+             {'value': 'Letters from a Stoic', 'status': 'complete'}),
+            ('04', 'author', {'value': 'Seneca', 'status': 'complete'},
+             {'value': 'Lucius Annaeus Seneca', 'status': 'complete'}),
             ('07', 'front_card_title', 'Elesh Norn, Mothe ... Machines', 'Elesh Norn, Mother of Machines'),
             ('06', 'title', 'Meathook Massacre II', 'Meathook Massacre 2'),
             ('08', 'button_location_abbreviation', 'SF CAL', 'San Francisco California'),
-            ('10', 'cartridge_title', None, 'Pokémon Black Version 2'),
+            ('10', 'cartridge_title', {'value': 'Black 2', 'status': 'incomplete'},
+             {'value': 'Pokémon Black Version 2', 'status': 'complete'}),
         ]:
             with self.subTest(image_id=image_id, field=field):
                 self.assertEqual(self.score_field(image_id, field, visible), (True, True))
@@ -55,6 +58,20 @@ class DatasetTests(unittest.TestCase):
         for wrong in ['Elesh Norn, Mother … Machines', 'Elesh Norn, Mothe of Machines',
                       'Elesh Norn', None]:
             self.assertFalse(self.score_field('07', 'front_card_title', wrong)[1])
+
+    def test_completeness_status_enforces_enum_and_flags(self):
+        self.assertEqual(self.score_field('04', 'title', {'value': 'RS FROM A STOIC', 'status': 'complete'}),
+                         (True, False))
+        self.assertEqual(self.score_field('04', 'title', {'value': 'RS FROM A STOIC', 'status': 'partial'}),
+                         (False, False))
+        self.assertEqual(self.score_field('10', 'cartridge_title', {'value': 'Black 2', 'status': 'complete'}),
+                         (True, False))
+        self.assertEqual(self.score_field('10', 'cartridge_title', {'value': None, 'status': 'unavailable'}),
+                         (True, False))
+        self.assertEqual(self.score_field('10', 'cartridge_product_code', {'value': None, 'status': 'unavailable'}),
+                         (True, True))
+        self.assertEqual(self.score_field('10', 'cartridge_product_code', {'value': None, 'status': 'incomplete'}),
+                         (True, False))
 
     def test_banknote_requires_the_visible_phrase(self):
         check = self.check('09', 2)
@@ -187,7 +204,11 @@ class DatasetTests(unittest.TestCase):
                                 self.assertTrue(all(isinstance(s, str) and s.strip() for s in group['any_of']))
                         else:
                             self.assertIn(check['basis'], {'visible', 'inferred', 'unavailable'})
-                            self.assertEqual(check['expected'] is None, check['basis'] == 'unavailable')
+                            unavailable = (check['expected'] is None
+                                           or (isinstance(check['expected'], dict)
+                                               and check['expected'].get('status') == 'unavailable'
+                                               and check['expected'].get('value') is None))
+                            self.assertEqual(unavailable, check['basis'] == 'unavailable')
                             spec = data['schema']['properties'][check['field']]
                             for value in [check['expected'], *check.get('alternatives', [])]:
                                 self.assertTrue(matches_schema(value, spec))

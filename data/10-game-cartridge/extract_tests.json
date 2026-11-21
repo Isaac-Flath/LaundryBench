@@ -3,12 +3,18 @@
     {
       "id": 1,
       "field": "booklet_title",
-      "expected": "Pokémon Black Version 2",
+      "expected": {
+        "value": "Pokémon Black Version 2",
+        "status": "complete"
+      },
       "alternatives": [
-        "Pokémon Black 2 Version"
+        {
+          "value": "Pokémon Black 2 Version",
+          "status": "complete"
+        }
       ],
       "basis": "visible",
-      "human_reference": "Game title on the booklet at the left.",
+      "human_reference": "Complete game title on the booklet at the left.",
       "tags": [
         "rotated_text"
       ]
@@ -16,9 +22,12 @@
     {
       "id": 2,
       "field": "cartridge_title",
-      "expected": null,
-      "basis": "unavailable",
-      "human_reference": "The original cartridge label is washed away. Surviving handwriting is not a complete game title, and the nearby booklet does not establish what is printed on the cartridge.",
+      "expected": {
+        "value": "Black 2",
+        "status": "incomplete"
+      },
+      "basis": "visible",
+      "human_reference": "The original cartridge label is washed away, leaving handwritten 'Black 2' on the cartridge — an incomplete title. Do not pull the full title from the nearby booklet.",
       "tags": [
         "multiple_objects",
         "damaged_or_occluded_text"
@@ -27,9 +36,12 @@
     {
       "id": 3,
       "field": "cartridge_product_code",
-      "expected": null,
+      "expected": {
+        "value": null,
+        "status": "unavailable"
+      },
       "basis": "unavailable",
-      "human_reference": "The cartridge label is washed away. No complete product code is visible.",
+      "human_reference": "The cartridge label is washed away. No product code is visible.",
       "tags": [
         "damaged_or_occluded_text"
       ]

@@ -32,6 +32,8 @@ def matches_schema(value, spec):
     """Validate the types and object shapes used by this benchmark's schemas."""
     if not has_allowed_type(value, spec['type']):
         return False
+    if 'enum' in spec and value not in spec['enum']:
+        return False
     if isinstance(value, list):
         return all(matches_schema(item, spec['items']) for item in value)
     if isinstance(value, dict):
