@@ -85,7 +85,7 @@ Do not give models the test files: they contain expected answers.
 
 ## Data and checks
 
-Text checks preserve visible wording, abbreviations, and readable fragments; they do not reconstruct missing words. Extraction fields allow calculations or other inference when explicitly requested in the schema.
+Text checks keep visible wording, abbreviations, and readable fragments; they do not reconstruct missing words. Extraction fields allow calculations or other inference when explicitly requested in the schema.
 
 Each `data/NN-name/` folder contains:
 
