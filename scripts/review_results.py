@@ -57,6 +57,9 @@ STYLES = '''
   .pass { background: #dcfce7; color: #166534; }
   .fail { background: #fee2e2; color: #991b1b; }
   .unknown { background: #e5e7eb; color: #374151; }
+  .result-details { margin: 0 0 10px; }
+  .result-details .output-label { margin: 8px 0 4px; }
+  .result-details pre { background: #f8fafc; border: 1px solid #dce1e6; border-radius: 5px; padding: 8px 10px; margin: 0; max-height: 240px; overflow: auto; }
   #results-summary { padding: 8px 16px; border-bottom: 1px solid #dce1e6; max-height: 25vh; overflow: auto; }
   #results-summary details + details { margin-top: 4px; }
   @media (max-width: 760px) {
@@ -83,24 +86,37 @@ JAVASCRIPT = '''
       const row = saved?.checks?.find(row => row.test.id === check.id);
       if (reason === 'current' && (!row || !same(row.test, check))) reason = 'check changed; regenerate snapshot';
       return {label, pass: reason === 'current' ? row.pass : null, reason,
-              actual: row?.actual, missing: row?.missing, schemaValid: saved?.schema_valid};
+              actual: row?.actual, missing: row?.missing, output: saved?.output,
+              schemaValid: saved?.schema_valid};
     });
   }
   function comparisonBadges(check, schema) {
     const block = element('div'), badges = element('div', undefined, 'results');
-    for (const result of comparisons(check, schema)) {
+    const results = comparisons(check, schema);
+    for (const result of results) {
       const state = result.pass === null ? 'unknown' : result.pass ? 'pass' : 'fail';
       const text = result.pass === null ? result.reason : result.pass ? 'Pass' : 'Fail';
       badges.append(element('span', `${result.label}: ${text}`, `badge ${state}`));
     }
     block.append(badges);
-    if (schema) {
-      const details = element('details');
+    const failures = results.filter(result => result.pass === false);
+    if (failures.length) {
+      const details = element('details', undefined, 'result-details');
+      details.append(element('summary', `Failed ${failures.length === 1 ? 'output' : 'outputs'} (${failures.length})`));
+      for (const result of failures) {
+        const value = schema
+          ? (result.missing ? '(missing field)' : JSON.stringify(result.actual, null, 2))
+          : (result.output?.trim() ? result.output : '(empty output)');
+        details.append(element('p', result.label, 'muted output-label'), element('pre', value));
+      }
+      block.append(details);
+    } else if (schema) {
+      const details = element('details', undefined, 'result-details');
       details.append(element('summary', 'Predicted values'));
-      for (const result of comparisons(check, schema)) {
+      for (const result of results) {
         const value = result.pass === null ? result.reason
           : result.missing ? '(missing field)' : JSON.stringify(result.actual, null, 2);
-        details.append(element('p', result.label, 'muted'), element('pre', value));
+        details.append(element('p', result.label, 'muted output-label'), element('pre', value));
       }
       block.append(details);
     }
