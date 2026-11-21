@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 BENCHMARK = Path(__file__).resolve().parents[1]
-from scripts.solution import select_images, record_prediction, prediction_status, sha256
+from scripts.solution import select_images, record_prediction, sha256
 EXTRACT_MODEL = "gpt-6-luna"
 JEV_MODEL = "jev-latest"
 SUPPORT_THRESHOLD = 0.5
@@ -133,7 +133,6 @@ def main(solution, ocr_backend):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='Run and score one image ID; omit for all images')
     parser.add_argument('--output-dir', type=Path, default=solution / 'output')
-    parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
     args = parser.parse_args()
     from dotenv import load_dotenv
     from openai import OpenAI
@@ -153,8 +152,6 @@ def main(solution, ocr_backend):
                '--output-dir', str(ocr_dir)]
     if args.image:
         command += ['--image', args.image]
-    if args.resume:
-        command.append('--resume')
     subprocess.run(command, cwd=BENCHMARK, check=True)
     for image_path in select_images(args.image):
         image_id = image_path.parent.name.split('-', 1)[0]
@@ -165,8 +162,6 @@ def main(solution, ocr_backend):
                     'ocr_source': str(ocr_dir.relative_to(BENCHMARK)) if ocr_dir.is_relative_to(BENCHMARK) else ocr_dir.name,
                     'ocr_sha256': sha256(ocr_path)}
         prediction = output_dir / f'{image_id}.json'
-        if args.resume and prediction_status(prediction, image_path, schema, settings) == 'current':
-            continue
         print(f'Extracting and verifying {image_id}', flush=True)
         text = ocr_path.read_text()
         (raw / f'{image_id}.md').write_text(text)

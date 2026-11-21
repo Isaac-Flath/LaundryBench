@@ -13,7 +13,7 @@ from scripts import luna_jev
 
 
 class PipelineTests(unittest.TestCase):
-    def test_both_backends_run_ocr_before_extraction_and_resume(self):
+    def test_both_backends_run_ocr_before_extraction(self):
         for backend in ('lighton', 'tesseract'):
             with self.subTest(backend=backend), tempfile.TemporaryDirectory() as tmp, ExitStack() as stack:
                 root = Path(tmp).resolve()
@@ -61,12 +61,6 @@ class PipelineTests(unittest.TestCase):
                     luna_jev.main(root, backend)
                 self.assertEqual(events, ['ocr', 'extract', 'score'] * 2)
                 self.assertEqual(extractor.call_count, 2)
-
-                with patch.object(sys, 'argv', args + ['--resume']):
-                    luna_jev.main(root, backend)
-                self.assertEqual(events[-2:], ['ocr', 'score'])
-                self.assertEqual(extractor.call_count, 2)
-                self.assertIn('--resume', runner.call_args_list[-2].args[0])
 
                 runner.side_effect = subprocess.CalledProcessError(1, 'ocr')
                 with patch.object(sys, 'argv', args), self.assertRaises(subprocess.CalledProcessError):

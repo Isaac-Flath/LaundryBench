@@ -43,17 +43,13 @@ Anyone can open a pull request:
 | Custom · lightweight | [Tesseract](solutions/parse/tesseract/) | [Tesseract → Luna → Jev](solutions/extract/tesseract-luna-jev/) |
 | Custom · LightOn | [LightOnOCR-3-4B](solutions/parse/lighton/) | [LightOn → Luna → Jev](solutions/extract/luna-jev/) |
 
-Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image or `--resume` to reuse unchanged completed predictions. Each extraction pipeline runs its own OCR from the source images before extraction and verification. Tesseract uses CPU only; LightOn runs model inference on your compute (the example was run on an H100). Luna and Jev call paid APIs.
+Follow the solution's README for dependencies and credentials, then run `python run.py` from its folder. Add `--image 05` to try one image. Each extraction pipeline runs its own OCR from the source images before extraction and verification. Tesseract uses CPU only; LightOn runs model inference on your compute (the example was run on an H100). Luna and Jev call paid APIs.
 
 Each solution saves predictions, raw responses, and `scores.json` in its `output/` folder. The pipelines also record the input image, schema, output hashes, settings, and run date. OCR settings live in the parser’s `run.py`; shared extraction settings live in `scripts/luna_jev.py`. API keys stay in the environment or an ignored `.env`. Keys and outputs are gitignored.
 
 The Tesseract and LightOn variants keep separate output folders, so their OCR and extraction results retain the correct pipeline names.
 
 ## Score your own outputs
-
-Run these commands from the repository root with Python 3.10+. The scorers need no dependencies or API keys. They score all eleven images by default; add `--image 05` to score one image.
-
-The predictions path is the folder containing saved model outputs. `--out` specifies where to write the score report. Checks are read automatically from `data/`; these commands do not call models.
 
 **Parse:** save unedited OCR as `01.md` through `11.md` (`.txt` and `.html` also work).
 
@@ -68,7 +64,7 @@ python3 -m scripts.check solutions/parse/tesseract/output \
   --out solutions/parse/tesseract/output/scores.json
 ```
 
-**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Include every field; use `null` for unavailable scalar values and `[]` when no qualifying list items are readable. Follow each field's description.
+**Extract:** give your model each image—or its OCR—and `extract_schema.json`. Save field values as `01.json` through `11.json`. Use `null` for unavailable scalar values and `[]` when no list items are readable. Follow each field's description.
 
 ```sh
 python3 -m scripts.extract /path/to/predictions --out /path/to/extract-scores.json
@@ -80,8 +76,6 @@ For example, score the custom pipeline's saved extraction outputs:
 python3 -m scripts.extract solutions/extract/tesseract-luna-jev/output \
   --out solutions/extract/tesseract-luna-jev/output/scores.json
 ```
-
-Do not give models the test files: they contain expected answers.
 
 ## Data and checks
 

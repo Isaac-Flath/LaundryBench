@@ -11,7 +11,7 @@ from transformers import AutoProcessor, Qwen3_5ForConditionalGeneration
 SOLUTION = Path(__file__).resolve().parent
 BENCHMARK = SOLUTION.parents[2]
 sys.path.insert(0, str(BENCHMARK))
-from scripts.solution import select_images, record_prediction, prediction_status, score_solution
+from scripts.solution import select_images, record_prediction, score_solution
 MODEL = "lightonai/LightOnOCR-3-4B"
 REVISION = "b71010f095dc3735de7ee6b9969bff8f8f50b39a"
 MAX_NEW_TOKENS = 4096
@@ -38,7 +38,6 @@ def transcribe_image(image_path, model, processor):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--image', help='Run and score one image ID; omit for all images')
-    parser.add_argument('--resume', action='store_true', help='Skip unchanged saved predictions')
     parser.add_argument('--output-dir', type=Path, default=SOLUTION / 'output')
     args = parser.parse_args()
     output_dir = args.output_dir.resolve()
@@ -47,13 +46,6 @@ def main():
     settings = {'model': MODEL, 'revision': REVISION, 'max_image_side': MAX_IMAGE_SIDE,
                 'max_new_tokens': MAX_NEW_TOKENS, 'do_sample': False}
     images = select_images(args.image)
-    if args.resume:
-        images = [path for path in images if prediction_status(
-            output_dir / f'{path.parent.name.split("-", 1)[0]}.md', path,
-            settings=settings) != 'current']
-    if not images:
-        score_solution('parse', output_dir, args.image)
-        return
     model = Qwen3_5ForConditionalGeneration.from_pretrained(
         MODEL, revision=REVISION, dtype=torch.bfloat16, device_map='auto',
     ).eval()
