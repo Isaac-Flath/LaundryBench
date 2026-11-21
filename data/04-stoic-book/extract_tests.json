@@ -7,8 +7,14 @@
         "value": "RS FROM A STOIC",
         "status": "incomplete"
       },
+      "alternatives": [
+        {
+          "value": "S FROM A STOIC",
+          "status": "incomplete"
+        }
+      ],
       "basis": "visible",
-      "human_reference": "The surviving main title reads RS FROM A STOIC. The beginning of the first word is covered; do not complete it to Letters, and mark status as incomplete.",
+      "human_reference": "The surviving main title reads RS FROM A STOIC (with the top of the R partly covered by the torn flap, so S FROM A STOIC is also accepted). Do not complete it to Letters, and mark status as incomplete.",
       "tags": [
         "damaged_or_occluded_text"
       ]

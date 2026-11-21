@@ -60,6 +60,8 @@ class DatasetTests(unittest.TestCase):
             self.assertFalse(self.score_field('07', 'front_card_title', wrong)[1])
 
     def test_completeness_status_enforces_enum_and_flags(self):
+        self.assertEqual(self.score_field('04', 'title', {'value': 'S FROM A STOIC', 'status': 'incomplete'}),
+                         (True, True))
         self.assertEqual(self.score_field('04', 'title', {'value': 'RS FROM A STOIC', 'status': 'complete'}),
                          (True, False))
         self.assertEqual(self.score_field('04', 'title', {'value': 'RS FROM A STOIC', 'status': 'partial'}),
@@ -116,9 +118,10 @@ class DatasetTests(unittest.TestCase):
 
     def test_subtypes_allow_reordering_but_not_omissions_or_duplicates(self):
         self.assertEqual(self.score_field('07', 'creature_subtypes',
-                         ['Phyrexian Chimera', 'Phyrexian Praetor']), (True, True))
-        for wrong in [[], ['Phyrexian Chimera'], ['Phyrexian Chimera', 'Phyrexian Chimera'],
-                      ['Phyrexian Chimera', 'Phyrexian Praetor', 'Human']]:
+                         ['Chimera', 'Phyrexian', 'Praetor']), (True, True))
+        for wrong in [[], ['Phyrexian', 'Praetor'], ['Phyrexian', 'Phyrexian', 'Praetor', 'Chimera'],
+                      ['Phyrexian', 'Praetor', 'Chimera', 'Human'],
+                      ['Phyrexian Praetor', 'Phyrexian Chimera']]:
             with self.subTest(wrong=wrong):
                 self.assertEqual(self.score_field('07', 'creature_subtypes', wrong), (True, False))
 

@@ -12,7 +12,7 @@
       "type": [
         "array"
       ],
-      "description": "Distinct full creature-subtype phrases.",
+      "description": "Distinct creature subtypes.",
       "items": {
         "type": [
           "string"

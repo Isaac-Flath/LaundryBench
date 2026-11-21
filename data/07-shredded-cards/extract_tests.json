@@ -21,11 +21,12 @@
       "id": 2,
       "field": "creature_subtypes",
       "expected": [
-        "Phyrexian Praetor",
-        "Phyrexian Chimera"
+        "Phyrexian",
+        "Praetor",
+        "Chimera"
       ],
       "basis": "visible",
-      "human_reference": "The front card reads Legendary Creature — Phyrexian Praetor; the rotated card reads Creature — Phyrexian Chimera. Both subtype phrases are required.",
+      "human_reference": "The front card reads Legendary Creature — Phyrexian Praetor; the rotated card reads Creature — Phyrexian Chimera. In Magic, Phyrexian, Praetor, and Chimera are three separate creature subtypes.",
       "tags": [
         "rotated_text",
         "multiple_objects"
