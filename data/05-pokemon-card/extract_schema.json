@@ -8,26 +8,26 @@
       ],
       "description": "HP."
     },
-    "attack_1_printed_damage": {
+    "attack_1_base_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Printed damage number beside attack 1."
+      "description": "Base damage of attack 1."
     },
-    "attack_2_printed_damage": {
+    "attack_2_base_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Printed damage number beside attack 2."
+      "description": "Base damage of attack 2."
     },
-    "attack_3_printed_damage": {
+    "attack_3_base_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Printed damage number beside attack 3."
+      "description": "Base damage of attack 3."
     },
     "attack_2_damage_against_damaged_active": {
       "type": [
@@ -39,9 +39,9 @@
   },
   "required": [
     "hp",
-    "attack_1_printed_damage",
-    "attack_2_printed_damage",
-    "attack_3_printed_damage",
+    "attack_1_base_damage",
+    "attack_2_base_damage",
+    "attack_3_base_damage",
     "attack_2_damage_against_damaged_active"
   ],
   "additionalProperties": false

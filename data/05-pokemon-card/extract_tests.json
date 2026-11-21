@@ -10,26 +10,26 @@
     },
     {
       "id": 2,
-      "field": "attack_1_printed_damage",
-      "expected": null,
-      "basis": "unavailable",
-      "human_reference": "The first attack, Linear Attack, has no numeric damage beside its name. The 40 in its rules prose is excluded. This null means absent printed damage, not an absent attack.",
+      "field": "attack_1_base_damage",
+      "expected": 40,
+      "basis": "visible",
+      "human_reference": "The first attack, Linear Attack, deals 40 damage (stated in its rules text).",
       "tags": []
     },
     {
       "id": 3,
-      "field": "attack_2_printed_damage",
+      "field": "attack_2_base_damage",
       "expected": 160,
       "basis": "visible",
-      "human_reference": "The second attack, Calamitous Slash, has 160+ beside its name. Extract 160; do not add the conditional 80 from the rules prose.",
+      "human_reference": "The second attack, Calamitous Slash, has 160+ base damage. Extract 160; do not add the conditional 80 from the rules prose.",
       "tags": []
     },
     {
       "id": 4,
-      "field": "attack_3_printed_damage",
+      "field": "attack_3_base_damage",
       "expected": null,
       "basis": "unavailable",
-      "human_reference": "The third attack, GG End GX, has no numeric damage beside its name. Numbers in its rules prose and energy costs are excluded. This null means absent printed damage, not an absent attack.",
+      "human_reference": "The third attack, GG End GX, deals no damage (it only discards Pokémon). Numbers in its rules prose and energy costs are excluded.",
       "tags": []
     },
     {
@@ -37,7 +37,7 @@
       "field": "attack_2_damage_against_damaged_active",
       "expected": 240,
       "basis": "inferred",
-      "human_reference": "Attack 2 is Calamitous Slash: 160 printed damage plus 80 when the opposing Active Pokémon already has damage counters. Total: 240. The schema identifies the attack by position, without revealing its name, numbers, or whether a bonus exists.",
+      "human_reference": "Attack 2 is Calamitous Slash: 160 base damage plus 80 when the opposing Active Pokémon already has damage counters. Total: 240. The schema identifies the attack by position, without revealing its name, numbers, or whether a bonus exists.",
       "tags": [
         "document_specific",
         "damaged_or_occluded_text"

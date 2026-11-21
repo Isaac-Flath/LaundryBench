@@ -126,30 +126,31 @@ class DatasetTests(unittest.TestCase):
         self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier']), (True, True))
         self.assertEqual(self.score_field('07', 'artist_credits', ['Johan Grenier', 'Nokar']), (True, False))
 
-    def test_numbered_attack_damage_excludes_prose_and_conditional_totals(self):
-        output = {'hp': 270, 'attack_1_printed_damage': None,
-                  'attack_2_printed_damage': 160, 'attack_3_printed_damage': None,
+    def test_numbered_attack_damage_excludes_conditional_totals_and_non_damage_numbers(self):
+        output = {'hp': 270, 'attack_1_base_damage': 40,
+                  'attack_2_base_damage': 160, 'attack_3_base_damage': None,
                   'attack_2_damage_against_damaged_active': 240}
         result = score_image(json.dumps(output), self.extract['05'])
         self.assertTrue(result['schema_valid'])
         self.assertEqual(result['score'], 1)
-        # Rules-prose damage, a shifted attack, and calculated damage all fail.
-        for field, wrong in [('attack_1_printed_damage', 40),
-                             ('attack_1_printed_damage', 160),
-                             ('attack_2_printed_damage', 240),
-                             ('attack_3_printed_damage', 0)]:
+        # Missing damage, a shifted attack, calculated bonus, and non-damage prose numbers all fail.
+        for field, wrong in [('attack_1_base_damage', None),
+                             ('attack_1_base_damage', 160),
+                             ('attack_2_base_damage', 240),
+                             ('attack_3_base_damage', 0),
+                             ('attack_3_base_damage', 3)]:
             with self.subTest(field=field, wrong=wrong):
                 self.assertEqual(self.score_field('05', field, wrong), (True, False))
         for malformed in ['160', '160+', True]:
             with self.subTest(malformed=malformed):
-                self.assertEqual(self.score_field('05', 'attack_2_printed_damage', malformed),
+                self.assertEqual(self.score_field('05', 'attack_2_base_damage', malformed),
                                  (False, False))
         # Omitting a null field is not equivalent to explicitly returning null.
-        del output['attack_3_printed_damage']
+        del output['attack_3_base_damage']
         result = score_image(json.dumps(output), self.extract['05'])
         self.assertFalse(result['schema_valid'])
         self.assertFalse(next(c for c in result['checks']
-                              if c['field'] == 'attack_3_printed_damage')['pass'])
+                              if c['field'] == 'attack_3_base_damage')['pass'])
 
     def test_inferences_require_the_bound_and_conditional_bonus(self):
         for image_id, field, correct, wrong_values in [
