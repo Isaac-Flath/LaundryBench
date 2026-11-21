@@ -1,18 +1,18 @@
 {
   "type": "object",
   "properties": {
-    "card_title": {
+    "title": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Card title as printed. Preserve Roman numerals rather than converting them to digits."
+      "description": "Title as printed."
     },
     "life_payments": {
       "type": [
         "array"
       ],
-      "description": "All distinct numeric life-payment amounts explicitly stated in the card rules. Include payments made by any player; exclude life gain, life loss that is not a payment, and amounts not readable as numbers. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "description": "Distinct numeric life-payment amounts in the rules.",
       "items": {
         "type": [
           "integer"
@@ -21,7 +21,7 @@
     }
   },
   "required": [
-    "card_title",
+    "title",
     "life_payments"
   ],
   "additionalProperties": false

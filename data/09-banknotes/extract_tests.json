@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "field": "complete_serial_numbers",
+      "field": "serial_numbers",
       "expected": [
         "A16281158A"
       ],
@@ -26,7 +26,7 @@
     },
     {
       "id": 3,
-      "field": "original_total_value",
+      "field": "total_value",
       "expected": null,
       "basis": "unavailable",
       "human_reference": "The overlapping fragments do not show how many banknotes there were.",

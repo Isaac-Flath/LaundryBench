@@ -6,7 +6,7 @@
         "string",
         "null"
       ],
-      "description": "Complete ISBN of the damaged textbook."
+      "description": "Complete ISBN."
     }
   },
   "required": [

@@ -6,27 +6,27 @@
         "string",
         "null"
       ],
-      "description": "Readable text in the main book title, excluding the subtitle. Preserve readable partial words (you may use ... for missing gaps); do not reconstruct missing letters or words. Return null only if no title text is readable."
+      "description": "Readable main title, without subtitle."
     },
     "author": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Author name as printed on the main book. Do not expand shortened names."
+      "description": "Author name as printed."
     },
     "publisher_imprint": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Publisher imprint of the main book."
+      "description": "Publisher imprint."
     },
-    "advertised_books": {
+    "advertised_works": {
       "type": [
         "array"
       ],
-      "description": "Books advertised in the document for which both the complete main title and the complete author credit are readable. Exclude the main book being photographed. Omit subtitles and skip entries with an incomplete main title or author credit. Return each distinct record once, in any order. Use [] when no complete records are readable; do not reconstruct missing text.",
+      "description": "Complete advertised titles and authors, excluding subtitles.",
       "items": {
         "type": [
           "object"
@@ -36,13 +36,13 @@
             "type": [
               "string"
             ],
-            "description": "Complete advertised main book title, without its subtitle."
+            "description": "Complete main title."
           },
           "author": {
             "type": [
               "string"
             ],
-            "description": "Complete author name as printed in the advertised entry."
+            "description": "Author name as printed."
           }
         },
         "required": [
@@ -57,7 +57,7 @@
     "title",
     "author",
     "publisher_imprint",
-    "advertised_books"
+    "advertised_works"
   ],
   "additionalProperties": false
 }

@@ -6,13 +6,13 @@
         "string",
         "null"
       ],
-      "description": "Readable text in the title of the torn card at the front. Preserve readable partial words (you may use ... for missing gaps); do not reconstruct missing letters or words. Return null only if no title text is readable."
+      "description": "Readable title of the card in front."
     },
     "creature_subtypes": {
       "type": [
         "array"
       ],
-      "description": "All complete creature-subtype phrases readable in the type lines of any cards in the image. Preserve each whole phrase as one item, excluding card types and supertypes such as Creature or Legendary. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "description": "Distinct full creature-subtype phrases.",
       "items": {
         "type": [
           "string"
@@ -23,7 +23,7 @@
       "type": [
         "array"
       ],
-      "description": "All complete artist names readable in the illustration-credit lines of any cards in the image. Exclude names in rules text or flavor-text attributions. Return each distinct value once, in any order. Use [] when none are readable; do not reconstruct missing text.",
+      "description": "Distinct complete artist credits.",
       "items": {
         "type": [
           "string"

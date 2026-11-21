@@ -13,7 +13,7 @@ JEV_MODEL = "jev-latest"
 SUPPORT_THRESHOLD = 0.5
 
 INSTRUCTIONS = (
-    "Extract the requested fields from the numbered OCR lines of a damaged document. "
+    "Extract the requested fields from the numbered OCR lines. "
     "Follow each field's description. "
     "Return null when a scalar value cannot be determined. For list fields, return [] "
     "when no qualifying items are readable. For every non-null scalar or non-empty list, cite the "

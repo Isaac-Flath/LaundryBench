@@ -42,7 +42,7 @@ class DatasetTests(unittest.TestCase):
             ('04', 'title', 'RS FROM A STOIC', 'Letters from a Stoic'),
             ('04', 'author', 'Seneca', 'Lucius Annaeus Seneca'),
             ('07', 'front_card_title', 'Elesh Norn, Mothe ... Machines', 'Elesh Norn, Mother of Machines'),
-            ('06', 'card_title', 'Meathook Massacre II', 'Meathook Massacre 2'),
+            ('06', 'title', 'Meathook Massacre II', 'Meathook Massacre 2'),
             ('08', 'button_location_abbreviation', 'SF CAL', 'San Francisco California'),
             ('10', 'cartridge_title', None, 'Pokémon Black Version 2'),
         ]:
@@ -154,15 +154,15 @@ class DatasetTests(unittest.TestCase):
             with self.subTest(malformed=malformed):
                 self.assertEqual(self.score_field('06', 'life_payments', malformed), (False, False))
 
-    def test_advertised_book_requires_correct_author(self):
-        self.assertEqual(self.score_field('04', 'advertised_books',
+    def test_advertised_work_requires_correct_author(self):
+        self.assertEqual(self.score_field('04', 'advertised_works',
                          [{'title': 'Meditations', 'author': 'Marcus Aurelius'}]), (True, True))
-        self.assertEqual(self.score_field('04', 'advertised_books',
+        self.assertEqual(self.score_field('04', 'advertised_works',
                          [{'title': 'Meditations', 'author': 'Seneca'}]), (True, False))
 
     def test_banknote_list_excludes_partial_serials(self):
-        self.assertEqual(self.score_field('09', 'complete_serial_numbers', ['A16281158A']), (True, True))
-        self.assertEqual(self.score_field('09', 'complete_serial_numbers',
+        self.assertEqual(self.score_field('09', 'serial_numbers', ['A16281158A']), (True, True))
+        self.assertEqual(self.score_field('09', 'serial_numbers',
                          ['A16281158A', 'L133']), (True, False))
 
     def test_dataset_contract(self):

@@ -28,7 +28,7 @@
     },
     {
       "id": 4,
-      "field": "advertised_books",
+      "field": "advertised_works",
       "expected": [
         {
           "title": "Meditations",

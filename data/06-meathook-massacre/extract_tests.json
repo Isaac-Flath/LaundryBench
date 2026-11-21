@@ -2,7 +2,7 @@
   "checks": [
     {
       "id": 1,
-      "field": "card_title",
+      "field": "title",
       "expected": "Meathook Massacre II",
       "basis": "visible",
       "human_reference": "Title at the top.",

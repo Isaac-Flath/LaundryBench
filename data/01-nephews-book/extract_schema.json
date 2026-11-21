@@ -1,30 +1,30 @@
 {
   "type": "object",
   "properties": {
-    "book_title": {
+    "title": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Title of the damaged book."
+      "description": "Main title."
     },
     "publisher_imprint": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Publisher imprint of the damaged book."
+      "description": "Publisher imprint."
     },
     "minimum_catalogue_titles": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Smallest whole-number catalogue size consistent with the claim on the back cover."
+      "description": "Minimum number of titles in the catalogue."
     }
   },
   "required": [
-    "book_title",
+    "title",
     "publisher_imprint",
     "minimum_catalogue_titles"
   ],
