@@ -79,7 +79,7 @@ STYLES = '''
   }
 '''
 
-JAVASCRIPT = '''
+JAVASCRIPT = r'''
   let notes = {}, activeRecorder = null;
   const notesReady = fetch('notes.json', {cache: 'no-store'})
     .then(response => response.ok ? response.json() : {})
