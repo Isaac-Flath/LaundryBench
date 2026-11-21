@@ -4,3 +4,4 @@ __pycache__/
 .env
 solutions/*/*/output/
 review-results.html
+review-notes.json
