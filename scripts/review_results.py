@@ -64,7 +64,6 @@ STYLES = '''
   .note-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
   .note-header label { font-size: 12px; font-weight: 600; color: #526271; }
   .note-btn { font-size: 12px; padding: 3px 9px; }
-  .note-btn.recording { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
   .note-status { font-size: 12px; color: #697582; margin-left: auto; }
   .note-status.error { color: #991b1b; }
   .note-input { width: 100%; font: 13px/1.5 system-ui, sans-serif; color: #202a35; background: #fbfcfd; border: 1px solid #ccd2d8; border-radius: 6px; padding: 8px 10px; resize: vertical; }
@@ -80,7 +79,7 @@ STYLES = '''
 '''
 
 JAVASCRIPT = r'''
-  let notes = {}, activeRecorder = null;
+  let notes = {};
   const notesReady = fetch('notes.json', {cache: 'no-store'})
     .then(response => response.ok ? response.json() : {})
     .then(data => { notes = data || {}; })
@@ -174,8 +173,6 @@ JAVASCRIPT = r'''
     const inputId = `note-${key.replace(/[^a-z0-9_-]/gi, '-')}`;
     const label = element('label', heading);
     label.htmlFor = inputId;
-    const recordBtn = element('button', 'Record', 'note-btn');
-    recordBtn.type = 'button';
     const status = element('span', notes[key]?.text ? 'Saved' : '', 'note-status');
     const area = element('textarea', undefined, 'note-input');
     area.id = inputId;
@@ -194,69 +191,7 @@ JAVASCRIPT = r'''
       timer = setTimeout(saveNow, 500);
     };
     area.onblur = () => { if (timer) saveNow(); };
-    recordBtn.onclick = async () => {
-      if (activeRecorder && activeRecorder.button === recordBtn) {
-        activeRecorder.stop();
-        return;
-      }
-      if (activeRecorder) activeRecorder.stop();
-      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
-        status.textContent = 'Mic unavailable here — dictate into the box or open in Chrome/Safari';
-        status.classList.add('error');
-        return;
-      }
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({audio: true});
-      } catch (error) {
-        status.textContent = `Mic blocked (${error.name}) — dictate into the box or open in Chrome/Safari`;
-        status.classList.add('error');
-        return;
-      }
-      const chunks = [];
-      const mimeType = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4']
-        .find(type => MediaRecorder.isTypeSupported(type));
-      const recorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
-      recorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
-      recorder.onstop = async () => {
-        stream.getTracks().forEach(track => track.stop());
-        if (activeRecorder?.recorder === recorder) activeRecorder = null;
-        recordBtn.textContent = 'Record';
-        recordBtn.classList.remove('recording');
-        recordBtn.disabled = true;
-        status.textContent = 'Transcribing…';
-        status.classList.remove('error');
-        try {
-          const blob = new Blob(chunks, {type: recorder.mimeType || 'audio/webm'});
-          const response = await fetch('transcribe', {
-            method: 'POST',
-            headers: {'Content-Type': blob.type || 'application/octet-stream'},
-            body: blob,
-          });
-          const data = await response.json();
-          if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
-          const transcript = (data.text || '').trim();
-          if (transcript) {
-            area.value = area.value.trim() ? `${area.value.trim()}\n${transcript}` : transcript;
-            await persistNote(key, meta, area.value, status);
-          } else {
-            status.textContent = 'No speech detected';
-          }
-        } catch (error) {
-          status.textContent = `Transcription failed: ${error.message}`;
-          status.classList.add('error');
-        } finally {
-          recordBtn.disabled = false;
-        }
-      };
-      activeRecorder = {button: recordBtn, recorder, stop: () => recorder.state !== 'inactive' && recorder.stop()};
-      recorder.start();
-      recordBtn.textContent = 'Stop & transcribe';
-      recordBtn.classList.add('recording');
-      status.textContent = 'Recording…';
-      status.classList.remove('error');
-    };
-    header.append(label, recordBtn, status);
+    header.append(label, status);
     box.append(header, area);
     return box;
   }
@@ -264,7 +199,7 @@ JAVASCRIPT = r'''
     const track = $('track').value, item = images[Number(picker.value)];
     const key = `${track}:${item.id}:${check.id}`;
     const meta = {image_id: item.id, image_title: item.title, track, check_id: check.id, label: checkLabel(check, schema)};
-    return buildNoteEditor(key, meta, 'Your thoughts', 'Record or type your thoughts on this check…');
+    return buildNoteEditor(key, meta, 'Your thoughts', 'Type or dictate your thoughts on this check…');
   }
   function formatNotesMarkdown() {
     const entries = Object.entries(notes).sort(([a], [b]) => a.localeCompare(b));
@@ -308,7 +243,7 @@ JAVASCRIPT = r'''
     const docKey = `doc:${id}`;
     docDetails.append(element('summary', notes[docKey]?.text ? 'Document notes (has note)' : 'Document notes'));
     docDetails.append(buildNoteEditor(docKey, {image_id: id, image_title: item.title, track: 'doc', check_id: null, label: item.title},
-      `Overall thoughts on ${id} · ${item.title}`, 'Record or type overall thoughts on this document…'));
+      `Overall thoughts on ${id} · ${item.title}`, 'Type or dictate overall thoughts on this document…'));
     summary.append(docDetails);
     for (const [label, documents] of Object.entries(snapshot.results[track])) {
       const saved = documents[id], details = element('details');
