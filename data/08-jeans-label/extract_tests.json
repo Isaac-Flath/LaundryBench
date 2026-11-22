@@ -37,6 +37,7 @@
       "basis": "visible",
       "human_reference": "Company name around the metal button: LEVI STRAUSS & CO.",
       "tags": [
+        "document_specific",
         "curved_text",
         "small_text"
       ]
@@ -51,6 +52,7 @@
       "basis": "visible",
       "human_reference": "Location abbreviation around the metal button: S F CAL.",
       "tags": [
+        "document_specific",
         "curved_text",
         "small_text"
       ]

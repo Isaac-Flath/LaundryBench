@@ -132,7 +132,8 @@ class DatasetTests(unittest.TestCase):
     def test_numbered_attack_damage_excludes_conditional_totals_and_non_damage_numbers(self):
         output = {'hp': 270, 'attack_1_base_damage': 40,
                   'attack_2_base_damage': 160, 'attack_3_base_damage': None,
-                  'attack_2_damage_against_damaged_active': 240}
+                  'attack_1_max_damage': 40, 'attack_2_max_damage': 240,
+                  'attack_3_max_damage': None}
         result = score_image(json.dumps(output), self.extract['05'])
         self.assertTrue(result['schema_valid'])
         self.assertEqual(result['score'], 1)
@@ -141,7 +142,9 @@ class DatasetTests(unittest.TestCase):
                              ('attack_1_base_damage', 160),
                              ('attack_2_base_damage', 240),
                              ('attack_3_base_damage', 0),
-                             ('attack_3_base_damage', 3)]:
+                             ('attack_3_base_damage', 3),
+                             ('attack_1_max_damage', None),
+                             ('attack_3_max_damage', 0)]:
             with self.subTest(field=field, wrong=wrong):
                 self.assertEqual(self.score_field('05', field, wrong), (True, False))
         for malformed in ['160', '160+', True]:
@@ -158,14 +161,14 @@ class DatasetTests(unittest.TestCase):
     def test_inferences_require_the_bound_and_conditional_bonus(self):
         for image_id, field, correct, wrong_values in [
             ('01', 'minimum_catalogue_titles', 61, [60, 62, None, '61', True]),
-            ('05', 'attack_2_damage_against_damaged_active', 240, [160, 80, None, '240', True]),
+            ('05', 'attack_2_max_damage', 240, [160, 80, None, '240', True]),
         ]:
             self.assertEqual(self.score_field(image_id, field, correct), (True, True))
             for wrong in wrong_values:
                 with self.subTest(field=field, wrong=wrong):
                     self.assertFalse(self.score_field(image_id, field, wrong)[1])
-        spec = self.extract['05']['schema']['properties']['attack_2_damage_against_damaged_active']
-        for clue in ['Calamitous', '160', '80', '240']:
+        spec = self.extract['05']['schema']['properties']['attack_2_max_damage']
+        for clue in ['Calamitous', '160', '80', '240', 'damaged Active']:
             self.assertNotIn(clue, spec['description'])
 
     def test_life_payments_are_distinct_and_typed(self):

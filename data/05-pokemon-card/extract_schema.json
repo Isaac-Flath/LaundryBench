@@ -29,12 +29,26 @@
       ],
       "description": "Base damage of attack 3."
     },
-    "attack_2_damage_against_damaged_active": {
+    "attack_1_max_damage": {
       "type": [
         "integer",
         "null"
       ],
-      "description": "Damage dealt by attack 2 against a damaged Active Pokémon."
+      "description": "Maximum damage of attack 1, including any conditional bonus."
+    },
+    "attack_2_max_damage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Maximum damage of attack 2, including any conditional bonus."
+    },
+    "attack_3_max_damage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Maximum damage of attack 3, including any conditional bonus."
     }
   },
   "required": [
@@ -42,7 +56,9 @@
     "attack_1_base_damage",
     "attack_2_base_damage",
     "attack_3_base_damage",
-    "attack_2_damage_against_damaged_active"
+    "attack_1_max_damage",
+    "attack_2_max_damage",
+    "attack_3_max_damage"
   ],
   "additionalProperties": false
 }

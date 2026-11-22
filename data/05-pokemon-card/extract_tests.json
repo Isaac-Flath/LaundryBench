@@ -34,14 +34,29 @@
     },
     {
       "id": 5,
-      "field": "attack_2_damage_against_damaged_active",
+      "field": "attack_1_max_damage",
+      "expected": 40,
+      "basis": "visible",
+      "human_reference": "Linear Attack has no conditional bonus, so its maximum damage is 40.",
+      "tags": []
+    },
+    {
+      "id": 6,
+      "field": "attack_2_max_damage",
       "expected": 240,
       "basis": "inferred",
-      "human_reference": "Attack 2 is Calamitous Slash: 160 base damage plus 80 when the opposing Active Pokémon already has damage counters. Total: 240. The schema identifies the attack by position, without revealing its name, numbers, or whether a bonus exists.",
+      "human_reference": "Calamitous Slash deals 160 base damage plus 80 more if the opponent's Active Pokémon already has damage counters: 240.",
       "tags": [
-        "document_specific",
         "damaged_or_occluded_text"
       ]
+    },
+    {
+      "id": 7,
+      "field": "attack_3_max_damage",
+      "expected": null,
+      "basis": "unavailable",
+      "human_reference": "GG End GX deals no damage (it only discards Pokémon).",
+      "tags": []
     }
   ]
 }

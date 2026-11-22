@@ -6,7 +6,7 @@
         "string",
         "null"
       ],
-      "description": "Main title, without subtitle."
+      "description": "Main title."
     },
     "subtitle": {
       "type": [
