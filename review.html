@@ -24,6 +24,8 @@
   .spacer { flex: 1; }
   #viewport { flex: 1; overflow: auto; background: #e9edf0; cursor: grab; touch-action: pan-x pan-y; }
   #viewport.dragging { cursor: grabbing; }
+  #photo-credit { padding: 8px 16px; border-top: 1px solid #dce1e6; background: #f8fafb; color: #526271; font-size: 13px; }
+  #photo-credit a { color: #245777; text-underline-offset: 2px; }
   #stage { display: grid; place-items: center; }
   #stage img { display: block; max-width: none; user-select: none; }
   #zoom-label { min-width: 45px; text-align: center; font-variant-numeric: tabular-nums; }
@@ -78,6 +80,7 @@
       <span class="spacer"></span><span class="muted">Drag to pan</span>
     </div>
     <div id="viewport"><div id="stage"></div></div>
+    <div id="photo-credit" hidden></div>
   </section>
   <section class="pane" aria-label="Checks and JSON">
     <div class="toolbar">
@@ -271,6 +274,23 @@
     $('position').textContent = `${index + 1} / ${images.length}`;
     $('check-count').textContent = 'Loading…';
     $('cards').replaceChildren(); $('file-json').textContent = ''; $('schema-json').textContent = '';
+    const credit = $('photo-credit');
+    credit.replaceChildren();
+    if (item.source && item.source.credit) {
+      credit.append(document.createTextNode('Photo by '));
+      if (item.source.url) {
+        const link = element('a', item.source.credit);
+        link.href = item.source.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        credit.append(link);
+      } else {
+        credit.append(document.createTextNode(item.source.credit));
+      }
+      credit.hidden = false;
+    } else {
+      credit.hidden = true;
+    }
     stage.replaceChildren(); photo = null;
     const image = new Image(); image.alt = item.title; image.draggable = false;
     image.src = item.file;

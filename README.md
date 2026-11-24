@@ -111,4 +111,6 @@ Run `python3 -m scripts.review` to [browse images, checks, and schemas](http://1
 | 10 | [Game cartridge with its label washed away](data/10-game-cartridge/) | [u/Annual_Marsupial3039](https://www.reddit.com/r/gamecollecting/comments/177yav4/whats_the_best_way_to_restore_this_ds_cartridge/) |
 | 11 | [The Da Vinci Curse — folded cover and paper pulp](data/11-da-vinci-curse/) | [u/Drysamel](https://www.reddit.com/r/Wellthatsucks/comments/i545sn/anyone_else_ever_not_realize_they_had_a_book_in/) |
 
+If you took one of these photos and want it credited differently or removed, open an issue or reach out and I will update or remove it promptly.
+
 </details>

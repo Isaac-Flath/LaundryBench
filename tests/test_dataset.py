@@ -3,7 +3,7 @@ import json
 import unittest
 
 from scripts.check import passes_check
-from scripts.common import load_dataset
+from scripts.common import ROOT, load_dataset
 from scripts.extract import matches_schema, score_image
 
 
@@ -224,6 +224,15 @@ class DatasetTests(unittest.TestCase):
                         self.assertEqual(len(fields), len(set(fields)))
                         self.assertEqual(set(fields), set(data['schema']['properties']))
                         self.assertEqual(set(fields), set(data['schema']['required']))
+
+    def test_every_document_has_photo_source_attribution(self):
+        sources = json.loads((ROOT / 'data' / 'sources.json').read_text(encoding='utf-8'))
+        self.assertEqual(set(sources), set(self.parse))
+        for doc_id, info in sources.items():
+            self.assertIsInstance(info.get('credit'), str)
+            self.assertTrue(info['credit'].strip())
+            if info.get('url') is not None:
+                self.assertTrue(info['url'].startswith('https://'))
 
 
 if __name__ == '__main__':

@@ -8,7 +8,14 @@ from urllib.parse import urlsplit
 from .common import ROOT, list_images, save_json
 
 NOTES_PATH = ROOT / 'review-notes.json'
+SOURCES_PATH = ROOT / 'data' / 'sources.json'
 NOTES_LOCK = threading.Lock()
+
+
+def load_sources():
+    if not SOURCES_PATH.exists():
+        return {}
+    return json.loads(SOURCES_PATH.read_text(encoding='utf-8'))
 
 
 def load_notes():
@@ -33,9 +40,16 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         path = urlsplit(self.path).path
         if path == '/images.json':
-            images = [{'id': p.parent.name.split('-', 1)[0],
-                       'title': p.parent.name.split('-', 1)[1].replace('-', ' ').capitalize(),
-                       'file': str(p.relative_to(ROOT))} for p in list_images()]
+            sources = load_sources()
+            images = []
+            for p in list_images():
+                doc_id = p.parent.name.split('-', 1)[0]
+                images.append({
+                    'id': doc_id,
+                    'title': p.parent.name.split('-', 1)[1].replace('-', ' ').capitalize(),
+                    'file': str(p.relative_to(ROOT)),
+                    'source': sources.get(doc_id),
+                })
             return self.send_json(200, images)
         if path == '/notes.json':
             with NOTES_LOCK:
